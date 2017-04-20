@@ -33,42 +33,53 @@ object KafkaSparkStreamManager
     val groupId = kp.get(GROUP_ID).get
     val consumerOffsets: Map[TopicAndPartition, Long] =
       if (fromOffset == null) {
-        val last = if (from == null) {
-          if (kp.contains(LAST_OP_COMSUMER)) kp.get(LAST_OP_COMSUMER)
-          else "LASTED"
-        } else from
+        val last =if (kp.contains(LAST_OP_COMSUMER)) kp.get(LAST_OP_COMSUMER)
+                  else from
         last match {
           case "LASTED"   => getLatestOffsets(topics, kp)
           case "COMSUMER" => getConsumerOffset(kp, groupId, topics)
           case _          => getLatestOffsets(topics, kp)
         }
       } else fromOffset
-
     KafkaUtils.createDirectStream[K, V, KD, VD, R](
       ssc,
       kp,
       consumerOffsets,
       msghandle)
-
   }
   def createDirectStreams[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
     ssc: StreamingContext,
     conf: Configuration,
     fromOffset: Map[TopicAndPartition, Long] = null,
     topics: Set[String],
-    msghandle: (MessageAndMetadata[K, V]) => R = msgHandle): InputDStream[R] = {
+    msghandle: (MessageAndMetadata[K, V]) => R = msgHandle)(implicit from:String): InputDStream[R] = {
     if (conf.kpIsNull) {
       throw new SparkException(s"Configuration s kafkaParam is Null or ${GROUP_ID} is not setted")
     }
     val kp = conf.getKafkaParams()
-   if(conf.containsKey(LAST_OP_COMSUMER)){
-     createDirectStream(ssc, kp, topics, fromOffset, msghandle)
-      //createDirectStream(ssc, kp, topics, fromOffset, msghandle)(conf.get(LAST_OP_COMSUMER))
-    }else 
-     createDirectStream(ssc, kp, topics, fromOffset, msghandle)
-    
+    if (!kp.contains(GROUP_ID) && conf.containsKey(GROUP_ID))
+      throw new SparkException(s"Configuration s kafkaParam is Null or ${GROUP_ID} is not setted")
+    val groupId = if(kp.contains(GROUP_ID)) kp.get(GROUP_ID).get
+                   else conf.get(GROUP_ID)
+    val consumerOffsets: Map[TopicAndPartition, Long] =
+      if (fromOffset == null) {
+        val last =if (kp.contains(LAST_OP_COMSUMER)) kp.get(LAST_OP_COMSUMER)
+                  else if(conf.containsKey(LAST_OP_COMSUMER)) conf.get(LAST_OP_COMSUMER)
+                  else from
+        last match {
+          case "LASTED"   => getLatestOffsets(topics, kp)
+          case "COMSUMER" => getConsumerOffset(kp, groupId, topics)
+          case _          => getLatestOffsets(topics, kp)
+        }
+      } else fromOffset
+    KafkaUtils.createDirectStream[K, V, KD, VD, R](
+      ssc,
+      kp,
+      consumerOffsets,
+      msghandle)
  }
-  def msgHandle = (mmd: MessageAndMetadata[String, String]) => (mmd.topic, mmd.message)
+  def msgHandle = (mmd: MessageAndMetadata[String, String]) 
+  => (mmd.topic, mmd.message)
   /**
    * get RDD offset
    */
