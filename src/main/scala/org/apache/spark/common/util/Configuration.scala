@@ -1,4 +1,4 @@
-package com.spark.common.conf.util
+package org.apache.spark.common.util
 
 import java.util.HashMap
 

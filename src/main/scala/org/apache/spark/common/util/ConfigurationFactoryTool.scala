@@ -1,4 +1,4 @@
-package com.spark.common.conf.util
+package org.apache.spark.common.util
 
 import java.io.File
 import java.util.Properties
@@ -6,7 +6,7 @@ import java.io.FileInputStream
 import java.io.InputStreamReader
 import scala.collection.JavaConversions._
 trait ConfigurationFactoryTool {
-  def intiConf(path: String,conf:Configuration){
+  def initConf(path: String,conf:Configuration){
     val property = getConfigFromFilePath(path)
     var keys = property.propertyNames()
     while (keys.hasMoreElements()) {

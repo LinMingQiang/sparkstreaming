@@ -7,7 +7,6 @@ import org.apache.spark.rdd.RDD
 import java.util.Properties
 trait KafkaSparkTool {
   var kc: KafkaCluster = null
-  implicit val last_comsumer:String="LASTED"
   def instance(kp: Map[String, String]) {
     if (kc == null) kc = new KafkaCluster(kp)
   }

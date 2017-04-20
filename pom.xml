@@ -1,8 +1,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>spark-kafka-util</groupId>
+  <groupId>org.spark.kafka.util</groupId>
   <artifactId>spark-kafka-util</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.8_1.3.0</version>
   <name>${project.artifactId}</name>
   <description>My wonderfull scala app</description>
   <inceptionYear>2015</inceptionYear>
@@ -121,11 +121,11 @@
 				<artifactId>maven-resources-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
-					<outputDirectory>${project.build.outputDirectory}/resources</outputDirectory>
+					<outputDirectory>${project.build.outputDirectory}/conf</outputDirectory>
 					<encoding>UTF-8</encoding>
 					<resources>
 						<resource>
-							<directory>src/main/resources</directory>
+							<directory>conf</directory>
 						</resource>
 					</resources>
 				</configuration>
