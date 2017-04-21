@@ -13,6 +13,8 @@ import org.apache.log4j.PropertyConfigurator
 object TestRunMain {
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
+    val conf=new ConfigurationTest
+    initJobConf(conf)
     runJobWithConf
   }
   def runJob() {
@@ -38,6 +40,13 @@ object TestRunMain {
     val scf = new SparkConf().setMaster("local[2]").setAppName("Test")
     val sc = new SparkContext(scf)
     val ssc = new StreamingContext(sc, Seconds(5))
+    val ds = ssc.createDirectStream(conf, null, msgHandle)
+    ds.foreachRDD { rdd => rdd.foreach(println) }
+    ssc.start()
+    ssc.awaitTermination()
+
+  }
+  def initJobConf(conf:Configuration){
     var kp = Map[String, String](
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
@@ -46,12 +55,5 @@ object TestRunMain {
     val topics = Set("test")
     conf.setKafkaParams(kp)
     conf.setTopics(topics)
-    
-    val ds = ssc.createDirectStream(conf, null, msgHandle)
-    ds.foreachRDD { rdd => rdd.foreach(println) }
-
-    ssc.start()
-    ssc.awaitTermination()
-
   }
 }
