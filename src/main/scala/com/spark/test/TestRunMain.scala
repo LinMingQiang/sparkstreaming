@@ -23,7 +23,7 @@ object TestRunMain {
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
       "group.id" -> "group.id",
-      LAST_OR_CONSUMER -> "last")
+      "kafka.last.consum" -> "last")
     val topics = Set("test")
     val ds = ssc.createDirectStream[(String, String)](kp, topics, null, msgHandle)
     ds.foreachRDD { rdd => rdd.foreach(println) }
@@ -42,7 +42,7 @@ object TestRunMain {
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
       "group.id" -> "group.id",
-      LAST_OR_CONSUMER -> "last")
+      "kafka.last.consum" -> "last")
     conf.setKafkaParams(kp)
     val topics = Set("test")
 

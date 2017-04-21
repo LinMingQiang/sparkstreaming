@@ -10,13 +10,11 @@ import kafka.serializer.StringDecoder
 import kafka.common.TopicAndPartition
 import scala.collection.mutable.HashMap
 import org.apache.spark.common.util.Configuration
-import org.apache.spark.common.util.configurationKey
 import kafka.serializer.Decoder
 import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
 object KafkaSparkStreamManager
-    extends KafkaSparkTool
-    with configurationKey { 
+    extends KafkaSparkTool { 
   val lastOrConsum:String="LASTED"
   /**
    * common create DStream 
