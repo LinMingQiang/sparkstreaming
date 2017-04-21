@@ -21,11 +21,10 @@ trait SparkImplicitTool {
     }
     def createDirectStream[R: ClassTag](
       conf: Configuration,
-      topics: Set[String],
-      fromOffset: Map[TopicAndPartition, Long]=null,
+      fromOffset: Map[TopicAndPartition, Long],
       msgHandle: (MessageAndMetadata[String, String]) => R) :InputDStream[R]={
       KafkaSparkStreamManager.createDirectStream
-      [String, String, StringDecoder, StringDecoder, R](ssc,conf,topics, fromOffset, msgHandle)
+      [String, String, StringDecoder, StringDecoder, R](ssc,conf, fromOffset, msgHandle)
     }
   }
 }

@@ -5,6 +5,7 @@ import java.util.HashMap
 trait Configuration extends Serializable{
   private var conf:HashMap[String,String]=new HashMap[String,String]
   var kafkaParams: Map[String, String]=null
+  var topics:Set[String]=null
   def containsKey(key:String)=conf.containsKey(key)
   def getString(key:String,default:String)={
     if(conf.containsKey(key)) conf.get(key)
@@ -36,9 +37,12 @@ trait Configuration extends Serializable{
   def getKafkaParams()={
     kafkaParams
   }
-  def kpIsNull=kafkaParams==null
-  
+  def kpIsNull:Boolean=kafkaParams==null
+  def tpIsNull:Boolean=topics==null
   def getKV()={
     conf
+  }
+  def setTopics(topics:Set[String]){
+    this.topics=topics
   }
 }

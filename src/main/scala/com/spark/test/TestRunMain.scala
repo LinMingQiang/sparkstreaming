@@ -43,10 +43,11 @@ object TestRunMain {
       "serializer.class" -> "kafka.serializer.StringEncoder",
       "group.id" -> "group.id",
       "kafka.last.consum" -> "last")
-    conf.setKafkaParams(kp)
     val topics = Set("test")
-
-    val ds = ssc.createDirectStream(conf, topics, null, msgHandle)
+    conf.setKafkaParams(kp)
+    conf.setTopics(topics)
+    
+    val ds = ssc.createDirectStream(conf, null, msgHandle)
     ds.foreachRDD { rdd => rdd.foreach(println) }
 
     ssc.start()

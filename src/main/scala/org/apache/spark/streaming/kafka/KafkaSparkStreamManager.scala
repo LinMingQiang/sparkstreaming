@@ -59,11 +59,10 @@ object KafkaSparkStreamManager
     K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
     ssc: StreamingContext,
     conf: Configuration,
-    topics: Set[String],
     fromOffset: Map[TopicAndPartition, Long],
     msghandle: (MessageAndMetadata[K, V]) => R): InputDStream[R] = {
-    if (conf.kpIsNull) {
-      throw new SparkException(s"Configuration s kafkaParam is Null or ${GROUP_ID} is not setted")
+    if (conf.kpIsNull ||conf.tpIsNull) {
+      throw new SparkException(s"Configuration s kafkaParam is Null or Topics is not setted")
     }
     val kp = conf.getKafkaParams()
     if (!kp.contains(GROUP_ID) && conf.containsKey(GROUP_ID))
@@ -71,6 +70,7 @@ object KafkaSparkStreamManager
     instance(kp)
     val groupId = if(kp.contains(GROUP_ID)) kp.get(GROUP_ID).get
                   else conf.get(GROUP_ID)
+    val topics=conf.topics
     val consumerOffsets: Map[TopicAndPartition, Long] =
       if (fromOffset == null) {
         val last =if (kp.contains(LAST_OR_CONSUMER)) kp.get(LAST_OR_CONSUMER).get
