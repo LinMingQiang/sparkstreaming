@@ -1,5 +1,5 @@
 package org.apache.spark.common
 
-package object util {
+package object util extends ConfigurationFactoryTool{
   
 }
