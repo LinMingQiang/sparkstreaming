@@ -14,12 +14,10 @@ object TestRunMain {
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
     val conf=new ConfigurationTest
-    
     runJobWithConf
   }
   def runJob() {
-    val scf = new SparkConf().setMaster("local[2]").setAppName("Test")
-    val sc = new SparkContext(scf)
+    val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
     val ssc = new StreamingContext(sc, Seconds(5))
     var kp = Map[String, String](
       "metadata.broker.list" -> brokers,
@@ -28,7 +26,9 @@ object TestRunMain {
       "kafka.last.consum" -> "last")
     val topics = Set("test")
     val ds = ssc.createDirectStream[(String, String)](kp, topics, null, msgHandle)
-    ds.foreachRDD { rdd => rdd.foreach(println) }
+    ds.foreachRDD { rdd => 
+      rdd.foreach(println)
+      rdd.updateOffsets(kp, "group.id")}
 
     ssc.start()
     ssc.awaitTermination()
