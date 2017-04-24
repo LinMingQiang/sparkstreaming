@@ -4,20 +4,18 @@ language : `Scala` <br>
 ScalaV   : `2.10` <br>
 SparkV   : `1.6.0` <br>
 
-* # Spark Kafka Util <br>
- SparkStreaming使用Direct的方式获取Kafka数据。更新Zookeeper的Offset <br>
-  详情请查看branch ：spark-kafka-util <br>
-  示例代码（具体信息查看 相应的branch）
-```
- val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
- val ssc = new StreamingContext(sc, Seconds(5))
- //kafka param
- var kp = Map[String, String]("metadata.broker.list" -> brokers,"serializer.class" -> "kafka.serializer.StringEncoder",
-                              "group.id" -> "group.id","kafka.last.consum" -> "last")
- val topics = Set("test")
-//不适用conf方式
-ssc.createDirectStream[(String, String)](kp, topics, fromoffsets, msgHandle)
-//配置集中在conf里面
-ssc.createDirectStream(conf, fromoffsets, msgHandle)
-```
+> # Spark Kafka Util <br>
+>> * scala version 2.10 <br>
+ spark version 1.3.0 1.6.0 <br>
+ kafka version 0.8 <br>
+>> * 提供 对外的 ssc创建Dstream的方法。
+>> * 提供 对外的 ssc利用conf创建Dstream的方法
+>> * 提供 使用direct方式读取kafka数据的方法
+>> * 提供 "kafka.last.consum" -> "last"/"consum" 参数，来动态决定获取kafka数据是从last还是从消费点开始
+>> * 提供 fromoffset 参数，决定从具体的offset开始获取数据
+>> * 提供 rdd的更新kafka offsets到zookeeper的方法
+
+> # Spark Hbase Util <br>
+>> * scala version 2.10 <br>
+
 
