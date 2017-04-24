@@ -14,7 +14,7 @@ object TestRunMain {
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
     val conf=new ConfigurationTest
-    initJobConf(conf)
+    
     runJobWithConf
   }
   def runJob() {
@@ -36,6 +36,7 @@ object TestRunMain {
   def runJobWithConf() {
     val conf = new ConfigurationTest()
     initConf("conf/config.properties", conf)
+    initJobConf(conf)
     println(conf.getKV())
     val scf = new SparkConf().setMaster("local[2]").setAppName("Test")
     val sc = new SparkContext(scf)
