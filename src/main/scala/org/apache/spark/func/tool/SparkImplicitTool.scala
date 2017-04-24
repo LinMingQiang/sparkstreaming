@@ -8,6 +8,7 @@ import kafka.message.MessageAndMetadata
 import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.common.util.Configuration
+import org.apache.spark.rdd.RDD
 
 trait SparkImplicitTool {
   implicit class sscFunc(ssc: StreamingContext) {
@@ -25,6 +26,14 @@ trait SparkImplicitTool {
       msgHandle: (MessageAndMetadata[String, String]) => R) :InputDStream[R]={
       KafkaSparkStreamManager.createDirectStream
       [String, String, StringDecoder, StringDecoder, R](ssc,conf, fromOffset, msgHandle)
+    }
+  }
+  implicit class rddkafkaFun[T](rdd:RDD[T]){
+    def updateOffsets(kp:Map[String,String],groupid:String){
+      KafkaSparkStreamManager.updateRDDOffset(kp, groupid, rdd)
+    }
+    def getRDDOffsets()={
+      KafkaSparkStreamManager.getRDDConsumerOffsets(rdd)
     }
   }
 }

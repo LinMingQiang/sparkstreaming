@@ -14,8 +14,8 @@ import kafka.serializer.Decoder
 import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
 object KafkaSparkStreamManager
-    extends KafkaSparkTool { 
-  val lastOrConsum:String="LASTED"
+extends KafkaSparkTool { 
+  val lastOrConsum:String="LAST"
   /**
    * common create DStream 
    * 
@@ -41,10 +41,11 @@ object KafkaSparkStreamManager
                   else lastOrConsum
         last.toUpperCase match {
           case "LAST"   => getLatestOffsets(topics, kp)
-          case "CONSUMER" => getConsumerOffset(kp, groupId, topics)
+          case "CONSUM" => getConsumerOffset(kp, groupId, topics)
           case _          => getLatestOffsets(topics, kp)
         }
       } else fromOffset
+    consumerOffsets.foreach(x=>logInfo(x.toString))
     KafkaUtils.createDirectStream[K, V, KD, VD, R](
       ssc,
       kp,
@@ -78,10 +79,11 @@ object KafkaSparkStreamManager
                   else lastOrConsum
         last.toUpperCase match {
           case "LAST"   => getLatestOffsets(topics, kp)
-          case "CONSUMER" => getConsumerOffset(kp, groupId, topics)
+          case "CONSUM" => getConsumerOffset(kp, groupId, topics)
           case _          => getLatestOffsets(topics, kp)
         }
       } else fromOffset
+      consumerOffsets.foreach(x=>logInfo(x.toString))
       KafkaUtils.createDirectStream[K, V, KD, VD, R](
       ssc,
       kp,

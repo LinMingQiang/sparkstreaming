@@ -5,7 +5,8 @@ import org.apache.spark.SparkException
 import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 import org.apache.spark.rdd.RDD
 import java.util.Properties
-trait KafkaSparkTool {
+import org.apache.spark.Logging
+trait KafkaSparkTool extends Logging{
   var kc: KafkaCluster = null
   val GROUP_ID="group.id"
   val LAST_OR_CONSUMER="kafka.last.consum"
