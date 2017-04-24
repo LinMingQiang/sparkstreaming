@@ -1,11 +1,10 @@
 # Spark-Util 
 language:Scala <br>
 SparkV:1.6.0 <br>
-# Spark Kafka Util
-SparkStreaming使用Direct的方式获取Kafka数据。更新Zookeeper的Offset <br>
-详情请查看branch ：spark-kafka-util <br>
-示例代码（具体信息查看 相应的branch）
-------
+* # Spark Kafka Util <br>
+ SparkStreaming使用Direct的方式获取Kafka数据。更新Zookeeper的Offset <br>
+  详情请查看branch ：spark-kafka-util <br>
+  示例代码（具体信息查看 相应的branch）
 ```
  val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
  val ssc = new StreamingContext(sc, Seconds(5))
