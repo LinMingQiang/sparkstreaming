@@ -13,6 +13,7 @@ import org.apache.spark.common.util.Configuration
 import kafka.serializer.Decoder
 import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
+private[spark]
 object KafkaSparkStreamManager
 extends KafkaSparkTool { 
   val lastOrConsum:String="LAST"

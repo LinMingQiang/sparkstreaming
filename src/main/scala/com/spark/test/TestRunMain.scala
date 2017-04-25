@@ -9,7 +9,7 @@ import kafka.serializer.StringDecoder
 import org.slf4j.LoggerFactory
 import org.apache.spark.common.util.Configuration
 import org.apache.log4j.PropertyConfigurator
-
+import org.apache.spark.func.tool._
 object TestRunMain {
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
