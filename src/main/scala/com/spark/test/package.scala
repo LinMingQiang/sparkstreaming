@@ -6,12 +6,12 @@ import org.apache.kafka.common.serialization.StringSerializer
 import org.apache.kafka.clients.producer.ProducerRecord
 
 package object test extends  ConfigurationFactoryTool{
-  val zookeeper=""
-  val brokers=""
-  
+  val zookeeper="solr2.zhiziyun.com,solr1.zhiziyun.com,mongodb3"
+  val brokers="kafka1:9092,kafka2:9092,kafka3:9092"
+  val outTopic="test"
   val producerConfig = {
   val p = new java.util.Properties()
-  p.setProperty("bootstrap.servers", "127.0.0.1:9092")
+  p.setProperty("bootstrap.servers", brokers)
   p.setProperty("key.serializer", classOf[StringSerializer].getName)
   p.setProperty("value.serializer", classOf[StringSerializer].getName)
   p
