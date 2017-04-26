@@ -18,6 +18,8 @@ SparkV   : `1.6.0` <br>
  * scala version 2.10 <br>
    spark version 1.6.0 <br>
    hbase version 1.2.0
- 
+* spark scan hbase data to RDD
+* spark RDD[T] get from hbase to RDD[U]
+* spark RDD[T] write to hbase
 
 
