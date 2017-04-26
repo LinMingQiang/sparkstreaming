@@ -16,5 +16,8 @@ SparkV   : `1.6.0` <br>
  * 提供 rdd 写入 Kafka 的方法
  # Spark Hbase Util <br>
  * scala version 2.10 <br>
+   spark version 1.6.0 <br>
+   hbase version 1.2.0
+ 
 
 
