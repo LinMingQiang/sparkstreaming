@@ -1,8 +1,9 @@
 # Spark-Util 
 
 language : `Scala` <br>
-ScalaV   : `2.10` <br>
-SparkV   : `1.6.0` <br>
+Scala   : `2.10` <br>
+Spark   : `1.6.0` <br>
+Hbase   : `1.2.0` <br>
  # Spark Kafka Util <br>
  * scala version 2.10 <br>
  spark version 1.3.0 1.6.0 <br>
