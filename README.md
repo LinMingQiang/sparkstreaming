@@ -1,4 +1,4 @@
-# spark-kafka-util
+# spark-kafka
 scala version 2.10
 spark version 1.3.0 1.6.0
 kafka version 0.8

@@ -67,7 +67,7 @@ extends KafkaSparkTool {
       throw new SparkException(s"Configuration s kafkaParam is Null or Topics is not setted")
     }
     val kp = conf.getKafkaParams()
-    if (!kp.contains(GROUP_ID) && conf.containsKey(GROUP_ID))
+    if (!kp.contains(GROUP_ID) && !conf.containsKey(GROUP_ID))
       throw new SparkException(s"Configuration s kafkaParam is Null or ${GROUP_ID} is not setted")
     instance(kp)
     val groupId = if(kp.contains(GROUP_ID)) kp.get(GROUP_ID).get

@@ -7,6 +7,7 @@ trait Configuration extends Serializable{
   var kafkaParams: Map[String, String]=null
   var topics:Set[String]=null
   var groupid:String=null
+
   def containsKey(key:String)=conf.containsKey(key)
   def getString(key:String,default:String)={
     if(conf.containsKey(key)) conf.get(key)
@@ -55,4 +56,8 @@ trait Configuration extends Serializable{
   def setTopics(topics:Set[String]){
     this.topics=topics
   }
+  def setTopics(topic:String){
+    setTopics(topic.split(",").toSet)
+  }
+  
 }

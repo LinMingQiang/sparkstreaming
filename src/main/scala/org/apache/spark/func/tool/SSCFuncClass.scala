@@ -18,11 +18,24 @@ class SSCFuncClass(ssc: StreamingContext) {
       KafkaSparkStreamManager.createDirectStream
       [String, String, StringDecoder, StringDecoder, R](ssc,kp,topics, fromOffset, msgHandle)
     }
+   def createDirectStream[R: ClassTag](
+      kp: Map[String, String],
+      topics: Set[String],
+      msgHandle: (MessageAndMetadata[String, String]) => R) :InputDStream[R]={
+      KafkaSparkStreamManager.createDirectStream
+      [String, String, StringDecoder, StringDecoder, R](ssc,kp,topics, null, msgHandle)
+    }
     def createDirectStream[R: ClassTag](
       conf: Configuration,
       fromOffset: Map[TopicAndPartition, Long],
       msgHandle: (MessageAndMetadata[String, String]) => R) :InputDStream[R]={
       KafkaSparkStreamManager.createDirectStream
       [String, String, StringDecoder, StringDecoder, R](ssc,conf, fromOffset, msgHandle)
+    }
+     def createDirectStream[R: ClassTag](
+      conf: Configuration,
+      msgHandle: (MessageAndMetadata[String, String]) => R) :InputDStream[R]={
+      KafkaSparkStreamManager.createDirectStream
+      [String, String, StringDecoder, StringDecoder, R](ssc,conf, null, msgHandle)
     }
 }

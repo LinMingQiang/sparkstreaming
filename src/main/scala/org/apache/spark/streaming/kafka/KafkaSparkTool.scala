@@ -7,9 +7,11 @@ import org.apache.spark.rdd.RDD
 import java.util.Properties
 import org.apache.spark.Logging
 trait KafkaSparkTool extends Logging{
+  override val logName="KafkaSparkTool"
   var kc: KafkaCluster = null
   val GROUP_ID="group.id"
   val LAST_OR_CONSUMER="kafka.last.consum"
+  val LAST_OR_EARLIEST="newgroup.last.earliest"
   def instance(kp: Map[String, String]) {
     if (kc == null) kc = new KafkaCluster(kp)
   }
@@ -44,12 +46,16 @@ trait KafkaSparkTool extends Logging{
             } else offsets += (tp -> n) //消费者的offsets正常
         })
       } else { // 没有消费过 ，这是一个新的消费group id
-        println(">>>  这是一个新的kafka group id  <<< : " + groupId)
-        var leaderOffsets: Map[TopicAndPartition, LeaderOffset] = null
-        leaderOffsets = kc.getLatestLeaderOffsets(partitions).right.get
-        leaderOffsets.foreach { case (tp, offset) => offsets += (tp -> offset.offset) }
+        logInfo(" this is a new kafka group id : " + groupId)
+        var newgroupOffsets: Map[TopicAndPartition, LeaderOffset] = if(kp.contains(LAST_OR_EARLIEST)){
+          kp.get(LAST_OR_EARLIEST).get.toUpperCase() match{
+            case "EARLIEST"=>kc.getEarliestLeaderOffsets(partitions).right.get
+            case _ => kc.getLatestLeaderOffsets(partitions).right.get
+          }
+        }else kc.getLatestLeaderOffsets(partitions).right.get
+        newgroupOffsets.foreach { case (tp, offset) => offsets += (tp -> offset.offset) }
         //解决冷启动问题。
-        updateConsumerOffsets(kp, groupId, leaderOffsets.map { case (tp, offset) => (tp -> offset.offset) })
+        updateConsumerOffsets(kp, groupId, newgroupOffsets.map { case (tp, offset) => (tp -> offset.offset) })
       }
     }
     offsets

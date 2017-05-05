@@ -13,22 +13,26 @@ import org.apache.spark.func.tool._
 object TestRunMain {
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
-    val conf=new ConfigurationTest
-    runJobWithConf
+    runJob
   }
   def runJob() {
     val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
-    val ssc = new StreamingContext(sc, Seconds(5))
+    val ssc = new StreamingContext(sc, Seconds(20))
     var kp = Map[String, String](
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
-      "group.id" -> "group.id",
-      "kafka.last.consum" -> "last")
-    val topics = Set("test")
-    val ds = ssc.createDirectStream[(String, String)](kp, topics, null, msgHandle)
+      "group.id" -> "group.id.test2",
+      "newgroup.last.earliest"->"earliest",
+      "kafka.last.consum" -> "consum")
+    val topics = Set("smartadsclicklog")
+    val ds = ssc.createDirectStream[(String, String)](kp, topics, msgHandle)
+    
     ds.foreachRDD { rdd => 
-      rdd.foreach(println)
-      rdd.updateOffsets(kp, "group.id")}
+      println(rdd.count)
+      rdd.getRDDOffsets().foreach(println)
+      rdd.updateOffsets(kp, "group.id.test")
+      System.exit(0)
+      }
 
     ssc.start()
     ssc.awaitTermination()
