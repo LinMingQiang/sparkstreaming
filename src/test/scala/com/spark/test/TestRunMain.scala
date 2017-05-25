@@ -13,7 +13,7 @@ import org.apache.spark.func.tool._
 object TestRunMain {
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
-    runJob
+    //runJob
   }
   def runJob() {
     val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))

@@ -6,8 +6,10 @@ import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 import org.apache.spark.rdd.RDD
 import java.util.Properties
 import org.apache.spark.Logging
-trait KafkaSparkTool extends Logging{
-  override val logName="KafkaSparkTool"
+import org.slf4j.LoggerFactory
+trait KafkaSparkTool{
+  val logname="KafkaSparkTool"
+  lazy val log=LoggerFactory.getLogger(logname)
   var kc: KafkaCluster = null
   val GROUP_ID="group.id"
   val LAST_OR_CONSUMER="kafka.last.consum"
@@ -46,7 +48,7 @@ trait KafkaSparkTool extends Logging{
             } else offsets += (tp -> n) //消费者的offsets正常
         })
       } else { // 没有消费过 ，这是一个新的消费group id
-        logInfo(" this is a new kafka group id : " + groupId)
+        log.info(" this is a new kafka group id : " + groupId)
         var newgroupOffsets: Map[TopicAndPartition, LeaderOffset] = if(kp.contains(LAST_OR_EARLIEST)){
           kp.get(LAST_OR_EARLIEST).get.toUpperCase() match{
             case "EARLIEST"=>kc.getEarliestLeaderOffsets(partitions).right.get

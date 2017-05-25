@@ -17,6 +17,7 @@ private[spark]
 object KafkaSparkStreamManager
 extends KafkaSparkTool { 
   val lastOrConsum:String="LAST"
+  override val logname="KafkaSparkStreamManager"
   /**
    * common create DStream 
    * 
@@ -43,10 +44,10 @@ extends KafkaSparkTool {
         last.toUpperCase match {
           case "LAST"   => getLatestOffsets(topics, kp)
           case "CONSUM" => getConsumerOffset(kp, groupId, topics)
-          case _          => getLatestOffsets(topics, kp)
+          case _          => log.info(s"""${LAST_OR_CONSUMER} must LAST or CONSUM,defualt is LAST""");getLatestOffsets(topics, kp)
         }
       } else fromOffset
-    consumerOffsets.foreach(x=>logInfo(x.toString))
+    consumerOffsets.foreach(x=>log.info(x.toString))
     KafkaUtils.createDirectStream[K, V, KD, VD, R](
       ssc,
       kp,
@@ -84,7 +85,7 @@ extends KafkaSparkTool {
           case _          => getLatestOffsets(topics, kp)
         }
       } else fromOffset
-      consumerOffsets.foreach(x=>logInfo(x.toString))
+      consumerOffsets.foreach(x=>log.info(x.toString))
       KafkaUtils.createDirectStream[K, V, KD, VD, R](
       ssc,
       kp,
