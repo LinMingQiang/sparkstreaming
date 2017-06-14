@@ -8,8 +8,13 @@ kafka version 0.8
 * 提供 使用direct方式读取kafka数据的方法
 * 提供 "kafka.last.consum" -> "last"/"consum" 参数，来动态决定获取kafka数据是从last还是从消费点开始
 * 提供 fromoffset 参数，决定从具体的offset开始获取数据
-* 提供 rdd的更新kafka offsets到zookeeper的方法
+* 提供 rdd的更新kafka offsets到zookeeper的方法(需要 import org.apache.spark.func.tool._)
 * 提供 rdd 写数据进kakfa方法
+
+* 提供SparkKafkaContext类
+* 提供创建KafkaRDD
+* 修改 增加updateOffsets方法不用提供group id
+
 # Example 
 > 使用common的方式获取Dstream
 ```
