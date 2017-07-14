@@ -9,8 +9,16 @@ import kafka.message.MessageAndMetadata
 import kafka.serializer.Decoder
 import kafka.common.TopicAndPartition
 import kafka.serializer.StringDecoder
-class SparkKafkaContext(sconf:SparkConf){
-  val sc=new SparkContext(sconf)
+class SparkKafkaContext{
+  var sc:SparkContext=null
+  def this(sc:SparkContext){
+    this()
+    this.sc=sc
+  }
+  def this(conf:SparkConf){
+    this()
+    sc=new SparkContext(conf)
+  }
   def kafkaRDD[
     K: ClassTag,
     V: ClassTag,
