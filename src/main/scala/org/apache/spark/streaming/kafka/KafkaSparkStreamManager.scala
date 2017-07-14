@@ -13,6 +13,7 @@ import org.apache.spark.common.util.Configuration
 import kafka.serializer.Decoder
 import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
+import org.apache.spark.storage.StorageLevel
 private[spark]
 object KafkaSparkStreamManager
 extends KafkaSparkTool { 
@@ -92,6 +93,16 @@ extends KafkaSparkTool {
       consumerOffsets,
       msghandle)
  }
+  def createReceiverStream[
+    K: ClassTag,
+    V: ClassTag, 
+    U <: Decoder[_]: ClassTag, 
+    T <: Decoder[_]: ClassTag](
+    ssc: StreamingContext,
+    kp: Map[String, String],
+    topics: Map[String,Int]) = {
+    KafkaUtils.createStream[K,V,U,T](ssc, kp, topics, StorageLevel.MEMORY_ONLY)
+    }
   def msgHandle = (mmd: MessageAndMetadata[String, String]) 
   => (mmd.topic, mmd.message)
   /**

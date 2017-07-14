@@ -25,6 +25,7 @@ trait KafkaSparkTool{
     groupId: String,
     topics: Set[String]) = {
     instance(kp)
+    log.info("KafkaSparkTool  getConsumerOffset")
     var offsets: Map[TopicAndPartition, Long] = Map()
     topics.foreach { topic =>
       var hasConsumed = true //是否消费过  ,true为消费过

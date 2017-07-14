@@ -45,7 +45,7 @@ object TestRunMain {
     val scf = new SparkConf().setMaster("local[2]").setAppName("Test")
     val sc = new SparkContext(scf)
     val ssc = new StreamingContext(sc, Seconds(5))
-    val ds = ssc.createDirectStream(conf, null, msgHandle)
+    val ds = ssc.createDirectStream(conf, msgHandle)
     ds.foreachRDD { rdd => rdd.foreach(println) }
     ssc.start()
     ssc.awaitTermination()
