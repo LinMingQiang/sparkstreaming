@@ -45,7 +45,7 @@ extends KafkaSparkTool {
           case _          => log.info(s"""${LAST_OR_CONSUMER} must LAST or CONSUM,defualt is LAST""");getLatestOffsets(topics, kp)
         }
       } else fromOffset
-      consumerOffsets.foreach(x=>log.info(x.toString))
+      //consumerOffsets.foreach(x=>log.info(x.toString))
       val maxMessagesPerPartition = sc.getConf.getInt("spark.streaming.kafka.maxRatePerPartition", 1000) //0表示没限制
       val untilOffsets = clamp(latestLeaderOffsets(consumerOffsets), consumerOffsets, maxMessagesPerPartition)
       

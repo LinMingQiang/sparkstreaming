@@ -25,39 +25,36 @@ trait KafkaSparkTool{
     groupId: String,
     topics: Set[String]) = {
     instance(kp)
-    log.info("KafkaSparkTool  getConsumerOffset")
     var offsets: Map[TopicAndPartition, Long] = Map()
     topics.foreach { topic =>
       var hasConsumed = true //是否消费过  ,true为消费过
       val partitionsE = kc.getPartitions(Set(topic)) //获取patition信息
       if (partitionsE.isLeft) throw new SparkException("get kafka partition failed:")
       val partitions = partitionsE.right.get
+      val last_earlies=if(kp.contains(LAST_OR_EARLIEST)){kp.get(LAST_OR_EARLIEST).get.toUpperCase()} else "LAST"
       val consumerOffsetsE = kc.getConsumerOffsets(groupId, partitions) //获取这个topic的每个patition的消费信息      
       if (consumerOffsetsE.isLeft) hasConsumed = false
       if (hasConsumed) {
         val earliestLeaderOffsets = kc.getEarliestLeaderOffsets(partitions).right.get
         val consumerOffsets = consumerOffsetsE.right.get
-        // 可能只是存在部分分区consumerOffsets过时，所以只更新过时分区的consumerOffsets为latestLeaderOffsets          
-        consumerOffsets.foreach({
-          case (tp, n) =>
-            //现在数据在什么offset上
+        var newgroupOffsets= last_earlies match{
+            case "EARLIEST"=>earliestLeaderOffsets
+            case _ => kc.getLatestLeaderOffsets(partitions).right.get
+        }
+        consumerOffsets.foreach({case (tp, n) =>
             val earliestLeaderOffset = earliestLeaderOffsets(tp).offset
             if (n < earliestLeaderOffset) {
-              //消费过，但是过时了，就从最新开始消费
-              val latestLeaderOffsets = kc.getLatestLeaderOffsets(partitions).right.get(tp).offset
-              offsets += (tp -> latestLeaderOffsets)
-            } else offsets += (tp -> n) //消费者的offsets正常
+              offsets += (tp -> newgroupOffsets.get(tp).get.offset)
+            } else offsets += (tp -> n) 
         })
-      } else { // 没有消费过 ，这是一个新的消费group id
-        log.info(" this is a new kafka group id : " + groupId)
-        var newgroupOffsets: Map[TopicAndPartition, LeaderOffset] = if(kp.contains(LAST_OR_EARLIEST)){
-          kp.get(LAST_OR_EARLIEST).get.toUpperCase() match{
+      } else {
+        log.warn(" New Group ID : " + groupId)
+        var newgroupOffsets= last_earlies match{
             case "EARLIEST"=>kc.getEarliestLeaderOffsets(partitions).right.get
             case _ => kc.getLatestLeaderOffsets(partitions).right.get
           }
-        }else kc.getLatestLeaderOffsets(partitions).right.get
-        newgroupOffsets.foreach { case (tp, offset) => offsets += (tp -> offset.offset) }
-        //解决冷启动问题。
+        newgroupOffsets.foreach { case (tp, offset) => 
+          offsets += (tp -> offset.offset) }
         updateConsumerOffsets(kp, groupId, newgroupOffsets.map { case (tp, offset) => (tp -> offset.offset) })
       }
     }
