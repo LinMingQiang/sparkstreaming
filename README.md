@@ -10,6 +10,7 @@ kafka version 0.8
 * 提供 fromoffset 参数，决定从具体的offset开始获取数据
 * 提供 rdd的更新kafka offsets到zookeeper的方法(需要 import org.apache.spark.func.tool._)
 * 提供 rdd 写数据进kakfa方法
+* 提供StreamingKafkaContext，使用更方便
 
 * 提供SparkKafkaContext类
 * 提供创建KafkaRDD

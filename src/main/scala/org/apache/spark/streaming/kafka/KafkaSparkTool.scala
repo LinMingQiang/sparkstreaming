@@ -64,6 +64,13 @@ trait KafkaSparkTool{
     instance(kp)
     val o = kc.setConsumerOffsets(groupId, offsets)
     if (o.isLeft)
+      log.error(s"Error updating the offset to Kafka cluster: ${o.left.get}")
+  }
+   def updateConsumerOffsets(kp: Map[String, String], offsets: Map[TopicAndPartition, Long]): Unit = {
+    instance(kp)
+    val groupId=kp.get(GROUP_ID).get
+    val o = kc.setConsumerOffsets(groupId, offsets)
+    if (o.isLeft)
       println(s"Error updating the offset to Kafka cluster: ${o.left.get}")
   }
 /*
@@ -71,6 +78,7 @@ trait KafkaSparkTool{
  * 
  */
   def getLatestOffsets(topics: Set[String], kafkaParams: Map[String, String]) = {
+     instance(kafkaParams)
     val reset = kafkaParams.get("auto.offset.reset").map(_.toLowerCase)
     var fromOffsets = (for {
       topicPartitions <- kc.getPartitions(topics).right

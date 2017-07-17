@@ -19,6 +19,16 @@ class SparkKafkaContext{
     this()
     sc=new SparkContext(conf)
   }
+  def sparkcontext()=sc
+  def broadcast[T:ClassTag](value:T)={
+    sc.broadcast(value)
+  }
+   //将当前的topic的groupid更新至最新的offsets
+  def updataOffsetToLastest(topics:Set[String],kp: Map[String, String])={
+    val lastestOffsets=KafkaSparkContextManager.getLatestOffsets(topics, kp)
+    KafkaSparkContextManager.updateConsumerOffsets(kp, lastestOffsets)
+    lastestOffsets
+  }
   def kafkaRDD[
     K: ClassTag,
     V: ClassTag,
