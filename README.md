@@ -15,7 +15,7 @@ kafka version 0.8
 * 提供SparkKafkaContext类
 * 提供创建KafkaRDD
 * 修改 增加updateOffsets方法不用提供group id
-
+* 修改，在kp里面设置spark.streaming.kafka.maxRatePerPartition。这样可以针对不同的topic使用不同的limit
 # Example 
 > 使用common的方式获取Dstream
 ```

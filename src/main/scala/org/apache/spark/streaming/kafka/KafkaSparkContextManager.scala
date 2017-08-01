@@ -46,7 +46,10 @@ extends KafkaSparkTool {
         }
       } else fromOffset
       //consumerOffsets.foreach(x=>log.info(x.toString))
-      val maxMessagesPerPartition = sc.getConf.getInt("spark.streaming.kafka.maxRatePerPartition", 1000) //0表示没限制
+      val maxMessagesPerPartition = if(kp.contains(maxMessagesPerPartitionKEY))
+        kp.get(maxMessagesPerPartitionKEY).get.toInt
+      else sc.getConf.getInt(maxMessagesPerPartitionKEY, 0) //0表示没限制
+      
       val untilOffsets = clamp(latestLeaderOffsets(consumerOffsets), consumerOffsets, maxMessagesPerPartition)
       
       KafkaRDD[K, V, KD, VD, R](
@@ -57,7 +60,42 @@ extends KafkaSparkTool {
       messageHandler)
     
   }
-  
+   def createKafkaRDD[
+    K: ClassTag,
+    V: ClassTag, 
+    KD <: Decoder[K]: ClassTag, 
+    VD <: Decoder[V]: ClassTag, 
+    R: ClassTag](
+    sc: SparkContext,
+    kp: Map[String, String],
+    topics: Set[String],
+    fromOffset: Map[TopicAndPartition, Long],
+    maxMessagesPerPartition:Int,
+    messageHandler: MessageAndMetadata[K, V] => R)={
+    if (kp==null || !kp.contains(GROUP_ID))
+      throw new SparkException(s"kafkaParam is Null or ${GROUP_ID} is not setted")
+    instance(kp)
+    val groupId = kp.get(GROUP_ID).get
+    val consumerOffsets: Map[TopicAndPartition, Long] =
+      if (fromOffset == null) {
+        val last =if (kp.contains(LAST_OR_CONSUMER)) kp.get(LAST_OR_CONSUMER).get
+                  else lastOrConsum
+        last.toUpperCase match {
+          case "LAST"   => getLatestOffsets(topics, kp)
+          case "CONSUM" => getConsumerOffset(kp, groupId, topics)
+          case _          => log.info(s"""${LAST_OR_CONSUMER} must LAST or CONSUM,defualt is LAST""");getLatestOffsets(topics, kp)
+        }
+      } else fromOffset
+      val untilOffsets = clamp(latestLeaderOffsets(consumerOffsets), consumerOffsets, maxMessagesPerPartition)
+      
+      KafkaRDD[K, V, KD, VD, R](
+      sc,
+      kp,
+      consumerOffsets,
+      untilOffsets,
+      messageHandler)
+    
+  } 
   /**
    * 最新的数据偏移量
    */

@@ -14,6 +14,7 @@ trait KafkaSparkTool{
   val GROUP_ID="group.id"
   val LAST_OR_CONSUMER="kafka.last.consum"
   val LAST_OR_EARLIEST="newgroup.last.earliest"
+  val maxMessagesPerPartitionKEY="spark.streaming.kafka.maxRatePerPartition"
   def instance(kp: Map[String, String]) {
     if (kc == null) kc = new KafkaCluster(kp)
   }
