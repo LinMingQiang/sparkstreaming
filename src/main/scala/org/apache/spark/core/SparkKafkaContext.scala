@@ -9,6 +9,7 @@ import kafka.message.MessageAndMetadata
 import kafka.serializer.Decoder
 import kafka.common.TopicAndPartition
 import kafka.serializer.StringDecoder
+import org.apache.spark.rdd.RDD
 class SparkKafkaContext{
   var sc:SparkContext=null
   def this(sc:SparkContext){
@@ -28,6 +29,9 @@ class SparkKafkaContext{
     val lastestOffsets=KafkaSparkContextManager.getLatestOffsets(topics, kp)
     KafkaSparkContextManager.updateConsumerOffsets(kp, lastestOffsets)
     lastestOffsets
+  }
+  def updateRDDOffsets[T](kp: Map[String, String], groupId: String, rdd: RDD[T]){
+    KafkaSparkContextManager.updateRDDOffset(kp, groupId, rdd)
   }
   def kafkaRDD[
     K: ClassTag,
