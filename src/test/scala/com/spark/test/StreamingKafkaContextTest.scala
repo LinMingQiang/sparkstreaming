@@ -9,15 +9,16 @@ import kafka.serializer.StringDecoder
 import org.slf4j.LoggerFactory
 import org.apache.spark.common.util.Configuration
 import org.apache.log4j.PropertyConfigurator
-import org.apache.spark.func.tool._
-object TestRunMain {
+import org.apache.spark.core.StreamingKafkaContext
+import org.apache.spark.core.SparkKafkaContext
+object StreamingKafkaContextTest{
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
     //runJob
   }
   def runJob() {
     val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
-    val ssc = new StreamingContext(sc, Seconds(20))
+    val ssc = new StreamingKafkaContext(sc, Seconds(20))
     var kp = Map[String, String](
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
@@ -29,8 +30,8 @@ object TestRunMain {
     
     ds.foreachRDD { rdd => 
       println(rdd.count)
-      rdd.getRDDOffsets().foreach(println)
-      rdd.updateOffsets(kp, "group.id.test")
+      ssc.getRDDOffsets(rdd).foreach(println)
+      ssc.updateRDDOffsets(kp,  "group.id.test", rdd)
       System.exit(0)
       }
 
@@ -43,8 +44,8 @@ object TestRunMain {
     initJobConf(conf)
     println(conf.getKV())
     val scf = new SparkConf().setMaster("local[2]").setAppName("Test")
-    val sc = new SparkContext(scf)
-    val ssc = new StreamingContext(sc, Seconds(5))
+    val sc = new SparkKafkaContext(scf)
+    val ssc = new StreamingKafkaContext(sc, Seconds(5))
     val ds = ssc.createDirectStream(conf, msgHandle)
     ds.foreachRDD { rdd => rdd.foreach(println) }
     ssc.start()

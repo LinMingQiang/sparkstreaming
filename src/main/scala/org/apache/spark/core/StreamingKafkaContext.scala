@@ -15,16 +15,15 @@ import org.apache.spark.rdd.RDD
 
 class StreamingKafkaContext {
   var ssc: StreamingContext = null
+  var sc:SparkContext=null
   def this(ssc: StreamingContext) {
     this()
     this.ssc = ssc
+    this.sc=ssc.sparkContext
   }
-  def this(skc:SparkKafkaContext, batchDuration: Duration){
+  def this(sc:SparkContext, batchDuration: Duration){
     this()
-    ssc = new StreamingContext(skc.sc, batchDuration)
-  }
-  def this(sc: SparkContext, batchDuration: Duration) {
-    this()
+    this.sc=sc
     ssc = new StreamingContext(sc, batchDuration)
   }
   def start(){
