@@ -14,6 +14,7 @@ import kafka.serializer.Decoder
 import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.SparkContext
+
 private[spark]
 object KafkaSparkContextManager
 extends KafkaSparkTool { 
@@ -52,13 +53,13 @@ extends KafkaSparkTool {
       
       val untilOffsets = clamp(latestLeaderOffsets(consumerOffsets), consumerOffsets, maxMessagesPerPartition)
       
-      KafkaRDD[K, V, KD, VD, R](
+      val kd=KafkaRDD[K, V, KD, VD, R](
       sc,
       kp,
       consumerOffsets,
       untilOffsets,
       messageHandler)
-    
+    new KafkaDataRDD[K, V, KD, VD, R](kd)
   }
    def createKafkaRDD[
     K: ClassTag,
@@ -88,13 +89,13 @@ extends KafkaSparkTool {
       } else fromOffset
       val untilOffsets = clamp(latestLeaderOffsets(consumerOffsets), consumerOffsets, maxMessagesPerPartition)
       
-      KafkaRDD[K, V, KD, VD, R](
+      val kd=KafkaRDD[K, V, KD, VD, R](
       sc,
       kp,
       consumerOffsets,
       untilOffsets,
       messageHandler)
-    
+     new KafkaDataRDD[K, V, KD, VD, R](kd)
   } 
   /**
    * 最新的数据偏移量

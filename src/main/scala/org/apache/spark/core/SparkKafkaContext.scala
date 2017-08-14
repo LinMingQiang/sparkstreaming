@@ -22,6 +22,7 @@ class SparkKafkaContext{
   }
   def sparkcontext()=sc
   def broadcast[T:ClassTag](value:T)={
+    
     sc.broadcast(value)
   }
    //将当前的topic的groupid更新至最新的offsets

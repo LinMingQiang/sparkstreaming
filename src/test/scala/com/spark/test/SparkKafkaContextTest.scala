@@ -2,7 +2,6 @@ package com.spark.test
 
 import org.apache.spark.core.SparkKafkaContext
 import org.apache.spark.SparkConf
-import org.apache.spark.func.tool._
 object SparkKafkaContextTest {
   def main(args: Array[String]): Unit = {
     val sc=new SparkKafkaContext(new SparkConf().setMaster("local[*]").setAppName("SparkKafkaContextTest"))
@@ -15,8 +14,7 @@ object SparkKafkaContextTest {
     val topics = Set("smartadsdeliverylog")
     
     val rdd=sc.kafkaRDD(kp, topics, msgHandle)
-        rdd.foreach(println)
+        rdd.map{x=>x._1}.foreach(println)
         rdd.updateOffsets(kp, "test")
-        
   }
 }
