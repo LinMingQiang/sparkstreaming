@@ -12,9 +12,7 @@ kafka version 0.8
 * 提供 rdd 写数据进kakfa方法
 * 提供StreamingKafkaContext，SparkKafkaContext使用更方便
 * 提供KafkaDataRDD，封装了更新offset等操作在里面。不用再用隐式转换来添加这些功能了
-
-* 提供SparkKafkaContext类
-* 提供创建KafkaRDD
+* 提供一个kafkaCluster。可以用来单独获取kafka信息，如最新偏移量等信息
 * 修改 增加updateOffsets方法不用提供group id
 * 修改，在kp里面设置spark.streaming.kafka.maxRatePerPartition。这样可以针对不同的topic使用不同的limit
 # Example 
