@@ -16,6 +16,7 @@ import org.apache.spark.rdd.RDD
 class StreamingKafkaContext {
   var ssc: StreamingContext = null
   var sc:SparkContext=null
+ 
   def this(ssc: StreamingContext) {
     this()
     this.ssc = ssc
@@ -69,4 +70,7 @@ class StreamingKafkaContext {
     msgHandle: (MessageAndMetadata[String, String]) => R): InputDStream[R] = {
     KafkaSparkStreamManager.createDirectStream[String, String, StringDecoder, StringDecoder, R](ssc, conf, null, msgHandle)
   }
+}
+object StreamingKafkaContext extends SparkKafkaConfsKey{
+ 
 }

@@ -32,16 +32,19 @@ trait KafkaSparkTool{
       val partitionsE = kc.getPartitions(Set(topic)) //获取patition信息
       if (partitionsE.isLeft) throw new SparkException("get kafka partition failed:")
       val partitions = partitionsE.right.get
+      //过期或者是新的groupid从哪开始读取
       val last_earlies=if(kp.contains(LAST_OR_EARLIEST)){kp.get(LAST_OR_EARLIEST).get.toUpperCase()} else "LAST"
       val consumerOffsetsE = kc.getConsumerOffsets(groupId, partitions) //获取这个topic的每个patition的消费信息      
       if (consumerOffsetsE.isLeft) hasConsumed = false
       if (hasConsumed) {
-        val earliestLeaderOffsets = kc.getEarliestLeaderOffsets(partitions).right.get
+        val earliestLeaderOffsets = kc.getEarliestLeaderOffsets(partitions).right.get//获取最早的偏移量
         val consumerOffsets = consumerOffsetsE.right.get
+         //过期或者是新的groupid从哪开始读取//为了防止丢失，建议从最旧的开始
         var newgroupOffsets= last_earlies match{
             case "EARLIEST"=>earliestLeaderOffsets
-            case _ => kc.getLatestLeaderOffsets(partitions).right.get
+            case  _ => kc.getLatestLeaderOffsets(partitions).right.get
         }
+        //消费的偏移量和最早的偏移量做比较（因为kafka有过期，如果太久没消费，）
         consumerOffsets.foreach({case (tp, n) =>
             val earliestLeaderOffset = earliestLeaderOffsets(tp).offset
             if (n < earliestLeaderOffset) {
@@ -56,7 +59,8 @@ trait KafkaSparkTool{
           }
         newgroupOffsets.foreach { case (tp, offset) => 
           offsets += (tp -> offset.offset) }
-        updateConsumerOffsets(kp, groupId, newgroupOffsets.map { case (tp, offset) => (tp -> offset.offset) })
+        //解决冷启动问题，更新一个初始为0的偏移量记录
+        updateConsumerOffsets(kp, groupId, newgroupOffsets.map { case (tp, offset) => (tp -> 0L) })
       }
     }
     offsets
@@ -99,4 +103,5 @@ trait KafkaSparkTool{
       ok => ok)
     fromOffsets
   }
+
 }

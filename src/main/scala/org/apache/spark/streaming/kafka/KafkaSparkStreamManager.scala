@@ -82,8 +82,9 @@ extends KafkaSparkTool {
                   else lastOrConsum
         last.toUpperCase match {
           case "LAST"   => getLatestOffsets(topics, kp)
+          case "SMALLEST"=>getLatestOffsets(topics, kp)
           case "CONSUM" => getConsumerOffset(kp, groupId, topics)
-          case _          => getLatestOffsets(topics, kp)
+          case "LAST"   => getLatestOffsets(topics, kp)
         }
       } else fromOffset
       consumerOffsets.foreach(x=>log.info(x.toString))

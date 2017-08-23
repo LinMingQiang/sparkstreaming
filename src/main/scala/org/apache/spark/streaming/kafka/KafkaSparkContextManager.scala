@@ -43,6 +43,7 @@ extends KafkaSparkTool {
         last.toUpperCase match {
           case "LAST"   => getLatestOffsets(topics, kp)
           case "CONSUM" => getConsumerOffset(kp, groupId, topics)
+          case "CUSTOM" => getConsumerOffsetsByToday(kp)
           case _          => log.info(s"""${LAST_OR_CONSUMER} must LAST or CONSUM,defualt is LAST""");getLatestOffsets(topics, kp)
         }
       } else fromOffset
@@ -97,6 +98,15 @@ extends KafkaSparkTool {
       messageHandler)
      new KafkaDataRDD[K, V, KD, VD, R](kd)
   } 
+  private def getConsumerOffsetsByToday(kp: Map[String,String]) = {
+    var consumerOffsets = new HashMap[TopicAndPartition, Long]()
+    var todayOffsets = kp.get("kafka.offset").get.split('|')
+    for (offset <- todayOffsets) {
+      val offsets = offset.split(",")
+      consumerOffsets.put(new TopicAndPartition(offsets(0), offsets(1).toInt), offsets(2).toLong)
+    }
+    consumerOffsets.toMap
+  }
   /**
    * 最新的数据偏移量
    */
@@ -147,5 +157,10 @@ extends KafkaSparkTool {
     val offsets = getRDDConsumerOffsets(rdd)
     updateConsumerOffsets(kp, groupId, offsets)
   }
-
+      //将当前的topic的groupid更新至最新的offsets
+  def updataOffsetToLastest(topics:Set[String],kp: Map[String, String])={
+    val lastestOffsets=KafkaSparkContextManager.getLatestOffsets(topics, kp)
+    updateConsumerOffsets(kp, kp.get("group.id").get,lastestOffsets)
+    lastestOffsets
+  }
 }
