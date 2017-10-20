@@ -39,7 +39,13 @@ class StreamingKafkaContext {
     KafkaSparkContextManager.updateConsumerOffsets(kp, lastestOffsets)
     lastestOffsets
   }
-  def updateRDDOffsets[T](kp: Map[String, String], groupId: String, rdd: RDD[T]) {
+  /**
+   * 更新rdd的offset
+   */
+  def updateRDDOffsets[T](
+      kp: Map[String, String], 
+      groupId: String, 
+      rdd: RDD[T]) {
     KafkaSparkContextManager.updateRDDOffset(kp, groupId, rdd)
   }
   def getRDDOffsets[T](rdd:RDD[T]) = {

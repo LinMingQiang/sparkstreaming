@@ -6,8 +6,8 @@ import org.apache.spark.streaming.Seconds
 import org.apache.spark.streaming.StreamingContext
 import org.apache.log4j.PropertyConfigurator
 import org.apache.spark.core.StreamingKafkaContext
-import org.apache.spark.func.tool.KafkaImplicittrait
-object KafkaWriterTest extends KafkaImplicittrait{
+import org.apache.spark.func.tool._
+object KafkaWriterTest{
    PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
     runJob
@@ -21,13 +21,11 @@ object KafkaWriterTest extends KafkaImplicittrait{
       "group.id" -> "test",
       "kafka.last.consum" -> "consum")
     val topics = Set("test")
-    val ds = ssc.createDirectStream[(String, String)](kp, topics, null, msgHandle)
+    val ds = ssc.createDirectStream[(String, String)](kp, topics, msgHandle)
     ds.foreachRDD { rdd => 
-      println("########## S")
       rdd.foreach(println)
       rdd.map(_._2)
          .writeToKafka(producerConfig, transformFunc(outTopic,_))
-      println("########## E")
       }
 
     ssc.start()

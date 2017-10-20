@@ -15,6 +15,9 @@ class KafkaDataRDD[
   T <: Decoder[_]: ClassTag,
   R: ClassTag](prev: KafkaRDD[K,V,U,T,R]) 
 extends RDD[R](prev) with HasOffsetRanges{
+  /**
+   * 使rdd具备更新offset的能力
+   */
   def updateOffsets(kp: Map[String, String], groupid: String){
     KafkaSparkStreamManager.updateRDDOffset(kp, groupid, this)
   }

@@ -18,7 +18,7 @@ private[spark]
 object KafkaSparkStreamManager
 extends KafkaSparkTool { 
   val lastOrConsum:String="LAST"
-  override val logname="KafkaSparkStreamManager"
+  logname="KafkaSparkStreamManager"
   /**
    * common create DStream 
    * 

@@ -11,33 +11,34 @@ import org.apache.spark.common.util.Configuration
 import org.apache.log4j.PropertyConfigurator
 import org.apache.spark.core.StreamingKafkaContext
 import org.apache.spark.core.SparkKafkaContext
-object StreamingKafkaContextTest{
+object StreamingKafkaContextTest {
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
-    runJob
+    run
   }
-  def runJob() {
+  def run() {
     val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
     val ssc = new StreamingKafkaContext(sc, Seconds(2))
     var kp = Map[String, String](
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
-      "group.id" -> "group.id.test2",
-     StreamingKafkaContext.NEWGROUP_LAST_EARLIEST->"earliest",
-     StreamingKafkaContext.LAST_CONSUMER -> "last")
-    val topics = Set("smartadsclicklog")
+      "group.id" -> "testGroupid",
+      StreamingKafkaContext.NEWGROUP_LAST_EARLIEST -> "earliest",
+      StreamingKafkaContext.LAST_CONSUMER -> "last")
+    val topics = Set("testTopic")
     val ds = ssc.createDirectStream[(String, String)](kp, topics, msgHandle)
-    
-    ds.foreachRDD { rdd => 
+    ds.foreachRDD { rdd =>
       println(rdd.count)
       rdd.foreach(println)
-      ssc.getRDDOffsets(rdd).foreach(println)
-      //ssc.updateRDDOffsets(kp,  "group.id.test", rdd)
-      System.exit(0)
-      }
+      //do rdd operate....
+      ssc.updateRDDOffsets(kp,  "group.id.test", rdd)//如果想要实现 rdd.updateOffsets。这需要重新inputstream（之后会加上）
+    }
     ssc.start()
     ssc.awaitTermination()
   }
+  /**
+   * 使用配置文件的形式
+   */
   def runJobWithConf() {
     val conf = new ConfigurationTest()
     initConf("conf/config.properties", conf)
@@ -52,7 +53,10 @@ object StreamingKafkaContextTest{
     ssc.awaitTermination()
 
   }
-  def initJobConf(conf:Configuration){
+  /**
+   * 初始化配置文件
+   */
+  def initJobConf(conf: Configuration) {
     var kp = Map[String, String](
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",

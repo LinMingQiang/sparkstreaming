@@ -19,6 +19,5 @@ package object test extends  ConfigurationFactoryTool{
   val transformFunc=(topic:String,msg:String) 
   => new ProducerRecord[String, String](topic, msg)
   
-  def msgHandle = (mmd: MessageAndMetadata[String, String]) 
-  => (mmd.topic, mmd.message)
+  def msgHandle = (mmd: MessageAndMetadata[String, String])=> (mmd.topic, mmd.message)
 }
