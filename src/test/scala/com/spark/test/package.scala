@@ -20,4 +20,7 @@ package object test extends  ConfigurationFactoryTool{
   => new ProducerRecord[String, String](topic, msg)
   
   def msgHandle = (mmd: MessageAndMetadata[String, String])=> (mmd.topic, mmd.message)
+
+    def msgHandle2 = (mmd: MessageAndMetadata[String, String])=> ((mmd.topic,mmd.partition,mmd.offset), mmd.message)
+
 }

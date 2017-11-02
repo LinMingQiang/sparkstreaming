@@ -156,10 +156,4 @@ private[spark] object KafkaSparkContextManager
     val offsets = getRDDConsumerOffsets(rdd)
     updateConsumerOffsets(kp, groupId, offsets)
   }
-  //将当前的topic的groupid更新至最新的offsets
-  def updataOffsetToLastest(topics: Set[String], kp: Map[String, String]) = {
-    val lastestOffsets = KafkaSparkContextManager.getLatestOffsets(topics, kp)
-    updateConsumerOffsets(kp, kp.get("group.id").get, lastestOffsets)
-    lastestOffsets
-  }
 }

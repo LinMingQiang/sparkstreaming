@@ -94,6 +94,9 @@ extends KafkaSparkTool {
       consumerOffsets,
       msghandle)
  }
+  /***
+   * 创建一个 receiver 的收集器来手机kafka数据
+   */
   def createReceiverStream[
     K: ClassTag,
     V: ClassTag, 
@@ -104,8 +107,10 @@ extends KafkaSparkTool {
     topics: Map[String,Int]) = {
     KafkaUtils.createStream[K,V,U,T](ssc, kp, topics, StorageLevel.MEMORY_ONLY)
     }
-  def msgHandle = (mmd: MessageAndMetadata[String, String]) 
-  => (mmd.topic, mmd.message)
+  /**
+   * 默认的一个handle
+   */
+  def msgHandle = (mmd: MessageAndMetadata[String, String])  => (mmd.topic, mmd.message)
   /**
    * get RDD offset
    */

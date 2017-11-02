@@ -7,6 +7,7 @@ import org.apache.spark.rdd.RDD
 import java.util.Properties
 import org.apache.spark.Logging
 import org.slf4j.LoggerFactory
+private[spark]
 trait KafkaSparkTool {
   var logname = "KafkaSparkTool" //外部可重写
   lazy val log = LoggerFactory.getLogger(logname)
@@ -120,5 +121,12 @@ trait KafkaSparkTool {
       ok => ok)
     fromOffsets
   }
-
+  /**
+   * 将当前的topic的groupid更新至最新的offsets
+   */
+  def updataOffsetToLastest(topics: Set[String], kp: Map[String, String]) = {
+    val lastestOffsets = KafkaSparkContextManager.getLatestOffsets(topics, kp)
+    updateConsumerOffsets(kp, kp.get("group.id").get, lastestOffsets)
+    lastestOffsets
+  }
 }
