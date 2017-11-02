@@ -56,6 +56,15 @@ class SparkKafkaContext {
     msgHandle: (MessageAndMetadata[K, V]) => R) = {
     KafkaSparkContextManager.createKafkaRDD[K, V, KD, VD, R](sc, kp, topics, null, msgHandle)
   }
+    /**
+   * 创建 kafkaDataRDD
+   */
+  def kafkaRDD[R: ClassTag](
+    kp: Map[String, String],
+    topics: Set[String],
+    msgHandle: (MessageAndMetadata[String, String]) => R) = {
+    KafkaSparkContextManager.createKafkaRDD[String, String, StringDecoder, StringDecoder, R](sc, kp, topics, null, msgHandle)
+  }
   /**
    * 创建kafkaRDD 但是提供fromOffset
    */

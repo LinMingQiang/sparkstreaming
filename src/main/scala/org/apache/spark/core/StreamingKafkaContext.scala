@@ -15,22 +15,22 @@ import org.apache.spark.rdd.RDD
 
 class StreamingKafkaContext {
   var ssc: StreamingContext = null
-  var sc:SparkContext=null
- 
+  var sc: SparkContext = null
+
   def this(ssc: StreamingContext) {
     this()
     this.ssc = ssc
-    this.sc=ssc.sparkContext
+    this.sc = ssc.sparkContext
   }
-  def this(sc:SparkContext, batchDuration: Duration){
+  def this(sc: SparkContext, batchDuration: Duration) {
     this()
-    this.sc=sc
+    this.sc = sc
     ssc = new StreamingContext(sc, batchDuration)
   }
-  def start(){
+  def start() {
     ssc.start()
   }
-  def awaitTermination(){
+  def awaitTermination() {
     ssc.awaitTermination
   }
   //将当前的topic的groupid更新至最新的offsets
@@ -43,15 +43,16 @@ class StreamingKafkaContext {
    * 更新rdd的offset
    */
   def updateRDDOffsets[T](
-      kp: Map[String, String], 
-      groupId: String, 
-      rdd: RDD[T]) {
+    kp: Map[String, String],
+    groupId: String,
+    rdd: RDD[T]) {
     KafkaSparkContextManager.updateRDDOffset(kp, groupId, rdd)
   }
-  def getRDDOffsets[T](rdd:RDD[T]) = {
+  
+  def getRDDOffsets[T](rdd: RDD[T]) = {
     KafkaSparkStreamManager.getRDDConsumerOffsets(rdd)
   }
-  
+
   def createDirectStream[R: ClassTag](
     kp: Map[String, String],
     topics: Set[String],
@@ -77,6 +78,16 @@ class StreamingKafkaContext {
     KafkaSparkStreamManager.createDirectStream[String, String, StringDecoder, StringDecoder, R](ssc, conf, null, msgHandle)
   }
 }
-object StreamingKafkaContext extends SparkKafkaConfsKey{
- 
+object StreamingKafkaContext extends SparkKafkaConfsKey {
+/**
+   * 更新rdd的offset
+   */
+  def updateRDDOffsets[T](
+    kp: Map[String, String],
+    rdd: RDD[T]) {
+    if (kp.contains("group.id")) {
+      val groupid = kp.get("group.id").get
+      KafkaSparkContextManager.updateRDDOffset(kp, groupid, rdd)
+    }else println("No Group Id To UpdateRDDOffsets")
+  }
 }

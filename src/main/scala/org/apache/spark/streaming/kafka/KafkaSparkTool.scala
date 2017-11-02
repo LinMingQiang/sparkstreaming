@@ -58,6 +58,7 @@ trait KafkaSparkTool {
         })
       } else {
         log.warn(" New Group ID : " + groupId)
+        log.warn(" Last_Earlies : " + last_earlies)
         var newgroupOffsets = last_earlies match {
           case "EARLIEST" => kc.getEarliestLeaderOffsets(partitions).right.get
           case _          => kc.getLatestLeaderOffsets(partitions).right.get

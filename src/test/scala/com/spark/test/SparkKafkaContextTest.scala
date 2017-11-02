@@ -4,6 +4,8 @@ import org.apache.spark.core.SparkKafkaContext
 import org.apache.spark.SparkConf
 import kafka.serializer.StringDecoder
 import org.apache.spark.streaming.kafka.KafkaUtil
+import org.apache.spark.rdd.RDD
+
 
 object SparkKafkaContextTest {
   /**
@@ -19,14 +21,11 @@ object SparkKafkaContextTest {
       "group.id" -> "group.id",
       "kafka.last.consum" -> "last")
     val topics = Set("test")
-    val kafkadataRdd = skc.kafkaRDD[String, String, StringDecoder, StringDecoder, (String, String)](kp, topics, msgHandle)
-    
-    
-    val rdd2=skc.kafkaRDD(kp, topics, 1000, msgHandle2)
-    rdd2.foreach{case((topic,part,offser),msg)=>
-      //msg如果是今天的，那就更新offset
-    
-    }
+    val kafkadataRdd = skc.kafkaRDD(kp, topics, msgHandle2)
+    RDD.rddToPairRDDFunctions(kafkadataRdd)
+    kafkadataRdd.reduceByKey(_+_)
+   // kafkadataRdd.map(f)
+ 
     
     kafkadataRdd.foreach(println)
     kafkadataRdd.updateOffsets(kp)
