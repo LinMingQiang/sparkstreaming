@@ -7,8 +7,7 @@ import org.apache.spark.rdd.RDD
 import java.util.Properties
 import org.apache.spark.Logging
 import org.slf4j.LoggerFactory
-private[spark]
-trait KafkaSparkTool {
+private[spark] trait KafkaSparkTool {
   var logname = "KafkaSparkTool" //外部可重写
   lazy val log = LoggerFactory.getLogger(logname)
   var kc: KafkaCluster = null
@@ -42,6 +41,7 @@ trait KafkaSparkTool {
       if (consumerOffsetsE.isLeft) hasConsumed = false
       if (hasConsumed) {
         val earliestLeaderOffsets = kc.getEarliestLeaderOffsets(partitions).right.get //获取最早的偏移量
+        val partLastOffsets = kc.getLatestLeaderOffsets(partitions).right
         val consumerOffsets = consumerOffsetsE.right.get
         //过期或者是新的groupid从哪开始读取//为了防止丢失，建议从最旧的开始
         var newgroupOffsets = last_earlies match {
@@ -51,10 +51,17 @@ trait KafkaSparkTool {
         //消费的偏移量和最早的偏移量做比较（因为kafka有过期，如果太久没消费，）
         consumerOffsets.foreach({
           case (tp, n) =>
+            //现在数据在什么offset上
             val earliestLeaderOffset = earliestLeaderOffsets(tp).offset
-            if (n < earliestLeaderOffset) {
-              offsets += (tp -> newgroupOffsets.get(tp).get.offset)
-            } else offsets += (tp -> n)
+            val lastoffset = partLastOffsets.get(tp).offset
+            if (n > lastoffset || n < earliestLeaderOffset) { //如果offset超过了最新的//消费过，但是过时了，就从最新开始消费
+              if (kp.contains(LAST_OR_EARLIEST)) {
+                kp.get(LAST_OR_EARLIEST).get.toUpperCase() match {
+                  case "EARLIEST" => offsets += (tp -> earliestLeaderOffset)
+                  case _          => offsets += (tp -> lastoffset)
+                }
+              }
+            } else offsets += (tp -> n) //消费者的offsets正常
         })
       } else {
         log.warn(" New Group ID : " + groupId)
@@ -97,7 +104,7 @@ trait KafkaSparkTool {
     if (o.isLeft)
       println(s"Error updating the offset to Kafka cluster: ${o.left.get}")
   }
-/*
+  /*
  *  "largest"/"smallest"
  * 
  */
