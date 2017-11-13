@@ -45,7 +45,7 @@ extends KafkaSparkTool {
         last.toUpperCase match {
           case "LAST"   => getLatestOffsets(topics, kp)
           case "CONSUM" => getConsumerOffset(kp, groupId, topics)
-          case _          => log.info(s"""${LAST_OR_CONSUMER} must LAST or CONSUM,defualt is LAST""");getLatestOffsets(topics, kp)
+          case _          => log.error(s"""${LAST_OR_CONSUMER} must LAST or CONSUM,defualt is LAST""");getLatestOffsets(topics, kp)
         }
       } else fromOffset
     consumerOffsets.foreach(x=>log.info(x.toString))

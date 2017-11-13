@@ -18,20 +18,21 @@ object StreamingKafkaContextTest {
   }
   def run() {
     val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
-    val ssc = new StreamingKafkaContext(sc, Seconds(2))
+    val ssc = new StreamingKafkaContext(sc, Seconds(5))
     var kp = Map[String, String](
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
       "group.id" -> "testGroupid",
-      StreamingKafkaContext.NEWGROUP_LAST_EARLIEST -> "earliest",
-      StreamingKafkaContext.LAST_CONSUMER -> "last")
-    val topics = Set("testTopic")
+      StreamingKafkaContext.WRONG_FROM -> "last",//EARLIEST
+      StreamingKafkaContext.CONSUMER_FROM -> "consum")
+    val topics = Set("testtopic")
     val ds = ssc.createDirectStream[(String, String)](kp, topics, msgHandle)
     ds.foreachRDD { rdd =>
       println(rdd.count)
-      rdd.foreach(println)
+      //rdd.foreach(println)
       //do rdd operate....
-      ssc.updateRDDOffsets(kp,  "group.id.test", rdd)//如果想要实现 rdd.updateOffsets。这需要重新inputstream（之后会加上）
+      ssc.getRDDOffsets(rdd).foreach(println)
+      //ssc.updateRDDOffsets(kp,  "group.id.test", rdd)//如果想要实现 rdd.updateOffsets。这需要重新inputstream（之后会加上）
     }
     ssc.start()
     ssc.awaitTermination()

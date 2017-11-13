@@ -12,8 +12,8 @@ private[spark] trait KafkaSparkTool {
   lazy val log = LoggerFactory.getLogger(logname)
   var kc: KafkaCluster = null
   val GROUP_ID = "group.id"
-  val LAST_OR_CONSUMER = "kafka.last.consum"
-  val LAST_OR_EARLIEST = "newgroup.last.earliest" //新用户或者过期用户 重新读取的点 （最新或者最旧）
+  val LAST_OR_CONSUMER = "kafka.consumer.from"
+  val LAST_OR_EARLIEST = "wrong.groupid.from" //新用户或者过期用户 重新读取的点 （最新或者最旧）
   val maxMessagesPerPartitionKEY = "spark.streaming.kafka.maxRatePerPartition"
   /**
    * init KafkaCluster
