@@ -14,6 +14,7 @@ trait ConfigurationFactoryTool {
       conf.set(key.trim(), property.get(key).toString().trim())
     }
   }
+  
   def getConfigFromFilePath(filePath: String) = {
     var file = new File(filePath)
     var p = new Properties()

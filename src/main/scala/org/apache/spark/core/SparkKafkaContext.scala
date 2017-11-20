@@ -27,6 +27,13 @@ class SparkKafkaContext {
   def broadcast[T: ClassTag](value: T) = {
     sc.broadcast(value)
   }
+  
+  def getRDDOffset[T](rdd:RDD[T])={
+    KafkaSparkContextManager.getRDDConsumerOffsets(rdd)
+  }
+  def getLastOffset(topics: Set[String], kp: Map[String, String])={
+    KafkaSparkContextManager.getLatestOffsets(topics, kp)
+  }
   /**
    * 将当前的topic的groupid更新至最新的offsets
    */
@@ -35,6 +42,7 @@ class SparkKafkaContext {
     KafkaSparkContextManager.updateConsumerOffsets(kp, lastestOffsets)
     lastestOffsets
   }
+ 
   /**
    * 为 sc提供更新offset的功能
    */

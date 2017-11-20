@@ -1,7 +1,7 @@
 package com.spark.test
 
-import org.apache.spark.common.util.Configuration
+import org.apache.spark.common.util.KafkaConfiguration
 
-class ConfigurationTest extends Configuration{
+class ConfigurationTest extends KafkaConfiguration{
   
 }

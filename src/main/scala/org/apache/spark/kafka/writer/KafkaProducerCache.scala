@@ -5,7 +5,7 @@ import org.apache.kafka.clients.producer.KafkaProducer
 import scala.collection.mutable
 private[spark]
 object KafkaProducerCache {
- private val producers = mutable.HashMap.empty[Properties, KafkaProducer[_, _]]
+ private lazy val producers = mutable.HashMap.empty[Properties, KafkaProducer[_, _]]
 
   /**
    * Retrieve a [[KafkaProducer]] in the cache or create a new one

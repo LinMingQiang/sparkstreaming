@@ -11,6 +11,7 @@ import org.apache.spark.common.util.Configuration
 import org.apache.log4j.PropertyConfigurator
 import org.apache.spark.core.StreamingKafkaContext
 import org.apache.spark.core.SparkKafkaContext
+import org.apache.spark.common.util.KafkaConfiguration
 object StreamingKafkaContextTest {
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
@@ -57,7 +58,7 @@ object StreamingKafkaContextTest {
   /**
    * 初始化配置文件
    */
-  def initJobConf(conf: Configuration) {
+  def initJobConf(conf: KafkaConfiguration) {
     var kp = Map[String, String](
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",

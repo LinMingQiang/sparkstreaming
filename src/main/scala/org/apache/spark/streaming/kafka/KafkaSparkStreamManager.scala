@@ -14,6 +14,7 @@ import kafka.serializer.Decoder
 import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.storage.StorageLevel
+import org.apache.spark.common.util.KafkaConfiguration
 private[spark]
 object KafkaSparkStreamManager
 extends KafkaSparkTool { 
@@ -62,7 +63,7 @@ extends KafkaSparkTool {
   def createDirectStream[
     K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
     ssc: StreamingContext,
-    conf: Configuration,
+    conf: KafkaConfiguration,
     fromOffset: Map[TopicAndPartition, Long],
     msghandle: (MessageAndMetadata[K, V]) => R): InputDStream[R] = {
     if (conf.kpIsNull ||conf.tpIsNull) {

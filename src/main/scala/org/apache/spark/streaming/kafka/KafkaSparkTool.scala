@@ -55,13 +55,19 @@ private[spark] trait KafkaSparkTool {
             val earliestLeaderOffset = earliestLeaderOffsets(tp).offset
             val lastoffset = partLastOffsets.get(tp).offset
             if (n > lastoffset || n < earliestLeaderOffset) { //如果offset超过了最新的//消费过，但是过时了，就从最新开始消费
+              log.warn("-- Consumer offset is OutTime --- "+tp+"->"+n)
               if (kp.contains(LAST_OR_EARLIEST)) {
                 kp.get(LAST_OR_EARLIEST).get.toUpperCase() match {
                   case "EARLIEST" => offsets += (tp -> earliestLeaderOffset)
                   case _          => offsets += (tp -> lastoffset)
                 }
+              }else{
+                log.warn("-- Use EARLIEST Offset (set 'wrong.groupid.from') -- ")
+                offsets += (tp -> earliestLeaderOffset)
               }
-            } else offsets += (tp -> n) //消费者的offsets正常
+            } else {
+              offsets += (tp -> n)
+          } //消费者的offsets正常
         })
       } else {
         log.warn(" New Group ID : " + groupId)
