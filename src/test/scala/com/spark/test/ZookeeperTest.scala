@@ -10,7 +10,15 @@ import kafka.admin.AdminUtils
 import org.I0Itec.zkclient.ZkConnection
 import java.util.Properties
 import org.apache.zookeeper.CreateMode
-
+import org.apache.spark.streaming.kafka.KafkaCluster
+import kafka.consumer.Consumer
+import kafka.consumer.ConsumerConfig
+import java.util.HashMap
+import kafka.common.TopicAndPartition
+import kafka.api.PartitionOffsetRequestInfo
+import scala.collection.JavaConversions._
+import kafka.api.OffsetRequest
+import kafka.consumer.SimpleConsumer
 object ZookeeperTest {
   val zk = "solr1,solr2,mongodb3"
   def main(args: Array[String]): Unit = {
@@ -43,13 +51,37 @@ object ZookeeperTest {
     //val zkUtils = new ZkUtils(zkClient, zkConnection, false)
   }
   def getAlltopics() = {
-    val topicConfig = new Properties(); // add per-topic configurations settings here
+    val props = new Properties();
+    props.put("zookeeper.connect", "solr1:2181,solr2:2181,mongodb3:2181");
+    props.put("group.id", "group1");
+    props.put("zookeeper.session.timeout.ms", "400");
+    props.put("zookeeper.sync.time.ms", "200");
+    props.put("auto.commit.interval.ms", "1000");
     val zkClient = getzkClient(zk)
-    //AdminUtils.fetchAllTopicConfigs(zkClient)
-    val topicmeta = AdminUtils.fetchTopicMetadataFromZk("test", zkClient)
-    topicmeta.partitionsMetadata.foreach { partmeta =>
-
+    val consumer = new SimpleConsumer("kafka3", 9092, 10000, 100000,OffsetRequest.DefaultClientId);
+    val topicmeta = AdminUtils.fetchTopicMetadataFromZk("mac_probelog", zkClient)
+    val topicAndPartitions=topicmeta.partitionsMetadata.map { partmeta => 
+     new TopicAndPartition(topicmeta.topic, partmeta.partitionId);
     }
+    topicmeta.partitionsMetadata.foreach { partmeta =>
+      val endpoint = partmeta.leader.get
+      println(endpoint.host, endpoint.port)
+      val tp = new TopicAndPartition(topicmeta.topic, partmeta.partitionId);
+      
+      
+      val requestInfo = new HashMap[TopicAndPartition, PartitionOffsetRequestInfo]();
+      requestInfo.put(tp, new PartitionOffsetRequestInfo(-1, 1));//这个是固定的
+      
+      
+      val request =OffsetRequest(requestInfo.toMap);//
+      val respMap = consumer.getOffsetsBefore(request)
+      consumer.close()
+      respMap.partitionErrorAndOffsets.toMap.foreach{x=>
+        println(x._2.offsets)
+      }
+    }
+    //val topicmeta = AdminUtils.fetchTopicMetadataFromZk("test", zkClient)
+    //topicmeta.partitionsMetadata.foreach { partmeta =>}
   }
   def getzkClient(zk: String) = {
     val zkClient = new ZkClient(zk, 10000, 10000, ZKStringSerializer)
