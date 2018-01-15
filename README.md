@@ -25,19 +25,25 @@ kafka version 0.8
 # Example StreamingKafkaContextTest
 > StreamingKafkaContextTest 流式 
 ```
-var kp = Map[String, String](
+ val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
+    val ssc = new StreamingKafkaContext(sc, Seconds(5))
+    var kp = Map[String, String](
       "metadata.broker.list" -> brokers,
       "serializer.class" -> "kafka.serializer.StringEncoder",
-      "group.id" -> "group.id",
-      "kafka.last.consum" -> "last")//决定是从哪里开始 
-val topics = Set("test")
-val ds = ssc.createDirectStream[(String, String)](kp, topics, fromoffset, msgHandle)
-ds.foreachRDD { rdd => 
-rdd.foreach(println)
-rdd.updateOffsets(kp, "group.id")//更新zookeeper的offsets
-}
-ssc.start()
-ssc.awaitTermination()
+      "group.id" -> "testGroupid",
+      StreamingKafkaContext.WRONG_FROM -> "last",//EARLIEST
+      StreamingKafkaContext.CONSUMER_FROM -> "consum")
+    val topics = Set("testtopic")
+    val ds = ssc.createDirectStream[(String, String)](kp, topics, msgHandle)
+    ds.foreachRDD { rdd =>
+      println(rdd.count)
+      //rdd.foreach(println)
+      //do rdd operate....
+      ssc.getRDDOffsets(rdd).foreach(println)
+      //ssc.updateRDDOffsets(kp,  "group.id.test", rdd)//如果想要实现 rdd.updateOffsets。这需要重写inputstream（之后会加上）
+    }
+    ssc.start()
+    ssc.awaitTermination()
 ```
 # Example StreamingKafkaContextTest With Confguration
 > StreamingKafkaContextTest （配置文件，便于管理。适用于项目开发）
@@ -48,21 +54,11 @@ ssc.awaitTermination()
     println(conf.getKV())
     val scf = new SparkConf().setMaster("local[2]").setAppName("Test")
     val sc = new SparkContext(scf)
-    val ssc = new StreamingContext(sc, Seconds(5))
-    val ds = ssc.createDirectStream(conf, null, msgHandle)
+    val ssc = new StreamingKafkaContext(sc, Seconds(5))
+    val ds = ssc.createDirectStream(conf, msgHandle)
     ds.foreachRDD { rdd => rdd.foreach(println) }
     ssc.start()
     ssc.awaitTermination()
- def initJobConf(conf:Configuration)={
-    var kp = Map[String, String](
-      "metadata.broker.list" -> brokers,
-      "serializer.class" -> "kafka.serializer.StringEncoder",
-      "group.id" -> "group.id",
-      "kafka.last.consum" -> "last")
-    val topics = Set("test")
-    conf.setKafkaParams(kp)
-    conf.setTopics(topics)
-  }
 
 ```
 # Example SparkKafkaContext 
