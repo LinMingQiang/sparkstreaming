@@ -1,9 +1,10 @@
 # Spark-Util 
 
 language : `Scala` <br>
-Scala   : `2.10` <br>
-Spark   : `1.6.0` <br>
-Hbase   : `1.2.0` <br>
+Scala   : `2.10` <br>
+Kafka   ：`0.8.0+` <br>
+Spark   : `1.3.0+` <br>
+Hbase   : `1.0.0+` <br>
  # Spark Kafka Util <br>
  * 支持spark 1.3+ 和 kafka 0.8+
  * spark读取kafka数据。sparkstreaming读取kafka数据等
