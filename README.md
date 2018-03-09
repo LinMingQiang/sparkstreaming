@@ -30,3 +30,17 @@ https://github.com/LinMingQiang/spark-util/tree/splunk
 * flink读取kafka数据，并结合hbase实现一个简单的wc的实例 <br>
 https://github.com/LinMingQiang/spark-util/tree/flink-kafka
 
+# Kafka Util
+* 操作kafka 的工具类  <br>
+https://github.com/LinMingQiang/spark-util/tree/kafka-util
+
+# database-util
+* 提供各个数据库的连接工具  <br>
+https://github.com/LinMingQiang/spark-util/tree/database-util
+
+# es shade
+* es shade完之后的jar，解决es和spark，hadoop相关包冲突的问题   <br>
+https://github.com/LinMingQiang/spark-util/tree/es-shaed
+
+
+
