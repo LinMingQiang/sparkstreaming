@@ -32,7 +32,7 @@ https://github.com/LinMingQiang/spark-util/tree/splunk
 https://github.com/LinMingQiang/spark-util/tree/flink-kafka
 
 # Kafka Util
-* 操作kafka 的工具类  <br>
+* 操作kafka 的工具类，提供按天来记录topic的offset，主要用于当天重算，小时重算等功能  <br>
 https://github.com/LinMingQiang/spark-util/tree/kafka-util
 
 # database-util
