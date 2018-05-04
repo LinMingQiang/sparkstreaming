@@ -35,6 +35,11 @@ https://github.com/LinMingQiang/spark-util/tree/flink-kafka
 * 操作kafka 的工具类，提供按天来记录topic的offset，主要用于当天重算，小时重算等功能  <br>
 https://github.com/LinMingQiang/spark-util/tree/kafka-util
 
+# Hbase Util
+* 操作 Hbase 的工具类，查询hbase表的region信息，用于手动split 某些过大的region  <br>
+https://github.com/LinMingQiang/spark-util/tree/hbase-util
+
+
 # database-util
 * 提供各个数据库的连接工具  <br>
 https://github.com/LinMingQiang/spark-util/tree/database-util
