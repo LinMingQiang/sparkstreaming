@@ -48,5 +48,7 @@ https://github.com/LinMingQiang/spark-util/tree/database-util
 * es shade完之后的jar，解决es和spark，hadoop相关包冲突的问题   <br>
 https://github.com/LinMingQiang/spark-util/tree/es-shaed
 
-
+# rabbitmq util
+* 一个用来发送和消费mq消息的工具类   <br>
+https://github.com/LinMingQiang/spark-util/tree/rabbitmq-util
 
