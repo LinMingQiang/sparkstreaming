@@ -4,7 +4,7 @@
 language : `Scala` <br>
 Scala   : `2.10` <br>
 Kafka   ：`0.8.0+` <br>
-Spark   : `1.3.0+` <br>
+Spark   : `1.6.0+` <br>
 Hbase   : `1.0.0+` <br>
  # Spark Kafka Util <br>
  * sparkstreaming 使用 direct方式读取kafka，不需要自己在手动维护offset。已经封装好了。提供许多配置参数来控制读取kafka数据的方式
