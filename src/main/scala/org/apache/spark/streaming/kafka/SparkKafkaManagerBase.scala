@@ -5,14 +5,18 @@ import org.apache.spark.rdd.RDD
 import kafka.common.TopicAndPartition
 import org.apache.spark.streaming.kafka010.HasOffsetRanges
 
-
-trait SparkKafkaManagerBase extends KafkaSparkTool{
-   /**
+trait SparkKafkaManagerBase extends KafkaSparkTool {
+  val LAST = "LAST"
+  val CONSUM = "CONSUM"
+  val EARLIEST = "EARLIEST"
+  val CUSTOM = "CUSTOM"
+  val KAFKA_OFFSET = "kafka.offset"
+  /**
    * @author LMQ
    * @description  默认的一个handle (key,value)=>(topic,msg)
    */
   def msgHandle = (mmd: MessageAndMetadata[String, String]) => (mmd.topic, mmd.message)
-    /**
+  /**
    * @author LMQ
    * @description 获取RDD的offset。但这个rdd必须继承HasOffsetRanges 的
    */

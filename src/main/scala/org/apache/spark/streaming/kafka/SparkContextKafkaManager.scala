@@ -51,10 +51,10 @@ private[spark] object SparkContextKafkaManager
         val last = if (kp.contains(KAFKA_CONSUMER_FROM)) kp.get(KAFKA_CONSUMER_FROM).get
         else defualtFrom
         last.toUpperCase match {
-          case "LAST"     => getLatestOffsets(topics, kp)
-          case "CONSUM"   => getConsumerOffset(kp, groupId, topics)
-          case "EARLIEST" => getEarliestOffsets(topics, kp)
-          case "CUSTOM"   => getSelfOffsets(kp)
+          case LAST     => getLatestOffsets(topics, kp)
+          case CONSUM   => getConsumerOffset(kp, groupId, topics)
+          case EARLIEST => getEarliestOffsets(topics, kp)
+          case CUSTOM  => getSelfOffsets(kp)
           case _          => log.info(s"""${KAFKA_CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics, kp)
         }
       } else fromOffset
@@ -104,10 +104,10 @@ private[spark] object SparkContextKafkaManager
         val last = if (kp.contains(KAFKA_CONSUMER_FROM)) kp.get(KAFKA_CONSUMER_FROM).get
         else defualtFrom
         last.toUpperCase match {
-          case "LAST"     => getLatestOffsets(topics, kp)
-          case "CONSUM"   => getConsumerOffset(kp, groupId, topics)
-          case "EARLIEST" => getEarliestOffsets(topics, kp)
-          case "CUSTOM"   => getSelfOffsets(kp)
+          case LAST     => getLatestOffsets(topics, kp)
+          case CONSUM   => getConsumerOffset(kp, groupId, topics)
+          case EARLIEST => getEarliestOffsets(topics, kp)
+          case CUSTOM   => getSelfOffsets(kp)
           case _          => log.info(s"""${KAFKA_CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics, kp)
         }
       } else fromOffset
