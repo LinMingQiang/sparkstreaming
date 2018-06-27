@@ -60,7 +60,7 @@ private[spark] object StreamingKafkaManager
           case _          => log.error(s"""${KAFKA_CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics, kp)
         }
       } else fromOffset
-    consumerOffsets.foreach(x => log.info(x.toString))
+    //consumerOffsets.foreach(x => log.info(x.toString))
     KafkaUtils.createDirectStream[K, V](
       ssc,
       LocationStrategies.PreferConsistent,
@@ -107,7 +107,7 @@ private[spark] object StreamingKafkaManager
           case _          => log.error(s"""${KAFKA_CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics, kp)
         }
       } else fromOffset
-    consumerOffsets.foreach(x => log.info(x.toString))
+    //consumerOffsets.foreach(x => log.info(x.toString))
      KafkaUtils.createDirectStream[K, V](
       ssc,
       LocationStrategies.PreferConsistent,
