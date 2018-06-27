@@ -4,7 +4,8 @@
 **spark version 2.0.1** <br/>
 **kafka version 0.10** <br/>
 
-说明
+# 说明
+
 -------------------
 > 由于kakfa-010 的api的变化，之前的 kafka-08 版本的 spark-kafka 虽然能用，但是他依赖于spark-streaming-kafka-0-8_2.10 <br/>.(可能会导致一些版本问题)；所以这次重新写了一个 kafka010 & spark-2.x 版本 ；但是使用方法还是跟之前的差不多， <br/>
 -------------------
@@ -40,7 +41,7 @@
       StreamingKafkaContext.WRONG_FROM -> "last",//EARLIEST
       StreamingKafkaContext.CONSUMER_FROM -> "consum")
     val topics = Set("testtopic")
-    val ds = ssc.createDirectStream[(String, String)](kp, topics, msgHandle)
+    val ds = ssc.createDirectStream[String, String](kp, topics)
     ds.foreachRDD { rdd =>
       println(rdd.count)
       //rdd.foreach(println)
@@ -61,7 +62,7 @@
     val scf = new SparkConf().setMaster("local[2]").setAppName("Test")
     val sc = new SparkContext(scf)
     val ssc = new StreamingKafkaContext(sc, Seconds(5))
-    val ds = ssc.createDirectStream(conf, msgHandle)
+    val ds = ssc.createDirectStream(conf)
     ds.foreachRDD { rdd => rdd.foreach(println) }
     ssc.start()
     ssc.awaitTermination()
@@ -78,7 +79,7 @@ val skc = new SparkKafkaContext(
       "group.id" -> "group.id",
       "kafka.last.consum" -> "last")
     val topics = Set("test")
-    val kafkadataRdd = skc.kafkaRDD[String, String, StringDecoder, StringDecoder, (String, String)](kp, topics, msgHandle)
+    val kafkadataRdd = skc.kafkaRDD[String, String](kp, topics, msgHandle)
     kafkadataRdd.foreach(println)
     kafkadataRdd.updateOffsets(kp)//更新kafka偏移量
     
@@ -94,7 +95,7 @@ val skc = new SparkKafkaContext(
       "group.id" -> "test",
       "kafka.last.consum" -> "consum")
     val topics = Set("test")
-    val ds = ssc.createDirectStream[(String, String)](kp, topics, msgHandle)
+    val ds = ssc.createDirectStream[String, String](kp, topics)
     ds.foreachRDD { rdd => 
       rdd.foreach(println)
       rdd.map(_._2)
