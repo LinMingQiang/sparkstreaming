@@ -9,6 +9,11 @@
 -------------------
 > 由于kakfa-010 的api的变化，之前的 kafka-08 版本的 spark-kafka 虽然能用，但是他依赖于spark-streaming-kafka-0-8_2.10 <br/>.(可能会导致一些版本问题)；所以这次重新写了一个 kafka010 & spark-2.x 版本 ；但是使用方法还是跟之前的差不多， <br/>
 -------------------
+
+-------------------
+> kafka010有两种来管理offset的方式，一种是旧版的用zookeeper来管理，一种是本身自带的。现只提供zookeeper的管理方式
+-------------------
+
 * 提供 对外的 ssc创建 createDirectStream 的方法 ，用来读取kafka的数据。
 * 提供 对外的 ssc利用conf创建Dstream的方法
 * 提供 使用direct方式读取kafka数据的方法
