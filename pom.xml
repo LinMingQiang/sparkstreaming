@@ -2,8 +2,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>spark-kafka</groupId>
-	<artifactId>spark-kafka-010</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>spark-kafka</artifactId>
+	<version>0.10-2.0</version>
 	<name>${project.artifactId}</name>
 	<description>My wonderfull scala app</description>
 	<inceptionYear>2015</inceptionYear>
@@ -19,36 +19,59 @@
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
 		<encoding>UTF-8</encoding>
-		<scala.version>2.10.5</scala.version>
-		<scala.compat.version>2.10</scala.compat.version>
+		<scala.version>2.11.5</scala.version>
+		<scala.compat.version>2.11</scala.compat.version>
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-core_2.10</artifactId>
-			<version>1.6.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-streaming_2.10</artifactId>
-			<version>1.6.0</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.spark</groupId>
-			<artifactId>spark-streaming-kafka_2.10</artifactId>
-			<version>1.6.0</version>
+		<!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
+		 <dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka_2.11</artifactId>
+			<version>0.10.0.0</version>
 			<exclusions>
 				<exclusion>
-					<artifactId>kafka_2.10</artifactId>
+					<artifactId>kafka-clients</artifactId>
+					<groupId>org.apache.kafka</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		<!-- 如果集群环境是10的话，发送代码用10的client来发送 -->
+		<dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-clients</artifactId>
+			<version>0.10.0.0</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>slf4j-log4j12</artifactId>
+					<groupId>org.slf4j</groupId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
+			<version>2.0.1</version>
+			<exclusions>
+				<exclusion>
+					<artifactId>kafka_2.11</artifactId>
 					<groupId>org.apache.kafka</groupId>
 				</exclusion>
 			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>org.apache.kafka</groupId>
-			<artifactId>kafka_2.10</artifactId>
-			<version>0.10.0.0</version>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-core_2.11</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
+		<!-- https://mvnrepository.com/artifact/org.apache.spark/spark-streaming -->
+		<dependency>
+			<groupId>org.apache.spark</groupId>
+			<artifactId>spark-streaming_2.11</artifactId>
+			<version>2.0.1</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 

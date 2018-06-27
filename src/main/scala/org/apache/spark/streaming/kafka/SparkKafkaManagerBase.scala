@@ -3,6 +3,8 @@ package org.apache.spark.streaming.kafka
 import kafka.message.MessageAndMetadata
 import org.apache.spark.rdd.RDD
 import kafka.common.TopicAndPartition
+import org.apache.spark.streaming.kafka010.HasOffsetRanges
+
 
 trait SparkKafkaManagerBase extends KafkaSparkTool{
    /**

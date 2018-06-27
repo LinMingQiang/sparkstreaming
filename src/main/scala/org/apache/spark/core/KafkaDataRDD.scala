@@ -7,6 +7,11 @@ import org.apache.spark.rdd.RDD
 import org.apache.spark.rdd.MapPartitionsRDD
 import org.apache.spark.Partition
 import org.apache.spark.TaskContext
+import org.apache.spark.streaming.kafka010.HasOffsetRanges
+import org.apache.spark.streaming.kafka010.KafkaRDD
+import org.apache.kafka.clients.consumer.ConsumerRecord
+
+
 /**
  * @author LMQ
  * @description 自定义一个kafkaRDD
@@ -14,8 +19,8 @@ import org.apache.spark.TaskContext
  * @description 当然也可以再重写一些其他特性
  */
 private[kafka] 
-class KafkaDataRDD[K: ClassTag, V: ClassTag, U <: Decoder[_]: ClassTag, T <: Decoder[_]: ClassTag, R: ClassTag](prev: KafkaRDD[K, V, U, T, R])
-    extends RDD[R](prev) with HasOffsetRanges {
+class KafkaDataRDD[K: ClassTag, V: ClassTag](prev: KafkaRDD[K, V])
+    extends RDD[ConsumerRecord[K, V]](prev) with HasOffsetRanges {
 
   def updateOffsets(kp: Map[String, String], groupid: String) {
     StreamingKafkaManager.updateRDDOffset(kp, groupid, this)

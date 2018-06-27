@@ -22,11 +22,10 @@ object KafkaWriterTest{
       "group.id" -> "test",
       "kafka.last.consum" -> "consum")
     val topics = Set("test")
-    val ds = ssc.createDirectStream[
-      String,String,StringDecoder,StringDecoder,(String, String)](kp, topics, msgHandle)
+    val ds = ssc.createDirectStream[String,String](kp, topics)
     ds.foreachRDD { rdd => 
       rdd.foreach(println)
-      rdd.map(_._2)
+      rdd.map(_.value())
          .writeToKafka(producerConfig, transformFunc(outTopic,_))
       }
 

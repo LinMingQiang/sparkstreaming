@@ -4,7 +4,6 @@ import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.SparkException
 import kafka.message.MessageAndMetadata
 import kafka.common.TopicAndPartition
-import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 import org.apache.spark.rdd.RDD
 import kafka.serializer.StringDecoder
 import kafka.common.TopicAndPartition
@@ -15,6 +14,14 @@ import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.storage.StorageLevel
 import org.apache.spark.common.util.KafkaConfig
+import org.apache.spark.streaming.kafka010.KafkaUtils
+import org.apache.spark.streaming.kafka010.ConsumerStrategies
+import org.apache.spark.streaming.kafka010.LocationStrategies
+import java.{ util => ju }
+import scala.collection.JavaConverters._
+import org.apache.kafka.common.TopicPartition
+import org.apache.kafka.clients.consumer.ConsumerRecord
+
 /**
  * @author LMQ
  * @time 2018.03.07
@@ -32,12 +39,12 @@ private[spark] object StreamingKafkaManager
    * @param fromOffset ： 如果想自己自定义从指定的offset开始读的话，传入这个值
    * @param msghandle： 读取kafka时提取的数据
    */
-  def createDirectStream[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
+  def createDirectStream[K: ClassTag, V: ClassTag](
     ssc: StreamingContext,
     kp: Map[String, String],
     topics: Set[String],
-    fromOffset: Map[TopicAndPartition, Long],
-    msghandle: (MessageAndMetadata[K, V]) => R = msgHandle): InputDStream[R] = {
+    fromOffset: Map[TopicAndPartition, Long]
+    ): InputDStream[ConsumerRecord[K,V]]= {
     if (kp == null || !kp.contains(GROUP_ID))
       throw new SparkException(s"kafkaParam is Null or ${GROUP_ID} is not setted")
     instance(kp)
@@ -54,11 +61,16 @@ private[spark] object StreamingKafkaManager
         }
       } else fromOffset
     consumerOffsets.foreach(x => log.info(x.toString))
-    KafkaUtils.createDirectStream[K, V, KD, VD, R](
+    KafkaUtils.createDirectStream[K, V](
       ssc,
-      kp,
-      consumerOffsets,
-      msghandle)
+      LocationStrategies.PreferConsistent,
+      ConsumerStrategies.Subscribe[K, V](
+          topics.asJavaCollection,
+          kp.toMap[String, Object].asJava,
+          consumerOffsets
+          .map{case(tp,lo)=>(new TopicPartition(tp.topic,tp.partition),new java.lang.Long(lo))}
+          .asJava)
+  )
   }
   /**
    * @author LMQ
@@ -68,11 +80,11 @@ private[spark] object StreamingKafkaManager
    * @param fromOffset ： 如果想自己自定义从指定的offset开始读的话，传入这个值
    * @param msghandle： 读取kafka时提取的数据
    */
-  def createDirectStream[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
+  def createDirectStream[K: ClassTag, V: ClassTag](
     ssc: StreamingContext,
     conf: KafkaConfig,
-    fromOffset: Map[TopicAndPartition, Long],
-    msghandle: (MessageAndMetadata[K, V]) => R = msgHandle): InputDStream[R] = {
+    fromOffset: Map[TopicAndPartition, Long]
+    ): InputDStream[ConsumerRecord[K,V]] = {
     if (conf.kpIsNull || conf.tpIsNull) {
       throw new SparkException(s"Configuration s kafkaParam is Null or Topics is not setted")
     }
@@ -96,21 +108,15 @@ private[spark] object StreamingKafkaManager
         }
       } else fromOffset
     consumerOffsets.foreach(x => log.info(x.toString))
-    KafkaUtils.createDirectStream[K, V, KD, VD, R](
+     KafkaUtils.createDirectStream[K, V](
       ssc,
-      kp,
-      consumerOffsets,
-      msghandle)
+      LocationStrategies.PreferConsistent,
+      ConsumerStrategies.Subscribe[K, V](
+          topics.asJavaCollection,
+          kp.toMap[String, Object].asJava,
+          consumerOffsets
+          .map{case(tp,lo)=>(new TopicPartition(tp.topic,tp.partition),new java.lang.Long(lo))}
+          .asJava)
+          )
   }
-  /**
-   * @author LMQ
-   * @description 创建一个 receiver 的收集器来手机kafka数据
-   */
-  def createReceiverStream[K: ClassTag, V: ClassTag, U <: Decoder[_]: ClassTag, T <: Decoder[_]: ClassTag](
-    ssc: StreamingContext,
-    kp: Map[String, String],
-    topics: Map[String, Int]) = {
-    KafkaUtils.createStream[K, V, U, T](ssc, kp, topics, StorageLevel.MEMORY_ONLY)
-  }
-
 }

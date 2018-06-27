@@ -16,18 +16,18 @@ object SparkKafkaContextTest {
     val skc = new SparkKafkaContext(new SparkConf().setMaster("local").setAppName("SparkKafkaContextTest"))
     
     val kp =SparkKafkaContext.getKafkaParam(
-        brokers,"groupid","last","consum","test,0,100|test,1,200|test,2,300")
+        brokers,"groupid","earliest","earliest","")
 
     
     val topics = Set("test")
     val kafkadataRdd = skc.kafkaRDD[((String, Int, Long), String)](kp, topics, msgHandle2)
     
     //RDD.rddToPairRDDFunctions(kafkadataRdd)
-    kafkadataRdd.reduceByKey(_+_)
+    //kafkadataRdd.reduceByKey(_+_)
    // kafkadataRdd.map(f)
  
     kafkadataRdd.foreach(println)
-    kafkadataRdd.updateOffsets(kp)
+    //kafkadataRdd.updateOffsets(kp)
     
   }
 }

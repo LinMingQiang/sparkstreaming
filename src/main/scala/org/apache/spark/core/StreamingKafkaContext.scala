@@ -14,6 +14,8 @@ import org.apache.spark.streaming.kafka.SparkContextKafkaManager
 import org.apache.spark.rdd.RDD
 import org.apache.spark.common.util.KafkaConfig
 import kafka.serializer.Decoder
+import org.apache.kafka.clients.consumer.ConsumerRecord
+
 /**
  * @author LMQ
  * @description 用于替代StreamingContext。但StreamingContext的很多功能没写，可以自己添加，或者直接拿StreamingContext使用
@@ -106,7 +108,7 @@ class StreamingKafkaContext {
     fromOffset: Map[TopicAndPartition, Long]
     )= {
     StreamingKafkaManager
-    .createDirectStream[String, String, StringDecoder, StringDecoder, (String,String)](
+    .createDirectStream[String, String](
         streamingContext, kp, topics, fromOffset)
   }
      /**
@@ -120,12 +122,11 @@ class StreamingKafkaContext {
   def createDirectStream[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
     kp: Map[String, String],
     topics: Set[String],
-    fromOffset: Map[TopicAndPartition, Long],
-    msgHandle: (MessageAndMetadata[K, V]) => R
-    ): InputDStream[R] = {
+    fromOffset: Map[TopicAndPartition, Long]
+    ): InputDStream[ConsumerRecord[K,V]] = {
     StreamingKafkaManager
-    .createDirectStream[K, V, KD, VD, R](
-        streamingContext, kp, topics, fromOffset, msgHandle)
+    .createDirectStream[K, V](
+        streamingContext, kp, topics, fromOffset)
   }
   /**
    * @author LMQ
@@ -134,14 +135,13 @@ class StreamingKafkaContext {
    * @param topics：topic列表
    * @param msgHandle ：读取kafka数据的方法
    */
-  def createDirectStream[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
+  def createDirectStream[K: ClassTag, V: ClassTag](
     kp: Map[String, String],
-    topics: Set[String],
-    msgHandle: (MessageAndMetadata[K, V]) => R
-    ): InputDStream[R] = {
+    topics: Set[String]
+    ): InputDStream[ConsumerRecord[K,V]] = {
     StreamingKafkaManager
-    .createDirectStream[K, V, KD, VD, R](
-        streamingContext, kp, topics, null, msgHandle)
+    .createDirectStream[K, V](
+        streamingContext, kp, topics, null)
   }
     /**
    * @author LMQ
@@ -153,9 +153,9 @@ class StreamingKafkaContext {
   def createDirectStream(
     kp: Map[String, String],
     topics: Set[String]
-    ): InputDStream[(String,String)] = {
+    ): InputDStream[ConsumerRecord[String, String]] = {
     StreamingKafkaManager
-    .createDirectStream[String, String, StringDecoder, StringDecoder, (String,String)](
+    .createDirectStream[String, String](
         streamingContext, kp, topics, null)
   }
   /**
@@ -168,9 +168,9 @@ class StreamingKafkaContext {
   def createDirectStream(
     conf: KafkaConfig,
     fromOffset: Map[TopicAndPartition, Long]
-    ) = {
+    ): InputDStream[ConsumerRecord[String, String]]  = {
     StreamingKafkaManager
-    .createDirectStream[String, String, StringDecoder, StringDecoder, (String,String)](
+    .createDirectStream[String, String](
         streamingContext, conf, fromOffset)
   }
   /**
@@ -180,14 +180,13 @@ class StreamingKafkaContext {
    * @param fromOffset ： 读取数据的offset起点
    * @param msgHandle ：读取kafka数据的方法
    */
-  def createDirectStream[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
+  def createDirectStream[K: ClassTag, V: ClassTag](
     conf: KafkaConfig,
-    fromOffset: Map[TopicAndPartition, Long],
-    msgHandle: (MessageAndMetadata[K, V]) => R
-    ) = {
+    fromOffset: Map[TopicAndPartition, Long]
+    ): InputDStream[ConsumerRecord[K,V]]  = {
     StreamingKafkaManager
-    .createDirectStream[K, V, KD, VD, R](
-        streamingContext, conf, fromOffset,msgHandle)
+    .createDirectStream[K, V](
+        streamingContext, conf, fromOffset)
   }
   /**
    * @author LMQ
@@ -195,13 +194,12 @@ class StreamingKafkaContext {
    * @param conf ： 包含kp和topics
    * @param msgHandle ：读取kafka数据的方法
    */
-  def createDirectStream[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
-    conf: KafkaConfig,
-    msgHandle: (MessageAndMetadata[K, V]) => R
-    ): InputDStream[R] = {
+  def createDirectStream[K: ClassTag, V: ClassTag](
+    conf: KafkaConfig
+    ): InputDStream[ConsumerRecord[String, String]]  = {
     StreamingKafkaManager
-    .createDirectStream[K, V, KD, VD, R](
-        streamingContext, conf, null, msgHandle)
+    .createDirectStream[String, String](
+        streamingContext, conf, null)
   }
     /**
    * @author LMQ
@@ -211,9 +209,9 @@ class StreamingKafkaContext {
    */
   def createDirectStream(
     conf: KafkaConfig
-    )= {
+    ): InputDStream[ConsumerRecord[String, String]] = {
     StreamingKafkaManager
-    .createDirectStream[String, String, StringDecoder, StringDecoder, (String, String)](
+    .createDirectStream[String, String](
         streamingContext, conf, null)
   }
 }

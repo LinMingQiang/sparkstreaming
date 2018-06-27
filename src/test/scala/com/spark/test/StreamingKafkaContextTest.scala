@@ -29,10 +29,7 @@ object StreamingKafkaContextTest {
       StreamingKafkaContext.WRONG_FROM -> "last",//EARLIEST
       StreamingKafkaContext.CONSUMER_FROM -> "consum")
     val topics = Set("smartadsdeliverylog")
-    val ds = ssc
-    .createDirectStream[
-      String,String,StringDecoder,StringDecoder,((String, Int, Long), String)](
-        kp, topics, msgHandle2)
+    val ds = ssc.createDirectStream[String,String](kp, topics)
     ds.foreachRDD { rdd =>
       println(rdd.count)
       //rdd.foreach(println)
@@ -54,9 +51,7 @@ object StreamingKafkaContextTest {
     val scf = new SparkConf().setMaster("local[2]").setAppName("Test")
     val sc = new SparkContext(scf)
     val ssc = new StreamingKafkaContext(sc, Seconds(5))
-    val ds = ssc.createDirectStream[
-      String,String,StringDecoder,StringDecoder,((String, Int, Long), String)](
-          conf, msgHandle2)
+    val ds = ssc.createDirectStream[String,String](conf)
     ds.foreachRDD { rdd => rdd.foreach(println) }
     ssc.start()
     ssc.awaitTermination()

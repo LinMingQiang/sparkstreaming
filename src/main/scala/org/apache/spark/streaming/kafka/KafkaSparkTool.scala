@@ -2,11 +2,11 @@ package org.apache.spark.streaming.kafka
 
 import kafka.common.TopicAndPartition
 import org.apache.spark.SparkException
-import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 import org.apache.spark.rdd.RDD
 import java.util.Properties
-import org.apache.spark.Logging
 import org.slf4j.LoggerFactory
+import org.apache.spark.streaming.kafka.KafkaCluster
+import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 /**
  * @author LMQ
  * @description 读取kafka，操作offset等操作工具
@@ -50,7 +50,7 @@ private[spark] trait KafkaSparkTool {
     topics.foreach { topic =>
       var hasConsumed = true //是否消费过  ,true为消费过
       val partitionsE = kc.getPartitions(Set(topic)) //获取patition信息
-      if (partitionsE.isLeft) throw new SparkException("get kafka partition failed:")
+      if (partitionsE.isLeft) throw new SparkException("get kafka partition failed:"+partitionsE.left.get)
       val partitions = partitionsE.right.get
       //过期或者是新的groupid从哪开始读取
       val last_earlies = if (kp.contains(WRONG_GROUP_FROM)) {

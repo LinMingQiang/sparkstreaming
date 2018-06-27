@@ -2,7 +2,6 @@ package org.apache.spark.core
 
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
-import org.apache.spark.streaming.kafka.KafkaUtils
 import org.apache.spark.streaming.kafka.SparkContextKafkaManager
 import scala.reflect.ClassTag
 import kafka.message.MessageAndMetadata
@@ -181,7 +180,7 @@ class SparkKafkaContext {
     maxMessagesPerPartition: Int,
     msgHandle: (MessageAndMetadata[K, V]) => R) = {
     SparkContextKafkaManager
-      .createKafkaRDD[K, V, KD, VD, R](
+      .createKafkaRDD2[K, V, KD, VD, R](
         sparkcontext, kp, topics, null, maxMessagesPerPartition, msgHandle)
   }
   /**
@@ -197,7 +196,7 @@ class SparkKafkaContext {
     topics: Set[String],
     maxMessagesPerPartition: Int) = {
     SparkContextKafkaManager
-      .createKafkaRDD[String, String, StringDecoder, StringDecoder, (String, String)](
+      .createKafkaRDD2[String, String, StringDecoder, StringDecoder, (String, String)](
         sparkcontext, kp, topics, null, maxMessagesPerPartition)
   }
 }
@@ -212,7 +211,7 @@ object SparkKafkaContext extends SparkKafkaConfsKey {
       SparkKafkaContext.BROKER -> brokers,
       SparkKafkaContext.SERIALIZER -> "kafka.serializer.StringEncoder",
       SparkKafkaContext.GROUPID -> groupid,
-      SparkKafkaContext.WRONG_FROM -> consumer_from, //EARLIEST
+      SparkKafkaContext.WRONG_FROM -> wrong_from, //EARLIEST
       SparkKafkaContext.CONSUMER_FROM -> consumer_from, //如果是配置了CUSTOM。必须要配一个 kafka.offset的参数
       SparkKafkaContext.KAFKAOFFSET -> kafkaoffset)
   }

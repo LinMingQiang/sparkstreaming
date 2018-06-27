@@ -4,7 +4,6 @@ import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.SparkException
 import kafka.message.MessageAndMetadata
 import kafka.common.TopicAndPartition
-import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 import org.apache.spark.rdd.RDD
 import kafka.serializer.StringDecoder
 import kafka.common.TopicAndPartition
@@ -14,9 +13,16 @@ import kafka.serializer.Decoder
 import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.SparkContext
+import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
+import org.apache.spark.streaming.kafka010.KafkaRDD
+import org.apache.spark.streaming.kafka010.OffsetRange
+import org.apache.spark.streaming.kafka010.LocationStrategies
+import org.apache.kafka.common.TopicPartition
+import java.{ util => ju }
+import scala.collection.JavaConverters._
 
 private[spark] object SparkContextKafkaManager
-    extends SparkKafkaManagerBase{
+  extends SparkKafkaManagerBase {
   logname = "SparkContextKafkaManager"
   /**
    * @author LMQ
@@ -32,10 +38,10 @@ private[spark] object SparkContextKafkaManager
    * 						这样可能会导致一次性读取的数据量过大。也可以使用另一个带有maxMessagesPerPartition参数的方法来读取
    */
   def createKafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
-    sc: SparkContext,
-    kp: Map[String, String],
-    topics: Set[String],
-    fromOffset: Map[TopicAndPartition, Long],
+    sc:             SparkContext,
+    kp:             Map[String, String],
+    topics:         Set[String],
+    fromOffset:     Map[TopicAndPartition, Long],
     messageHandler: MessageAndMetadata[K, V] => R = msgHandle) = {
     if (kp == null || !kp.contains(GROUP_ID))
       throw new SparkException(s"kafkaParam is Null or ${GROUP_ID} is not setted")
@@ -43,7 +49,7 @@ private[spark] object SparkContextKafkaManager
     val consumerOffsets: Map[TopicAndPartition, Long] =
       if (fromOffset == null) {
         val last = if (kp.contains(KAFKA_CONSUMER_FROM)) kp.get(KAFKA_CONSUMER_FROM).get
-                   else defualtFrom
+        else defualtFrom
         last.toUpperCase match {
           case "LAST"     => getLatestOffsets(topics, kp)
           case "CONSUM"   => getConsumerOffset(kp, groupId, topics)
@@ -52,19 +58,23 @@ private[spark] object SparkContextKafkaManager
           case _          => log.info(s"""${KAFKA_CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics, kp)
         }
       } else fromOffset
-      
+
     //consumerOffsets.foreach(x=>log.info(x.toString))
     val maxMessagesPerPartition = if (kp.contains(maxMessagesPerPartitionKEY)) kp.get(maxMessagesPerPartitionKEY).get.toInt
-                                  else sc.getConf.getInt(maxMessagesPerPartitionKEY, 0) //0表示没限制
-    val untilOffsets = clamp(latestLeaderOffsets(kp,0,consumerOffsets), consumerOffsets, maxMessagesPerPartition)
+    else sc.getConf.getInt(maxMessagesPerPartitionKEY, 0) //0表示没限制
+    val untilOffsets = clamp(latestLeaderOffsets(kp, 0, consumerOffsets), consumerOffsets, maxMessagesPerPartition)
+    val offsetRange = untilOffsets.map {
+      case (tp, of) =>
+        OffsetRange(tp.topic, tp.partition, 0, of.offset)
+    }.toArray
 
-    val kd = KafkaRDD[K, V, KD, VD, R](
+    val kd = new KafkaRDD[K, V](
       sc,
-      kp,
-      consumerOffsets,
-      untilOffsets,
-      messageHandler)
-    new KafkaDataRDD[K, V, KD, VD, R](kd)
+      kp.toMap[String, Object].asJava,
+      offsetRange,
+      ju.Collections.emptyMap[TopicPartition, String](),
+      true)
+    new KafkaDataRDD[K, V](kd)
   }
   /**
    * @author LMQ
@@ -78,13 +88,13 @@ private[spark] object SparkContextKafkaManager
    * 				4：从自定义的offset开始  = CUSTOM
    * @param maxMessagesPerPartition ： 限制读取的kafka数据量（每个分区多少数据）
    */
-  def createKafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
-    sc: SparkContext,
-    kp: Map[String, String],
-    topics: Set[String],
-    fromOffset: Map[TopicAndPartition, Long],
+  def createKafkaRDD2[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
+    sc:                      SparkContext,
+    kp:                      Map[String, String],
+    topics:                  Set[String],
+    fromOffset:              Map[TopicAndPartition, Long],
     maxMessagesPerPartition: Int,
-    messageHandler: MessageAndMetadata[K, V] => R = msgHandle) = {
+    messageHandler:          MessageAndMetadata[K, V] => R = msgHandle) = {
     if (kp == null || !kp.contains(GROUP_ID))
       throw new SparkException(s"kafkaParam is Null or ${GROUP_ID} is not setted")
     instance(kp)
@@ -101,15 +111,19 @@ private[spark] object SparkContextKafkaManager
           case _          => log.info(s"""${KAFKA_CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics, kp)
         }
       } else fromOffset
-    val untilOffsets = clamp(latestLeaderOffsets(kp,0,consumerOffsets), consumerOffsets, maxMessagesPerPartition)
+    val untilOffsets = clamp(latestLeaderOffsets(kp, 0, consumerOffsets), consumerOffsets, maxMessagesPerPartition)
+    val offsetRange = untilOffsets.map {
+      case (tp, of) =>
+        OffsetRange(tp.topic, tp.partition, 0, of.offset)
+    }.toArray
 
-    val kd = KafkaRDD[K, V, KD, VD, R](
+    val kd = new KafkaRDD[K, V](
       sc,
-      kp,
-      consumerOffsets,
-      untilOffsets,
-      messageHandler)
-    new KafkaDataRDD[K, V, KD, VD, R](kd)
+      kp.toMap[String, Object].asJava,
+      offsetRange,
+      ju.Collections.emptyMap[TopicPartition, String](),
+      true)
+    new KafkaDataRDD[K, V](kd)
   }
   /**
    * @author LMQ
@@ -119,7 +133,7 @@ private[spark] object SparkContextKafkaManager
    * @attention 这个方法只有在 配置 kafka.consumer.from = CUSTOM才生效
    *            同时必须要有一个 kafka.offset 的配置
    *            具体的 数据格式在readme.md里面有解释
-   *            
+   *
    */
   private def getSelfOffsets(kp: Map[String, String]) = {
     var consumerOffsets = new HashMap[TopicAndPartition, Long]()
@@ -136,9 +150,10 @@ private[spark] object SparkContextKafkaManager
    * 							代表每个topic.partition->offset
    * @description 由maxMessagesPerPartition限制最多读取多少数据
    */
-  def clamp(leaderOffsets: Map[TopicAndPartition, LeaderOffset],
-            currentOffsets: Map[TopicAndPartition, Long],
-            maxMessagesPerPartition: Int): Map[TopicAndPartition, LeaderOffset] = {
+  def clamp(
+    leaderOffsets:           Map[TopicAndPartition, LeaderOffset],
+    currentOffsets:          Map[TopicAndPartition, Long],
+    maxMessagesPerPartition: Int): Map[TopicAndPartition, LeaderOffset] = {
     if (maxMessagesPerPartition > 0) {
       leaderOffsets.map {
         case (tp, lo) =>
