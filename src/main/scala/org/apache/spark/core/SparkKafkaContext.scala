@@ -201,18 +201,5 @@ class SparkKafkaContext {
   }
 }
 object SparkKafkaContext extends SparkKafkaConfsKey {
-  def getKafkaParam(
-    brokers: String,
-    groupid: String,
-    consumer_from: String,
-    wrong_from: String,
-    kafkaoffset: String) = {
-    Map[String, String](
-      SparkKafkaContext.BROKER -> brokers,
-      SparkKafkaContext.SERIALIZER -> "kafka.serializer.StringEncoder",
-      SparkKafkaContext.GROUPID -> groupid,
-      SparkKafkaContext.WRONG_FROM -> wrong_from, //EARLIEST
-      SparkKafkaContext.CONSUMER_FROM -> consumer_from, //如果是配置了CUSTOM。必须要配一个 kafka.offset的参数
-      SparkKafkaContext.KAFKAOFFSET -> kafkaoffset)
-  }
+
 }
