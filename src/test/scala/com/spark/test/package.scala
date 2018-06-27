@@ -7,8 +7,7 @@ import org.apache.kafka.clients.producer.ProducerRecord
 
 package object test {
  // val zookeeper = "solr1,solr2,mongodb3"
-  //val brokers="kylin-node2:9092,kylin-node3:9092,kylin-node4:9092"
-  val brokers = "kafka1:9092,kafka2:9092,kafka3:9092"
+  val brokers="kylin-node2:9092,kylin-node3:9092,kylin-node4:9092"
   val outTopic = "test"
   val producerConfig = {
     val p = new java.util.Properties()
