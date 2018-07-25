@@ -232,4 +232,14 @@ private[spark] trait KafkaSparkTool {
     updateConsumerOffsets(kp, kp.get("group.id").get, lastestOffsets)
     lastestOffsets
   }
+    /**
+   * @author LMQ
+   * @description 将某个groupid的偏移量更新至最早的offset
+   * @description
+   */
+  def updataOffsetToEarliest(topics: Set[String], kp: Map[String, String]) = {
+    val earliestOffset = getEarliestOffsets(topics, kp)
+    updateConsumerOffsets(kp, kp.get(("group.id").get, earliestOffset)
+    earliestOffset
+  }
 }
