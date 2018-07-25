@@ -150,15 +150,18 @@ private[spark] object SparkContextKafkaManager
    * 							代表每个topic.partition->offset
    * @description 由maxMessagesPerPartition限制最多读取多少数据
    */
-  def clamp(
-    leaderOffsets:           Map[TopicAndPartition, LeaderOffset],
-    currentOffsets:          Map[TopicAndPartition, Long],
-    maxMessagesPerPartition: Int): Map[TopicAndPartition, LeaderOffset] = {
+  def clamp(lastOffsets: Map[TopicAndPartition, LeaderOffset],
+            currentOffsets: Map[TopicAndPartition, Long],
+            maxMessagesPerPartition: Int): Map[TopicAndPartition, LeaderOffset] = {
     if (maxMessagesPerPartition > 0) {
-      leaderOffsets.map {
+      lastOffsets.map {
         case (tp, lo) =>
-          tp -> lo.copy(offset = Math.min(currentOffsets(tp) + maxMessagesPerPartition, lo.offset))
+          if(currentOffsets.contains(tp)){
+             tp -> lo.copy(offset = Math.min(currentOffsets(tp) + maxMessagesPerPartition, lo.offset))
+          }else {//如果新添一个分区
+            tp -> lo.copy(offset = Math.min(maxMessagesPerPartition, lo.offset))
+          }
       }
-    } else leaderOffsets
+    } else lastOffsets
   }
 }

@@ -248,7 +248,7 @@ private[spark] trait KafkaSparkTool {
    */
   def updataOffsetToEarliest(topics: Set[String], kp: Map[String, String]) = {
     val earliestOffset = getEarliestOffsets(topics, kp)
-    updateConsumerOffsets(kp, kp.get(("group.id").get, earliestOffset)
+    updateConsumerOffsets(kp, earliestOffset)
     earliestOffset
   }
 }

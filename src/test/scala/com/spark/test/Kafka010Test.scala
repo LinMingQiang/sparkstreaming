@@ -10,8 +10,6 @@ import java.util.ArrayList
 import java.util.Arrays
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
-import org.apache.spark.streaming.kafka.KafkaUtils
-import org.apache.spark.streaming.kafka.OffsetRange
 object Kafka010Test {
   val broker = "192.168.0.234:9092,192.168.0.235:9092,192.168.0.236:9092"
   val topics = Set("test010")
