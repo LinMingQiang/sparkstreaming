@@ -95,23 +95,28 @@ private[spark] trait KafkaSparkTool {
    * @time 2018-04-04
    * @func 获取有效的offset
    */
-  def getEffectiveOffset(
-    kc: KafkaCluster,
-    kp: Map[String, String],
-    partitions: Set[TopicAndPartition],
+   def getEffectiveOffset(
+    kc:               KafkaCluster,
+    kp:               Map[String, String],
+    partitions:       Set[TopicAndPartition],
     consumerOffsetsE: Either[KafkaCluster.Err, Map[TopicAndPartition, Long]],
-    last_earlies: String) = {
-    val earliestLeaderOffsets = kc.getEarliestLeaderOffsets(partitions).right.get //获取最早的偏移量
-    val partLastOffsets = kc.getLatestLeaderOffsets(partitions).right
+    last_earlies:     String) = {
+    val earliestinfo=kc.getEarliestLeaderOffsets(partitions)
+    if(earliestinfo.isLeft) throw new SparkException("Topic is not exist or offset EarliestOffset is error ")
+    val earliestOffsets =earliestinfo.right.get //获取最早的偏移量
+    val lastinfo=kc.getLatestLeaderOffsets(partitions)
+    if(lastinfo.isLeft) throw new SparkException("Topic is not exist or offset LastOffset is error ")
+    val lastOffsets = lastinfo.right
     val consumerOffsets = consumerOffsetsE.right.get
     //消费的偏移量和最早的偏移量做比较（因为kafka有过期，如果太久没消费，）
     consumerOffsets.map({
       case (tp, n) =>
         //现在数据在什么offset上
-        val earliestLeaderOffset = earliestLeaderOffsets(tp).offset
-        val lastoffset = partLastOffsets.get(tp).offset
+        val earliestLeaderOffset = earliestOffsets(tp).offset
+        val lastoffset = lastOffsets.get(tp).offset
         if (n > lastoffset || n < earliestLeaderOffset) { //如果offset超过了最新的//消费过，但是过时了，就从最新开始消费
           log.warn("-- Consumer offset is OutTime --- " + tp + "->" + n)
+          log.warn("-- RESET OFFSET FROM  --- " + last_earlies)
           last_earlies match {
             case "EARLIEST" => (tp -> earliestLeaderOffset)
             case _          => (tp -> lastoffset)
@@ -121,7 +126,6 @@ private[spark] trait KafkaSparkTool {
         }
     })
   }
-
   /**
    * @author LMQ
    * @description 更新消费者的offset至zookeeper
