@@ -95,17 +95,22 @@ private[spark] trait KafkaSparkTool {
    * @time 2018-04-04
    * @func 获取有效的offset
    */
-   def getEffectiveOffset(
+  /**
+   * @author LMQ
+   * @time 2018-04-04
+   * @func 获取有效的offset
+   */
+  def getEffectiveOffset(
     kc:               KafkaCluster,
     kp:               Map[String, String],
     partitions:       Set[TopicAndPartition],
     consumerOffsetsE: Either[KafkaCluster.Err, Map[TopicAndPartition, Long]],
     last_earlies:     String) = {
     val earliestinfo=kc.getEarliestLeaderOffsets(partitions)
-    if(earliestinfo.isLeft) throw new SparkException("Topic is not exist or offset EarliestOffset is error ")
+    if(earliestinfo.isLeft) throw new SparkException(earliestinfo.left.toString())
     val earliestOffsets =earliestinfo.right.get //获取最早的偏移量
     val lastinfo=kc.getLatestLeaderOffsets(partitions)
-    if(lastinfo.isLeft) throw new SparkException("Topic is not exist or offset LastOffset is error ")
+    if(lastinfo.isLeft) throw new SparkException(lastinfo.left.toString())
     val lastOffsets = lastinfo.right
     val consumerOffsets = consumerOffsetsE.right.get
     //消费的偏移量和最早的偏移量做比较（因为kafka有过期，如果太久没消费，）
