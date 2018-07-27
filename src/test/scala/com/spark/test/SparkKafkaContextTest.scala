@@ -3,9 +3,7 @@ package com.spark.test
 import org.apache.spark.core.SparkKafkaContext
 import org.apache.spark.SparkConf
 import kafka.serializer.StringDecoder
-import org.apache.spark.streaming.kafka.KafkaUtil
 import org.apache.spark.rdd.RDD
-
 
 object SparkKafkaContextTest {
   /**
@@ -13,21 +11,22 @@ object SparkKafkaContextTest {
    * 测试 SparkKafkaContext类
    */
   def main(args: Array[String]): Unit = {
-    val skc = new SparkKafkaContext(new SparkConf().setMaster("local").setAppName("SparkKafkaContextTest"))
-    
-    val kp =SparkKafkaContext.getKafkaParam(
-        brokers,"groupid","earliest","earliest","")
 
-    
+    val kp = SparkKafkaContext.getKafkaParam(
+      brokers, "groupid", "earliest", "earliest", "")
+    val skc = new SparkKafkaContext(kp, new SparkConf()
+      .setMaster("local")
+      .setAppName("SparkKafkaContextTest"))
+
     val topics = Set("test")
-    val kafkadataRdd = skc.kafkaRDD[((String, Int, Long), String)](kp, topics, msgHandle2)
-    
+    val kafkadataRdd = skc.kafkaRDD[String,String](topics)
+
     //RDD.rddToPairRDDFunctions(kafkadataRdd)
     //kafkadataRdd.reduceByKey(_+_)
-   // kafkadataRdd.map(f)
- 
+    // kafkadataRdd.map(f)
+
     kafkadataRdd.foreach(println)
     //kafkadataRdd.updateOffsets(kp)
-    
+
   }
 }

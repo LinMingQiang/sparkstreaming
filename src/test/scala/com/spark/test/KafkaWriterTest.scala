@@ -15,14 +15,14 @@ object KafkaWriterTest{
   }
   def runJob() {
     val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
-    val ssc = new StreamingKafkaContext(sc, Seconds(5))
-    var kp = Map[String, String](
-      "metadata.broker.list" -> brokers,
-      "serializer.class" -> "kafka.serializer.StringEncoder",
-      "group.id" -> "test",
-      "kafka.last.consum" -> "consum")
-    val topics = Set("test")
-    val ds = ssc.createDirectStream[String,String](kp, topics)
+    		var kp = Map[String, String](
+    				"metadata.broker.list" -> brokers,
+    				"serializer.class" -> "kafka.serializer.StringEncoder",
+    				"group.id" -> "test",
+    				"kafka.last.consum" -> "consum")
+    		val topics = Set("test")
+    val ssc = new StreamingKafkaContext(kp,sc, Seconds(5))
+    val ds = ssc.createDirectStream[String,String](topics)
     ds.foreachRDD { rdd => 
       rdd.foreach(println)
       rdd.map(_.value())

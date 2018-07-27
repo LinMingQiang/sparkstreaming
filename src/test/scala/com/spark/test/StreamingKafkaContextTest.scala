@@ -33,11 +33,11 @@ object StreamingKafkaContextTest {
       .setMaster("local[2]")
       .setAppName("Test")
       .set(SparkKafkaContext.MAX_RATE_PER_PARTITION, "1"))
-    val ssc = new StreamingKafkaContext(sc, Seconds(5))
-    var kp = StreamingKafkaContext.getKafkaParam(brokers,"test","consum","EARLIEST")
-    val consumOffset=getConsumerOffset(kp).foreach(println)
+    var kp = StreamingKafkaContext.getKafkaParam(brokers, "test", "consum", "EARLIEST")
+    val ssc = new StreamingKafkaContext(kp,sc, Seconds(5))
+    val consumOffset = getConsumerOffset(kp).foreach(println)
     val topics = Set("test1")
-    val ds = ssc.createDirectStream[String, String](kp, topics)
+    val ds = ssc.createDirectStream[String, String](topics)
     ds.foreachRDD { rdd =>
       println("COUNT : ", rdd.count)
       rdd.foreach(println)
@@ -45,7 +45,7 @@ object StreamingKafkaContextTest {
       val offsetRanges = rdd.asInstanceOf[HasOffsetRanges].offsetRanges
       ds.asInstanceOf[CanCommitOffsets].commitAsync(offsetRanges)
       //使用zookeeper来管理offset
-      ssc.updateRDDOffsets(kp, "test", rdd) 
+      ssc.updateRDDOffsets("test", rdd)
     }
     ssc.start()
     ssc.awaitTermination()
@@ -54,7 +54,7 @@ object StreamingKafkaContextTest {
   /**
    * @func 获取上次消费偏移量。
    */
-  def getConsumerOffset(kp:Map[String, Object]) = {
+  def getConsumerOffset(kp: Map[String, Object]) = {
     val consumer = new KafkaConsumer[String, String](kp)
     consumer.subscribe(Arrays.asList("test1")); //订阅topic
     consumer.poll(0)
@@ -74,7 +74,7 @@ object StreamingKafkaContextTest {
     println(conf.getKV())
     val scf = new SparkConf().setMaster("local[2]").setAppName("Test")
     val sc = new SparkContext(scf)
-    val ssc = new StreamingKafkaContext(sc, Seconds(5))
+    val ssc = new StreamingKafkaContext(conf.kafkaParams, sc, Seconds(5))
     val ds = ssc.createDirectStream[String, String](conf)
     ds.foreachRDD { rdd => rdd.foreach(println) }
     ssc.start()

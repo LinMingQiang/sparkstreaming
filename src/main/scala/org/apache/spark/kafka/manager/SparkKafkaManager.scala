@@ -1,9 +1,9 @@
-
 package org.apache.spark.streaming.kafka
 import org.apache.spark.streaming.StreamingContext
 import org.apache.spark.SparkException
 import kafka.message.MessageAndMetadata
 import kafka.common.TopicAndPartition
+import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
 import org.apache.spark.rdd.RDD
 import kafka.serializer.StringDecoder
 import kafka.common.TopicAndPartition
@@ -13,15 +13,13 @@ import kafka.serializer.Decoder
 import scala.reflect.ClassTag
 import org.apache.spark.streaming.dstream.InputDStream
 import org.apache.spark.SparkContext
-import org.apache.spark.streaming.kafka.KafkaCluster.LeaderOffset
-import org.apache.spark.streaming.kafka010.KafkaRDD
+import org.apache.spark.core.SparkKafkaContext
 import org.apache.spark.streaming.kafka010.OffsetRange
-import org.apache.spark.streaming.kafka010.LocationStrategies
+import org.apache.spark.kafka.manager.SparkKafkaManagerBase
 import org.apache.kafka.common.TopicPartition
-import java.{ util => ju }
 import scala.collection.JavaConverters._
-
-private[spark] object SparkContextKafkaManager
+import java.{ util => ju }
+private[spark] class SparkKafkaManager(override var kp: Map[String, String])
   extends SparkKafkaManagerBase {
   logname = "SparkContextKafkaManager"
   /**
@@ -37,44 +35,40 @@ private[spark] object SparkContextKafkaManager
    * @attention maxMessagesPerPartitionKEY：这个参数。是放在sparkconf里面，或者是kp里面。如果两个都没配置，那默认是没有限制，
    * 						这样可能会导致一次性读取的数据量过大。也可以使用另一个带有maxMessagesPerPartition参数的方法来读取
    */
-  def createKafkaRDD[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
-    sc:             SparkContext,
-    kp:             Map[String, String],
-    topics:         Set[String],
-    fromOffset:     Map[TopicAndPartition, Long],
-    messageHandler: MessageAndMetadata[K, V] => R = msgHandle) = {
-    if (kp == null || !kp.contains(GROUP_ID))
-      throw new SparkException(s"kafkaParam is Null or ${GROUP_ID} is not setted")
-    val groupId = kp.get(GROUP_ID).get
+  def createKafkaRDD[K: ClassTag, V: ClassTag](
+    sc:         SparkKafkaContext,
+    topics:     Set[String],
+    fromOffset: Map[TopicAndPartition, Long]): KafkaDataRDD[K, V] = {
+    if (kp == null || !kp.contains(GROUPID))
+      throw new SparkException(s"kafkaParam is Null or ${GROUPID} is not setted")
+    val groupId = kp.get(GROUPID).get
     val consumerOffsets: Map[TopicAndPartition, Long] =
       if (fromOffset == null) {
-        val last = if (kp.contains(KAFKA_CONSUMER_FROM)) kp.get(KAFKA_CONSUMER_FROM).get
+        val last = if (kp.contains(CONSUMER_FROM)) kp.get(CONSUMER_FROM).get
         else defualtFrom
         last.toUpperCase match {
-          case LAST     => getLatestOffsets(topics, kp)
-          case CONSUM   => getConsumerOffset(kp, groupId, topics)
-          case EARLIEST => getEarliestOffsets(topics, kp)
-          case CUSTOM  => getSelfOffsets(kp)
-          case _          => log.info(s"""${KAFKA_CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics, kp)
+          case LAST     => getLatestOffsets(topics)
+          case CONSUM   => getConsumerOffset(groupId, topics)
+          case EARLIEST => getEarliestOffsets(topics)
+          case CUSTOM   => getSelfOffsets()
+          case _        => log.info(s"""${CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics)
         }
       } else fromOffset
 
     //consumerOffsets.foreach(x=>log.info(x.toString))
-    val maxMessagesPerPartition = if (kp.contains(maxMessagesPerPartitionKEY)) kp.get(maxMessagesPerPartitionKEY).get.toInt
-    else sc.getConf.getInt(maxMessagesPerPartitionKEY, 0) //0表示没限制
-    val untilOffsets = clamp(latestLeaderOffsets(kp, 0, consumerOffsets), consumerOffsets, maxMessagesPerPartition)
+    val maxMessagesPerPartition = if (kp.contains(MAX_RATE_PER_PARTITION)) kp.get(MAX_RATE_PER_PARTITION).get.toInt
+    else sc.conf.getInt(MAX_RATE_PER_PARTITION, 0) //0表示没限制
+    val untilOffsets = clamp(latestLeaderOffsets(consumerOffsets), consumerOffsets, maxMessagesPerPartition)
     val offsetRange = untilOffsets.map {
       case (tp, of) =>
         OffsetRange(tp.topic, tp.partition, 0, of.offset)
     }.toArray
-
-    val kd = new KafkaRDD[K, V](
+    new KafkaDataRDD[K, V](
       sc,
       kp.toMap[String, Object].asJava,
       offsetRange,
       ju.Collections.emptyMap[TopicPartition, String](),
       true)
-    new KafkaDataRDD[K, V](kd)
   }
   /**
    * @author LMQ
@@ -88,56 +82,52 @@ private[spark] object SparkContextKafkaManager
    * 				4：从自定义的offset开始  = CUSTOM
    * @param maxMessagesPerPartition ： 限制读取的kafka数据量（每个分区多少数据）
    */
-  def createKafkaRDD2[K: ClassTag, V: ClassTag, KD <: Decoder[K]: ClassTag, VD <: Decoder[V]: ClassTag, R: ClassTag](
-    sc:                      SparkContext,
-    kp:                      Map[String, String],
+  def createKafkaRDD[K: ClassTag, V: ClassTag](
+    sc:                      SparkKafkaContext,
     topics:                  Set[String],
     fromOffset:              Map[TopicAndPartition, Long],
-    maxMessagesPerPartition: Int,
-    messageHandler:          MessageAndMetadata[K, V] => R = msgHandle) = {
-    if (kp == null || !kp.contains(GROUP_ID))
-      throw new SparkException(s"kafkaParam is Null or ${GROUP_ID} is not setted")
-    instance(kp)
-    val groupId = kp.get(GROUP_ID).get
+    maxMessagesPerPartition: Int): KafkaDataRDD[K, V] = {
+    if (kp == null || !kp.contains(GROUPID)) throw new SparkException(s"kafkaParam is Null or ${GROUPID} is not setted")
+    val groupId = kp.get(GROUPID).get
     val consumerOffsets: Map[TopicAndPartition, Long] =
       if (fromOffset == null) {
-        val last = if (kp.contains(KAFKA_CONSUMER_FROM)) kp.get(KAFKA_CONSUMER_FROM).get
+        val last = if (kp.contains(CONSUMER_FROM)) kp.get(CONSUMER_FROM).get
         else defualtFrom
         last.toUpperCase match {
-          case LAST     => getLatestOffsets(topics, kp)
-          case CONSUM   => getConsumerOffset(kp, groupId, topics)
-          case EARLIEST => getEarliestOffsets(topics, kp)
-          case CUSTOM   => getSelfOffsets(kp)
-          case _          => log.info(s"""${KAFKA_CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics, kp)
+          case LAST     => getLatestOffsets(topics)
+          case CONSUM   => getConsumerOffset(groupId, topics)
+          case EARLIEST => getEarliestOffsets(topics)
+          case CUSTOM   => getSelfOffsets()
+          case _        => log.info(s"""${CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics)
         }
       } else fromOffset
-    val untilOffsets = clamp(latestLeaderOffsets(kp, 0, consumerOffsets), consumerOffsets, maxMessagesPerPartition)
+    val untilOffsets = clamp(latestLeaderOffsets(consumerOffsets), consumerOffsets, maxMessagesPerPartition)
+
     val offsetRange = untilOffsets.map {
       case (tp, of) =>
         OffsetRange(tp.topic, tp.partition, 0, of.offset)
     }.toArray
-
-    val kd = new KafkaRDD[K, V](
+    new KafkaDataRDD[K, V](
       sc,
       kp.toMap[String, Object].asJava,
       offsetRange,
       ju.Collections.emptyMap[TopicPartition, String](),
       true)
-    new KafkaDataRDD[K, V](kd)
   }
   /**
    * @author LMQ
    * @description 获取自定义的offset值
    * @description 这个方法主要适用于 ： 如果程序想要重算某个时间点或者从指定的offset开始
    * 							例如程序需要重算今天的所有数据（前提你记录了今天凌晨的offset。这个我之后会有程序来提供每天记录所有topic凌晨的offset）
+   * 						 https://github.com/LinMingQiang/kafka-util
    * @attention 这个方法只有在 配置 kafka.consumer.from = CUSTOM才生效
    *            同时必须要有一个 kafka.offset 的配置
    *            具体的 数据格式在readme.md里面有解释
    *
    */
-  private def getSelfOffsets(kp: Map[String, String]) = {
+  private def getSelfOffsets() = {
     var consumerOffsets = new HashMap[TopicAndPartition, Long]()
-    var todayOffsets = kp.get("kafka.offset").get.split('|')
+    var todayOffsets = kp.get(KAFKA_OFFSET).get.split('|')
     for (offset <- todayOffsets) {
       val offsets = offset.split(",")
       consumerOffsets.put(new TopicAndPartition(offsets(0), offsets(1).toInt), offsets(2).toLong)
@@ -146,22 +136,67 @@ private[spark] object SparkContextKafkaManager
   }
   /**
    * @author LMQ
+   * @description 获取最新的数据偏移量
+   * @description 这个方法主要是spark在用，所以就不写进kafkatool的类里面了
+   */
+  def latestLeaderOffsets(
+    consumerOffsets: Map[TopicAndPartition, Long]): Map[TopicAndPartition, LeaderOffset] = {
+    val o = kc.getLatestLeaderOffsets(consumerOffsets.keySet)
+    if (o.isLeft) {
+      throw new SparkException(o.left.toString)
+    } else {
+      o.right.get
+    }
+  }
+  /**
+   * @author LMQ
    * @description 计算读取kafka的数据到哪返回一个Map[TopicAndPartition, LeaderOffset]
    * 							代表每个topic.partition->offset
    * @description 由maxMessagesPerPartition限制最多读取多少数据
    */
-  def clamp(lastOffsets: Map[TopicAndPartition, LeaderOffset],
-            currentOffsets: Map[TopicAndPartition, Long],
-            maxMessagesPerPartition: Int): Map[TopicAndPartition, LeaderOffset] = {
+  def clamp(
+    lastOffsets:             Map[TopicAndPartition, LeaderOffset],
+    currentOffsets:          Map[TopicAndPartition, Long],
+    maxMessagesPerPartition: Int): Map[TopicAndPartition, LeaderOffset] = {
     if (maxMessagesPerPartition > 0) {
       lastOffsets.map {
         case (tp, lo) =>
-          if(currentOffsets.contains(tp)){
-             tp -> lo.copy(offset = Math.min(currentOffsets(tp) + maxMessagesPerPartition, lo.offset))
-          }else {//如果新添一个分区
-            tp -> lo.copy(offset = Math.min(maxMessagesPerPartition, lo.offset))
-          }
+          if (currentOffsets.contains(tp)) tp -> lo.copy(offset = Math.min(currentOffsets(tp) + maxMessagesPerPartition, lo.offset))
+          else tp -> lo.copy(offset = Math.min(maxMessagesPerPartition, lo.offset)) //新增一个分区时
+
       }
     } else lastOffsets
   }
 }
+object SparkKafkaManager {
+  def apply(kp: Map[String, String]) = new SparkKafkaManager(kp)
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

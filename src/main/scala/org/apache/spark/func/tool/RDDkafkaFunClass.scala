@@ -10,7 +10,7 @@ import org.apache.spark.streaming.kafka.StreamingKafkaManager
  * 					Dstream里面的RDD 更新offset的操作已经放在StreamingKafkaContext类里面了
  */
 class rddkafkaFunClass[T](rdd: RDD[T]) {
-  def updateOffsets(kp: Map[String, String], groupid: String){
+/*  def updateOffsets(kp: Map[String, String], groupid: String){
     StreamingKafkaManager.updateRDDOffset(kp, groupid, rdd)
   }
   def updateOffsets(kp: Map[String, String]):Boolean={
@@ -23,5 +23,5 @@ class rddkafkaFunClass[T](rdd: RDD[T]) {
   }
   def getRDDOffsets() = {
     StreamingKafkaManager.getRDDConsumerOffsets(rdd)
-  }
+  }*/
 }
