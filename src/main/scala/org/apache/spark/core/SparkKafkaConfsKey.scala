@@ -5,6 +5,7 @@ trait SparkKafkaConfsKey {
    val BROKER="metadata.broker.list"
    val BOOTSTRAP="bootstrap.servers"
    val SERIALIZER="serializer.class"
+   val AUTO_OFFSET_RESET_CONFIG = "auto.offset.reset"
    /*
     * 如果groupid不存在或者过期选择从last还是从earliest开始
     */

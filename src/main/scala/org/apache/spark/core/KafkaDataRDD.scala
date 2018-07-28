@@ -1,5 +1,6 @@
 package org.apache.spark.streaming.kafka
-
+import scala.collection.JavaConverters._
+import scala.collection.JavaConversions._
 import scala.reflect.ClassTag
 import kafka.serializer.Decoder
 import org.apache.spark.SparkContext
@@ -23,9 +24,9 @@ import org.apache.kafka.common.TopicPartition
  */
 class KafkaDataRDD[K: ClassTag, V: ClassTag](
   @transient sc:      SparkKafkaContext,
-  kafkaParams:    java.util.Map[String, Object],
+  @transient kafkaParams: Map[String, Object],
   offsetRanges:   Array[OffsetRange],
-  preferredHosts: java.util.Map[TopicPartition, String],
+  @transient preferredHosts: java.util.Map[TopicPartition, String],
   useConsumerCache:   Boolean)
   extends KafkaRDD[K, V](
     sc.sparkcontext, kafkaParams, offsetRanges, preferredHosts, useConsumerCache) {
@@ -47,7 +48,7 @@ class KafkaDataRDD[K: ClassTag, V: ClassTag](
 object KafkaDataRDD {
   def apply[K: ClassTag, V: ClassTag](
     sc:               SparkKafkaContext,
-    kafkaParams:      java.util.Map[String, Object],
+    kafkaParams:      Map[String, Object],
     offsetRanges:     Array[OffsetRange],
     preferredHosts:   java.util.Map[TopicPartition, String],
     useConsumerCache: Boolean): KafkaDataRDD[K, V] = {

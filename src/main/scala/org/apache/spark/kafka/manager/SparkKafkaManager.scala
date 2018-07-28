@@ -18,6 +18,7 @@ import org.apache.spark.streaming.kafka010.OffsetRange
 import org.apache.spark.kafka.manager.SparkKafkaManagerBase
 import org.apache.kafka.common.TopicPartition
 import scala.collection.JavaConverters._
+import scala.collection.JavaConversions._
 import java.{ util => ju }
 private[spark] class SparkKafkaManager(override var kp: Map[String, String])
   extends SparkKafkaManagerBase {
@@ -65,7 +66,7 @@ private[spark] class SparkKafkaManager(override var kp: Map[String, String])
     }.toArray
     new KafkaDataRDD[K, V](
       sc,
-      kp.toMap[String, Object].asJava,
+      kp.+((AUTO_OFFSET_RESET_CONFIG,"none")).toMap[String, Object],
       offsetRange,
       ju.Collections.emptyMap[TopicPartition, String](),
       true)
@@ -109,7 +110,7 @@ private[spark] class SparkKafkaManager(override var kp: Map[String, String])
     }.toArray
     new KafkaDataRDD[K, V](
       sc,
-      kp.toMap[String, Object].asJava,
+      kp.toMap[String, Object],
       offsetRange,
       ju.Collections.emptyMap[TopicPartition, String](),
       true)
