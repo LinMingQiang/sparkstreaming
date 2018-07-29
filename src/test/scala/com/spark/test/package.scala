@@ -7,9 +7,9 @@ import org.apache.kafka.clients.producer.ProducerRecord
 
 package object test {
  // val zookeeper = "solr1,solr2,mongodb3"
-  val brokers="kafka01:9092,kafka02:9092,kafka03:9092"
+  
   val outTopic = "test"
-  val producerConfig = {
+  def producerConfig(brokers:String) = {
     val p = new java.util.Properties()
     p.setProperty("bootstrap.servers", brokers)
     p.setProperty("key.serializer", classOf[StringSerializer].getName)
