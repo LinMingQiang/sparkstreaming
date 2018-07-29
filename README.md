@@ -14,6 +14,11 @@
 > kafka010有两种来管理offset的方式，一种是旧版的用zookeeper来管理，一种是本身自带的。现只提供zookeeper的管理方式
 -------------------
 
+-------------------
+> 要确保编译的kafka-client的版本和服务器端的版本一致，否则会报 Error reading string of length 27489, only 475 bytes available 等错误<br/>
+-------------------
+
+
 * 提供 对外的 ssc创建 createDirectStream 的方法 ，用来读取kafka的数据。
 * 提供 对外的 ssc利用conf创建Dstream的方法
 * 提供 使用direct方式读取kafka数据的方法
