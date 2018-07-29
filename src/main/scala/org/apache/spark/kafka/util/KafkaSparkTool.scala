@@ -18,12 +18,21 @@ private[spark] trait KafkaSparkTool extends SparkKafkaConfsKey {
   lazy val log = LoggerFactory.getLogger(logname)
   var kp:Map[String, String]
   lazy val kc: KafkaCluster = new KafkaCluster(kp)
+  lazy val fixKp=fixKafkaParams(kp)
   /**
    * @author LMQ
    * @func 重置kafka配置参数
    */
   def setKafkaParam(kp:Map[String, String]){
     this.kp=kp
+  }
+def fixKafkaParams(kafkaParams: Map[String, String]) = {
+   val fixKp=new java.util.HashMap[String,Object]()
+   kafkaParams.foreach{case(x,y)=>fixKp.put(x,y)}
+    fixKp.put(ENABLE_AUTO_COMMIT_CONFIG, false: java.lang.Boolean)
+    fixKp.put(AUTO_OFFSET_RESET_CONFIG, "none")
+    fixKp.put(RECEIVE_BUFFER_CONFIG, 65536: java.lang.Integer)
+   fixKp
   }
   /**
    * @author LMQ

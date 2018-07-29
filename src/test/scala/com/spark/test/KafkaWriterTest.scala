@@ -14,6 +14,7 @@ object KafkaWriterTest{
     runJob
   }
   def runJob() {
+    val brokers=""
     val sc = new SparkContext(new SparkConf().setMaster("local[2]").setAppName("Test"))
     		var kp = Map[String, String](
     				"metadata.broker.list" -> brokers,
@@ -26,7 +27,7 @@ object KafkaWriterTest{
     ds.foreachRDD { rdd => 
       rdd.foreach(println)
       rdd.map(_.value())
-         .writeToKafka(producerConfig, transformFunc(outTopic,_))
+         .writeToKafka(producerConfig(brokers), transformFunc(outTopic,_))
       }
 
     ssc.start()

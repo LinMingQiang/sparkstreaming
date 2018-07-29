@@ -1,6 +1,4 @@
 package org.apache.spark.streaming.kafka
-import scala.collection.JavaConverters._
-import scala.collection.JavaConversions._
 import scala.reflect.ClassTag
 import kafka.serializer.Decoder
 import org.apache.spark.SparkContext
@@ -15,7 +13,7 @@ import org.apache.spark.core.SparkKafkaContext
 import org.apache.spark.streaming.kafka010.OffsetRange
 import org.apache.spark.streaming.kafka010.KafkaRDD
 import org.apache.kafka.common.TopicPartition
-
+import java.{util=>ju}
 /**
  * @author LMQ
  * @description 自定义一个kafkaRDD
@@ -23,13 +21,13 @@ import org.apache.kafka.common.TopicPartition
  * @description 当然也可以再重写一些其他特性
  */
 class KafkaDataRDD[K: ClassTag, V: ClassTag](
-  @transient sc:      SparkKafkaContext,
-  @transient kafkaParams: Map[String, Object],
+  @transient var sc:      SparkKafkaContext,
+  @transient var kafkaParam: ju.Map[String, Object],
   offsetRanges:   Array[OffsetRange],
-  @transient preferredHosts: java.util.Map[TopicPartition, String],
+  preferredHosts: java.util.Map[TopicPartition, String],
   useConsumerCache:   Boolean)
   extends KafkaRDD[K, V](
-    sc.sparkcontext, kafkaParams, offsetRanges, preferredHosts, useConsumerCache) {
+    sc.sparkcontext, kafkaParam, offsetRanges, preferredHosts, useConsumerCache) {
 
   def updateOffsets(groupId: String) {
     sc.updateRDDOffsets(groupId, this)
@@ -48,9 +46,9 @@ class KafkaDataRDD[K: ClassTag, V: ClassTag](
 object KafkaDataRDD {
   def apply[K: ClassTag, V: ClassTag](
     sc:               SparkKafkaContext,
-    kafkaParams:      Map[String, Object],
+    kafkaParams:      ju.Map[String, Object],
     offsetRanges:     Array[OffsetRange],
-    preferredHosts:   java.util.Map[TopicPartition, String],
+    preferredHosts:   ju.Map[TopicPartition, String],
     useConsumerCache: Boolean): KafkaDataRDD[K, V] = {
 new KafkaDataRDD[K, V](sc, kafkaParams, offsetRanges, preferredHosts, useConsumerCache)
   }
