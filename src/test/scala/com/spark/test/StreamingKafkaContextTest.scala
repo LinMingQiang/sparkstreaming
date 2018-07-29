@@ -23,12 +23,13 @@ import scala.collection.JavaConverters._
 import java.util.Arrays
 
 object StreamingKafkaContextTest {
-
+ val brokers=""
   PropertyConfigurator.configure("conf/log4j.properties")
   def main(args: Array[String]): Unit = {
     run
   }
   def run() {
+   
     val sc = new SparkContext(new SparkConf()
       .setMaster("local[2]")
       .setAppName("Test")

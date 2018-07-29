@@ -112,19 +112,10 @@ class SparkKafkaContext(var kp:Map[String,String]) {
    * @param kp：kafka配置参数
    * @param topics： topics
    */
-  def kafkaRDD[K: ClassTag, V: ClassTag](topics: Set[String]):KafkaDataRDD[K, V] = {
+  def kafkaRDD[K: ClassTag, V: ClassTag](topics: Set[String]) = {
     skm.createKafkaRDD[K, V](this, topics, null)
   }
-  /**
-   * @author LMQ
-   * @description 创建一个kafkaRDD。从kafka拉取数据
-   * @param kp：kafka配置参数
-   * @param topics： topics
-   */
-  def kafkaRDD(topics: Set[String]):KafkaDataRDD[String, String] = {
-    skm.createKafkaRDD[String, String](
-        this, topics, null)
-  }
+
   /**
    * @author LMQ
    * @description 创建一个kafkaRDD。从kafka拉取数据

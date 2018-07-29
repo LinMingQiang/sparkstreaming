@@ -12,8 +12,9 @@ object SparkKafkaContextTest {
    * 测试 SparkKafkaContext类
    */
   def main(args: Array[String]): Unit = {
-    val groupId = "dataflow-tg"
-     val topics = Set("TG_TOPIC")
+    val brokers="kafka1:9092,kafka2:9092,kafka3:9092"
+    val groupId = "test"
+     val topics = Set("smartadsdeliverylog")
     val kp = SparkKafkaContext.getKafkaParam(
       brokers,
       groupId,
@@ -24,7 +25,6 @@ object SparkKafkaContextTest {
       .setMaster("local")
       .set(SparkKafkaContext.MAX_RATE_PER_PARTITION, "1")
       .setAppName("SparkKafkaContextTest"))
-      println( kp.+((SparkKafkaContext.AUTO_OFFSET_RESET_CONFIG,"none")).toMap[String, Object].asJava)
    
     val kafkadataRdd = skc.kafkaRDD[String, String](topics)
     kafkadataRdd.foreach(println)
