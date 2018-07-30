@@ -12,9 +12,9 @@ object SparkKafkaContextTest {
    * 测试 SparkKafkaContext类
    */
   def main(args: Array[String]): Unit = {
-    val brokers="kafka1:9092,kafka2:9092,kafka3:9092"
+    val brokers="kylin-node2:9092,kylin-node3:9092,kylin-node4:9092"
     val groupId = "test"
-     val topics = Set("smartadsdeliverylog")
+     val topics = Set("topic_3")
     val kp = SparkKafkaContext.getKafkaParam(
       brokers,
       groupId,
