@@ -57,15 +57,10 @@ private[spark] class SparkKafkaManager(override var kp: Map[String, String])
           case _        => log.info(s"""${CONSUMER_FROM} must LAST or CONSUM,defualt is LAST"""); getLatestOffsets(topics)
         }
       } else fromOffset
-
-    //consumerOffsets.foreach(x=>log.info(x.toString))
     val maxMessagesPerPartition = if (kp.contains(MAX_RATE_PER_PARTITION)) kp.get(MAX_RATE_PER_PARTITION).get.toInt
     else sc.conf.getInt(MAX_RATE_PER_PARTITION, 0) //0表示没限制
     val untilOffsets = clamp(latestLeaderOffsets(consumerOffsets), consumerOffsets, maxMessagesPerPartition)
-    val offsetRange = untilOffsets.map {
-      case (tp, of) =>
-        OffsetRange(tp.topic, tp.partition, 0, of.offset)
-    }.toArray
+    val offsetRange = getOffsetRange(consumerOffsets, untilOffsets)
     new KafkaDataRDD[K, V](
       sc,
       fixKp,
@@ -105,11 +100,7 @@ private[spark] class SparkKafkaManager(override var kp: Map[String, String])
         }
       } else fromOffset
     val untilOffsets = clamp(latestLeaderOffsets(consumerOffsets), consumerOffsets, maxMessagesPerPartition)
-
-    val offsetRange = untilOffsets.map {
-      case (tp, of) =>
-        OffsetRange(tp.topic, tp.partition, 0, of.offset)
-    }.toArray
+    val offsetRange = getOffsetRange(consumerOffsets, untilOffsets)
     new KafkaDataRDD[K, V](
       sc,
       fixKp,
@@ -150,6 +141,22 @@ private[spark] class SparkKafkaManager(override var kp: Map[String, String])
     } else {
       o.right.get
     }
+  }
+  /**
+   * @author LMQ
+   * @func 获取offsetrange
+   */
+  def getOffsetRange(
+      consumerOffsets: Map[TopicAndPartition, Long],
+      untilOffsets: Map[TopicAndPartition, KafkaCluster.LeaderOffset])={
+    untilOffsets.map {
+      case (tp, of) =>
+        if(consumerOffsets.contains(tp)){
+          OffsetRange(tp.topic, tp.partition, consumerOffsets(tp), of.offset)
+        }else {
+          OffsetRange(tp.topic, tp.partition, 0, of.offset)//一个新分区，默认从0开始
+        }
+    }.toArray
   }
   /**
    * @author LMQ
