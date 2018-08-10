@@ -1,4 +1,2 @@
 
-*.js linguist-language=scala
-*.css linguist-language=scala
-*.html linguist-language=scala
+*.md linguist-language=scala
