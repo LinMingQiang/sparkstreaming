@@ -9,6 +9,7 @@ Hbase   : `1.0.0+` <br>
  # Spark Kafka Util <br>
  * sparkstreaming 使用 direct方式读取kafka，不需要自己在手动维护offset。已经封装好了。提供许多配置参数来控制读取kafka数据的方式
  * 支持spark 1.3+ 和 kafka 0.8+
+ * 提供了spark2.x kafka 0.10+的版本支持（这两个版本较之前的有大的变化）
  * 封装了许多使用的方法。 <br>
 https://github.com/LinMingQiang/spark-kafka
  # Spark Hbase Util <br>
