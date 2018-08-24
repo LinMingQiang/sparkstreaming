@@ -34,34 +34,38 @@ Here is mainly encapsulated some common components with spark. For some simple n
  # Spark Hbase Util <br>
  * spark scan hbase data to RDD <br>
   scan -> RDD[T]
-* spark RDD[T] get from hbase to RDD[U] <br>
+ * spark RDD[T] get from hbase to RDD[U] <br>
   RDD[T] -> Get -> RDD[U]
-* spark RDD[T] write to hbase <br>
+ * spark RDD[T] write to hbase <br>
   RDD[T] -> Put -> Hbase
-* spark RDD[T] update with hbase data  <br>
+ * spark RDD[T] update with hbase data  <br>
   RDD[T] -> Get -> Combine -> RDD[U] <br>
-* spark RDD[T] update with hbase data then put return to hbase <br>
+ * spark RDD[T] update with hbase data then put return to hbase <br>
   RDD[T] -> Get -> Combine -> Put -> Hbase
  - https://github.com/LinMingQiang/spark-util/tree/spark-hbase
  
 <a name="Spark-ES-Util"></a>
 # Spark ES Util  <br>
-- spark读取es和写入es  <br>
+- ElasticSearch integration for Apache Spark  <br>
+- Scanning es data into RDD <br>
 - https://github.com/LinMingQiang/spark-util/tree/spark-es
 
 <a name="Spark-Kudu"></a>
-# Spark Kudu  <br>
-* spark读取kudu数据 <br>
+# Spark Kudu  <br>
+- Read kudu data into RDD <br>
+- Write RDD data to kudu <br>
+- draw lessons from: https://github.com/tmalaska/SparkOnKudu
 - https://github.com/LinMingQiang/spark-util/tree/spark-kudu
 
 <a name="Flink-kafka"></a>
 # Flink kafka
-* flink读取kafka数据，并结合hbase实现一个简单的wc的实例 <br>
+* This is a simple example. Read Kafka data, implement WordCount statistics and write to HBase <br>
 - https://github.com/LinMingQiang/spark-util/tree/flink-kafka
 
 <a name="Splunk"></a>
-# Splunk  <br>
-* 日志监控工具Splunk的安装和使用 <br>
+# Splunk  <br>
+* Splunk is a log display and monitoring system.
+* Installation and use of Splunk <br>
 - https://github.com/LinMingQiang/spark-util/tree/splunk
 
 <a name="Kafka-Util"></a>
