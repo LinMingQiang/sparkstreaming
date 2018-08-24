@@ -8,7 +8,16 @@ Here is mainly encapsulated some common components with spark. For some simple n
 | **spark 1.3.x**    | 2.10               | 0.8+               | :smiley: | :smiley: | :smiley: |
 | **spark 1.6.x**    | 2.10               | 0.8+               | :smiley: | :smiley: | :smiley: |
 | **spark 2.0.x**    | 2.11               | 0.8+               | :smiley: | :smiley: | :smiley: |
+---
 
+## Table of contents
+- [Spark Kafka Util](#Spark Kafka Util)
+- [Quick Start](#quick-start)
+- [Bugs and Feature Requests](#bugs-and-feature-requests)
+- [Documentation](#documentation)
+- [Contributing](#contributing)
+- [Community](#community)
+<a name="Spark Kafka Util"></a>
  # Spark Kafka Util <br>
  * Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data
  * The version support of spark2.x Kafka 0.10+ is provided.（0.8, there is a big change compared to the 0.10 version.）
