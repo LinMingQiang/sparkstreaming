@@ -70,26 +70,26 @@ Here is mainly encapsulated some common components with spark. For some simple n
 
 <a name="Kafka-Util"></a>
 # Kafka Util
-* 操作kafka 的工具类，提供按天来记录topic的offset，主要用于当天重算，小时重算等功能  <br>
+* Operate the tool class of kafka, provide offset to record topic by day, mainly used for day recalculation, hour recalculation and other functions  <br>
 - https://github.com/LinMingQiang/spark-util/tree/kafka-util
 
 <a name="Hbase-Util"></a>
 # Hbase Util
-* 操作 Hbase 的工具类，查询hbase表的region信息，用于手动split 某些过大的region  <br>
+* The tool class that operates Hbase, inquires the region information of HBase table, used for manual split some excessive region  <br>
 - https://github.com/LinMingQiang/spark-util/tree/hbase-util
 
 <a name="Database-util"></a>
 # database util
-* 提供各个数据库的连接工具  <br>
+* Provides a connection tool for each database. <br>
 - https://github.com/LinMingQiang/spark-util/tree/database-util
 
 <a name="Elasticserach-shade"></a>
 # Elasticserach shade
-* es shade完之后的jar，解决es和spark，hadoop相关包冲突的问题   <br>
+* Resolving conflicts between ES and spark and Hadoop related packages <br>
 - https://github.com/LinMingQiang/spark-util/tree/es-shaed
 
 <a name="Rabbitmq-util"></a>
 # Rabbitmq util
-* 一个用来发送和消费mq消息的工具类   <br>
+* A tool class for sending and consuming MQ messages  <br>
 https://github.com/LinMingQiang/spark-util/tree/rabbitmq-util
 
