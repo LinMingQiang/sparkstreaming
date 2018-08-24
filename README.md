@@ -49,7 +49,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 - spark读取es和写入es  <br>
 - https://github.com/LinMingQiang/spark-util/tree/spark-es
 
-<a name="Spark-Kusu"></a>
+<a name="Spark-Kudu"></a>
 # Spark Kudu  <br>
 * spark读取kudu数据 <br>
 - https://github.com/LinMingQiang/spark-util/tree/spark-kudu
