@@ -26,7 +26,16 @@ Here is mainly encapsulated some common components with spark. For some simple n
 
 <a name="Spark-Hbase-Util"></a>
  # Spark Hbase Util <br>
- - spark读取和写入hbase <br>
+ * spark scan hbase data to RDD <br>
+  scan -> RDD[T]
+* spark RDD[T] get from hbase to RDD[U] <br>
+  RDD[T] -> Get -> RDD[U]
+* spark RDD[T] write to hbase <br>
+  RDD[T] -> Put -> Hbase
+* spark RDD[T] update with hbase data  <br>
+  RDD[T] -> Get -> Combine -> RDD[U] <br>
+* spark RDD[T] update with hbase data then put return to hbase <br>
+  RDD[T] -> Get -> Combine -> Put -> Hbase
  - https://github.com/LinMingQiang/spark-util/tree/spark-hbase
  
 <a name="Spark-ES-Util"></a>
