@@ -60,7 +60,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 <a name="Flink-kafka"></a>
 # Flink kafka
 * This is a simple example. Read Kafka data, implement WordCount statistics and write to HBase <br>
-- https://github.com/LinMingQiang/spark-util/tree/flink-kafka
+- https://github.com/LinMingQiang/flink-demo
 
 <a name="Splunk"></a>
 # Splunk  <br>
