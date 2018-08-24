@@ -10,7 +10,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 | **spark 2.0.x**    | 2.11               | 0.8+               | :smiley: | :smiley: | :smiley: |
 
  # Spark Kafka Util <br>
- * sparkstreaming 使用 direct方式读取kafka，不需要自己在手动维护offset。已经封装好了。提供许多配置参数来控制读取kafka数据的方式
+ * Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。提供许多配置参数来控制读取kafka数据的方式
  * 支持spark 1.3+ 和 kafka 0.8+
  * 提供了spark2.x kafka 0.10+的版本支持（这两个版本较之前的有大的变化）
  * 封装了许多使用的方法。 <br>
