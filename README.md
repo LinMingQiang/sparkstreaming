@@ -5,9 +5,9 @@ Here is mainly encapsulated some common components with spark. For some simple n
 ---
 |                    | scala version      |Kafka version       | hbase 1.0+         | es   2.3.0         |kudu  1.3.0         |
 |:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
-| **spark 1.3.x**    | 2.10               | 0.8+               | :u6709: | :apple: | :watermelon: |
-| **spark 1.6.x**    | 2.10               | 0.8+               | :pineapple: | :tomato: | :melon: |
-| **spark 2.0.x**    | 2.10/2.11          | 0.8+               | :cherries: | :strawberry: | :grapes: |
+| **spark 1.3.x**    | 2.10               | 0.8+               | :ok_hand: | :star2: | :ok_hand: |
+| **spark 1.6.x**    | 2.10               | 0.8+               | :ok_hand: | :ok_hand: | :ok_hand: |
+| **spark 2.0.x**    | 2.10/2.11          | 0.8+               | :ok_hand: | :ok_hand: | :ok_hand: |
 ---
 
 ## Table of contents
