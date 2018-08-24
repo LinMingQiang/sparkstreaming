@@ -14,9 +14,15 @@ Here is mainly encapsulated some common components with spark. For some simple n
 - [Spark Kafka Util](#Spark-Kafka-Util)
 - [Spark Hbase Util](#Spark-Hbase-Util)
 - [Spark ES Util](#Spark-ES-Util)
-- [Documentation](#documentation)
-- [Contributing](#contributing)
-- [Community](#community)
+- [Spark Kudu](#Spark-Kudu)
+- [Flink kafka](#Flink-kafka)
+- [Kafka Util](#Kafka-Util)
+- [Hbase Util](#Hbase-Util)
+- [Database util](#database-util)
+- [Elasticserach shade](#Elasticserach-shade)
+- [Rabbitmq util](#Rabbitmq-util)
+- [Splunk](#Splunk)
+
 
 <a name="Spark-Kafka-Util"></a>
  ## Spark Kafka Util <br>
@@ -43,36 +49,43 @@ Here is mainly encapsulated some common components with spark. For some simple n
 - spark读取es和写入es  <br>
 - https://github.com/LinMingQiang/spark-util/tree/spark-es
 
+<a name="Spark-Kusu"></a>
 # Spark Kudu  <br>
 * spark读取kudu数据 <br>
-https://github.com/LinMingQiang/spark-util/tree/spark-kudu
+- https://github.com/LinMingQiang/spark-util/tree/spark-kudu
 
+<a name="Flink-kafka"></a>
+# Flink kafka
+* flink读取kafka数据，并结合hbase实现一个简单的wc的实例 <br>
+- https://github.com/LinMingQiang/spark-util/tree/flink-kafka
+
+<a name="Splunk"></a>
 # Splunk  <br>
 * 日志监控工具Splunk的安装和使用 <br>
-https://github.com/LinMingQiang/spark-util/tree/splunk
+- https://github.com/LinMingQiang/spark-util/tree/splunk
 
-# flink kafka
-* flink读取kafka数据，并结合hbase实现一个简单的wc的实例 <br>
-https://github.com/LinMingQiang/spark-util/tree/flink-kafka
-
+<a name="Kafka-Util"></a>
 # Kafka Util
 * 操作kafka 的工具类，提供按天来记录topic的offset，主要用于当天重算，小时重算等功能  <br>
-https://github.com/LinMingQiang/spark-util/tree/kafka-util
+- https://github.com/LinMingQiang/spark-util/tree/kafka-util
 
+<a name="Hbase-Util"></a>
 # Hbase Util
 * 操作 Hbase 的工具类，查询hbase表的region信息，用于手动split 某些过大的region  <br>
-https://github.com/LinMingQiang/spark-util/tree/hbase-util
+- https://github.com/LinMingQiang/spark-util/tree/hbase-util
 
-
-# database-util
+<a name="Database-util"></a>
+# database util
 * 提供各个数据库的连接工具  <br>
-https://github.com/LinMingQiang/spark-util/tree/database-util
+- https://github.com/LinMingQiang/spark-util/tree/database-util
 
-# es shade
+<a name="Elasticserach-shade"></a>
+# Elasticserach shade
 * es shade完之后的jar，解决es和spark，hadoop相关包冲突的问题   <br>
-https://github.com/LinMingQiang/spark-util/tree/es-shaed
+- https://github.com/LinMingQiang/spark-util/tree/es-shaed
 
-# rabbitmq util
+<a name="Rabbitmq-util"></a>
+# Rabbitmq util
 * 一个用来发送和消费mq消息的工具类   <br>
 https://github.com/LinMingQiang/spark-util/tree/rabbitmq-util
 
