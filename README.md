@@ -1,11 +1,14 @@
 # Spark-Util 
-大数据生态中有许多的组件，spark作为大数据的主流技术，在实际开发中spark会经常更其他组件进行结合开发。但是spark官方没有响应的工具包来支持。
-这里主要是自己封装了一些常用的组件与spark结合。对于一些简单需求，或者新手来说可能比较适合。以下代码全部在生产线上使用过了并且稳定运行。bug的话暂时没发现。如果你使用过程中有发现什么bug或者有新的idea，可以留言------LinMingQiang  <br>
-language : `Scala` <br>
-Scala   : `2.10+` <br>
-Kafka   ：`0.8.0+` <br>
-Spark   : `1.6.0+` <br>
-Hbase   : `1.0.0+` <br>
+There are many components in bigdata ecology. As the mainstream technology of bigdata, spark often combines with other components in actual development. But spark official did not respond to the toolkit to support it.
+Here is mainly encapsulated some common components with spark. For some simple needs, or newcomers may be more suitable. The following code is used in the production line and runs smoothly. Bug has not been discovered for the time being. If you use any bug or new idea in the process, you can leave a message.------LinMingQiang  <br>
+## Support
+---
+|                    | scala version      |Kafka version       | hbase 1.0+         | es   2.3.0         |kudu  1.3.0         |
+|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
+| **spark 1.3.x**    | 2.10               | 0.8+               | :smiley: | :smiley: | :smiley: |
+| **spark 1.6.x**    | 2.10               | 0.8+               | :smiley: | :smiley: | :smiley: |
+| **spark 2.0.x**    | 2.11               | 0.8+               | :smiley: | :smiley: | :smiley: |
+
  # Spark Kafka Util <br>
  * sparkstreaming 使用 direct方式读取kafka，不需要自己在手动维护offset。已经封装好了。提供许多配置参数来控制读取kafka数据的方式
  * 支持spark 1.3+ 和 kafka 0.8+
