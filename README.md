@@ -80,7 +80,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 
 <a name="Database-util"></a>
 # database util
-* Provides a connection tool for each database. <br>
+* Provides a connection tool for each database. include: es,hbase,mysql,mongo  <br>
 - https://github.com/LinMingQiang/spark-util/tree/database-util
 
 <a name="Elasticserach-shade"></a>
