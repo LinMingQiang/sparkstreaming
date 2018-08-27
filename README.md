@@ -29,6 +29,14 @@ Here is mainly encapsulated some common components with spark. For some simple n
  - Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data
  - The version support of spark2.x Kafka 0.10+ is provided.（0.8, there is a big change compared to the 0.10 version.）
  - https://github.com/LinMingQiang/spark-kafka
+ ```
+   val kp = SparkKafkaContext.getKafkaParam(brokers,groupId,"consum", //last/consum/custom/earliest
+      "earliest") //wrong_from//when group id get error 
+   val skc = new SparkKafkaContext(kp,sparkconf) 
+   val kafkadataRdd = skc.kafkaRDD(topics,last,msgHandle)
+   //...do something 
+   kafkadataRdd.updateOffsets(groupId)//update offset to zk
+ ```
 
 <a name="Spark-Hbase-Util"></a>
  # :ghost:Spark Hbase Util <br>
