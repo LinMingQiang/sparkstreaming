@@ -30,8 +30,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
  - The version support of spark2.x Kafka 0.10+ is provided.（0.8, there is a big change compared to the 0.10 version.）
  - https://github.com/LinMingQiang/spark-kafka
  ```
-   val kp = SparkKafkaContext.getKafkaParam(brokers,groupId,"consum", //last/consum/custom/earliest
-      "earliest") //wrong_from//when group id get error 
+   val kp = SparkKafkaContext.getKafkaParam(brokers,groupId,"consum","earliest") 
    val skc = new SparkKafkaContext(kp,sparkconf) 
    val kafkadataRdd = skc.kafkaRDD(topics,last,msgHandle)
    //...do something 
@@ -51,6 +50,13 @@ Here is mainly encapsulated some common components with spark. For some simple n
  * spark RDD[T] update with hbase data then put return to hbase <br>
   RDD[T] -> Get -> Combine -> Put -> Hbase
  - https://github.com/LinMingQiang/spark-util/tree/spark-hbase
+ ```
+    val conf = new SparkConf().setMaster("local").setAppName("tets")
+    val sc = new SparkContext(conf)
+    val hc = new SparkHBaseContext(sc, zk)
+    hc.hbaseRDD(tablename, f).foreach { println }
+    hc.scanHbaseRDD(tablename, new Scan(), f)
+```
  
 <a name="Spark-ES-Util"></a>
 # :santa:Spark ES Util  <br>
