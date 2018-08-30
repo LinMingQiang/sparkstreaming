@@ -27,6 +27,9 @@ Here is mainly encapsulated some common components with spark. For some simple n
 <a name="Spark-Kafka-Util"></a>
  ## :beetle:Spark Kafka Util <br>
  - Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data
+ - Support topic to add new partition
+ - Supporting RDD data to write to Kafka
+ - Add parameters ： 'kafka.consumer.from' To dynamically decide whether to get Kafka data from last or from consumption point
  - The version support of spark2.x Kafka 0.10+ is provided.（0.8, there is a big change compared to the 0.10 version.）
  - https://github.com/LinMingQiang/spark-kafka
  ```
