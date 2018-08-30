@@ -66,6 +66,10 @@ Here is mainly encapsulated some common components with spark. For some simple n
 - ElasticSearch integration for Apache Spark  <br>
 - Scanning es data into RDD <br>
 - https://github.com/LinMingQiang/spark-util/tree/spark-es
+```
+sc.esRDD("testindex/testtype", query)
+
+```
 
 <a name="Spark-Kudu"></a>
 # :confetti_ball:Spark Kudu  <br>
