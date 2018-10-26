@@ -3,11 +3,12 @@ There are many components in bigdata ecology. As the mainstream technology of bi
 Here is mainly encapsulated some common components with spark. For some simple needs, or newcomers may be more suitable. The following code is used in the production line and runs smoothly. Bug has not been discovered for the time being. If you use any bug or new idea in the process, you can leave a message.------LinMingQiang  <br>
 ## Support
 ---
-|                    | scala version      |Kafka version       | hbase 1.0+         | es   2.3.0         |kudu  1.3.0         |
-|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
-| **spark 1.3.x**    | 2.10               | 0.8               | :ok_hand: | :star2: | :eggplant: |
-| **spark 1.6.x**    | 2.10               | 0.8               | :baby_chick: | :santa: | :corn: |
-| **spark 2.0.x**    | 2.10/2.11          | 0.8+               | :smiley: | :cherries: | :peach: |
+|                    | scala version      |Kafka version       | hbase 1.0+         | es   2.3.0         |kudu  1.3.0         |SSL         |
+|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|:------------------:|
+| **spark 1.3.x**    | 2.10               | 0.8               | :ok_hand: | :star2: | :eggplant: |NO |
+| **spark 1.6.x**    | 2.10               | 0.8               | :baby_chick: | :santa: | :corn: |NO |
+| **spark 1.6.x**    | 2.10               | 0.10+               | :baby_chick: | :santa: | :corn: |YES |
+| **spark 2.0.x**    | 2.10/2.11          | 0.8+               | :smiley: | :cherries: | :peach: |YES |
 ---
 
 ## :jack_o_lantern:Table of contents
