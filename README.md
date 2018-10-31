@@ -12,7 +12,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 ---
 
 ## :jack_o_lantern: Table of contents
-- [spark kafka](#spark kafka)
+- [spark-kafka](#spark kafka)
 - [Spark Hbase Util](#Spark-Hbase-Util)
 - [Spark ES Util](#Spark-ES-Util)
 - [Spark Kudu](#Spark-Kudu)
@@ -24,7 +24,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 - [Rabbitmq util](#Rabbitmq-util)
 - [Splunk](#Splunk)
 
-spark kafka
+spark-kafka
  ------------
  - Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data
  - Support topic to add new partition
