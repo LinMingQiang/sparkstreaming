@@ -12,7 +12,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 ---
 
 ## :jack_o_lantern:Table of contents
-- [Spark Kafka Util](#Spark Kafka Util)
+- [Spark Kafka Util](#Spark-Kafka-Util)
 - [Spark Hbase Util](#Spark-Hbase-Util)
 - [Spark ES Util](#Spark-ES-Util)
 - [Spark Kudu](#Spark-Kudu)
@@ -26,7 +26,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 
 
 <a name="Spark-Kafka-Util"></a>
- ## :beetle:Spark Kafka Util <br>
+ ## :beetle:Spark-Kafka-Util <br>
  - Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data
  - Support topic to add new partition
  - Supporting RDD data to write to Kafka
