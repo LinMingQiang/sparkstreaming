@@ -13,7 +13,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 
 ## :jack_o_lantern: Table of contents
 - [Spark kafka](#Spark-kafka)
-- [Spark Hbase Util](#spark-Hbase)
+- [Spark Hbase](#spark-Hbase)
 - [Spark ES Util](#Spark-ES-Util)
 - [Spark Kudu](#Spark-Kudu)
 - [Flink kafka](#Flink-kafka)
@@ -43,7 +43,7 @@ Spark kafka
  ```
 
 <a name="spark-Hbase"></a>
-Spark Hbase Util
+Spark Hbase
 ------------
  * spark scan hbase data to RDD <br>
   scan -> RDD[T]
