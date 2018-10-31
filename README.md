@@ -43,7 +43,7 @@ spark kafka
  ```
 
 <a name="spark-Hbase"></a>
- # :ghost:Spark Hbase Util <br>
+Spark Hbase Util <br>
  ------------
  * spark scan hbase data to RDD <br>
   scan -> RDD[T]
