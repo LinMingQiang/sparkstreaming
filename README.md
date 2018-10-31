@@ -13,7 +13,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 
 ## :jack_o_lantern: Table of contents
 - [spark kafka](#spark-kafka)
-- [Spark Hbase Util](#spark-Hbase-Util)
+- [Spark Hbase Util](#spark-Hbase)
 - [Spark ES Util](#Spark-ES-Util)
 - [Spark Kudu](#Spark-Kudu)
 - [Flink kafka](#Flink-kafka)
@@ -42,7 +42,7 @@ spark kafka
    kafkadataRdd.updateOffsets(groupId)//update offset to zk
  ```
 
-<a name="spark-Hbase-Util"></a>
+<a name="spark-Hbase"></a>
  # :ghost:Spark Hbase Util <br>
  ------------
  * spark scan hbase data to RDD <br>
