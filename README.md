@@ -11,7 +11,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 | **spark 2.0.x**    | 2.10/2.11          | 0.8+               | :smiley: | :cherries: | :peach: |YES |
 ---
 
-## :jack_o_lantern:Table of contents
+## :jack_o_lantern: Table of contents
 - [Spark Kafka Util](#Spark-Kafka-Util)
 - [Spark Hbase Util](#Spark-Hbase-Util)
 - [Spark ES Util](#Spark-ES-Util)
@@ -26,7 +26,8 @@ Here is mainly encapsulated some common components with spark. For some simple n
 
 
 <a name="Spark-Kafka-Util"></a>
- ## :beetle:Spark-Kafka-Util <br>
+ ## :beetle:Spark Kafka Util <br>
+ ------------
  - Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data
  - Support topic to add new partition
  - Supporting RDD data to write to Kafka
@@ -44,6 +45,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 
 <a name="Spark-Hbase-Util"></a>
  # :ghost:Spark Hbase Util <br>
+ ------------
  * spark scan hbase data to RDD <br>
   scan -> RDD[T]
  * spark RDD[T] get from hbase to RDD[U] <br>
@@ -65,6 +67,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
  
 <a name="Spark-ES-Util"></a>
 # :santa:Spark ES Util  <br>
+------------
 - ElasticSearch integration for Apache Spark  <br>
 - Scanning es data into RDD <br>
 - https://github.com/LinMingQiang/spark-util/tree/spark-es
@@ -75,6 +78,7 @@ sc.esRDD("testindex/testtype", query)
 
 <a name="Spark-Kudu"></a>
 # :confetti_ball:Spark Kudu  <br>
+------------
 - Read kudu data into RDD <br>
 - Write RDD data to kudu <br>
 - draw lessons from: https://github.com/tmalaska/SparkOnKudu
@@ -82,37 +86,44 @@ sc.esRDD("testindex/testtype", query)
 
 <a name="Flink-kafka"></a>
 # :lollipop:Flink kafka
+------------
 * This is a simple example. Read Kafka data, implement WordCount statistics and write to HBase <br>
 - https://github.com/LinMingQiang/flink-demo
 
 <a name="Splunk"></a>
 # :joy:Splunk  <br>
+------------
 * Splunk is a log display and monitoring system.
 * Installation and use of Splunk <br>
 - https://github.com/LinMingQiang/spark-util/tree/splunk
 
 <a name="Kafka-Util"></a>
 # :joy:Kafka Util
+------------
 * Operate the tool class of kafka, provide offset to record topic by day, mainly used for day recalculation, hour recalculation and other functions  <br>
 - https://github.com/LinMingQiang/spark-util/tree/kafka-util
 
 <a name="Hbase-Util"></a>
 # :joy:Hbase Util
+------------
 * The tool class that operates Hbase, inquires the region information of HBase table, used for manual split some excessive region  <br>
 - https://github.com/LinMingQiang/spark-util/tree/hbase-util
 
 <a name="Database-util"></a>
 # :joy:database util
+------------
 * Provides a connection tool for each database. include: es,hbase,mysql,mongo  <br>
 - https://github.com/LinMingQiang/spark-util/tree/database-util
 
 <a name="Elasticserach-shade"></a>
 # :joy:Elasticserach shade
+------------
 * Resolving conflicts between ES and spark and Hadoop related packages <br>
 - https://github.com/LinMingQiang/spark-util/tree/es-shaed
 
 <a name="Rabbitmq-util"></a>
 # :joy:Rabbitmq util
+------------
 * A tool class for sending and consuming MQ messages  <br>
 https://github.com/LinMingQiang/spark-util/tree/rabbitmq-util
 
