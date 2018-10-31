@@ -26,7 +26,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 
 <a name="Spark-kafka"></a>
 Spark kafka
- ------------
+------------
  - Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data
  - Support topic to add new partition
  - Supporting RDD data to write to Kafka
@@ -44,7 +44,7 @@ Spark kafka
 
 <a name="spark-Hbase"></a>
 Spark Hbase Util
- ------------
+------------
  * spark scan hbase data to RDD <br>
   scan -> RDD[T]
  * spark RDD[T] get from hbase to RDD[U] <br>
@@ -76,7 +76,7 @@ sc.esRDD("testindex/testtype", query)
 ```
 
 <a name="Spark-Kudu"></a>
-Spark Kudu  <br>
+Spark Kudu
 ------------
 - Read kudu data into RDD <br>
 - Write RDD data to kudu <br>
@@ -90,7 +90,7 @@ Flink kafka
 - https://github.com/LinMingQiang/flink-demo
 
 <a name="Splunk"></a>
-Splunk  <br>
+Splunk
 ------------
 * Splunk is a log display and monitoring system.
 * Installation and use of Splunk <br>
