@@ -12,7 +12,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 ---
 
 ## :jack_o_lantern: Table of contents
-- [spark-kafka](#spark kafka)
+- [spark kafka](#spark-kafka)
 - [Spark Hbase Util](#Spark-Hbase-Util)
 - [Spark ES Util](#Spark-ES-Util)
 - [Spark Kudu](#Spark-Kudu)
