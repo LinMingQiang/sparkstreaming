@@ -65,7 +65,7 @@ Spark Hbase Util
 ```
  
 <a name="Spark-ES-Util"></a>
-# :santa:Spark ES Util  <br>
+Spark ES Util
 ------------
 - ElasticSearch integration for Apache Spark  <br>
 - Scanning es data into RDD <br>
