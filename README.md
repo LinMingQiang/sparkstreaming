@@ -25,7 +25,7 @@ Here is mainly encapsulated some common components with spark. For some simple n
 - [Splunk](#Splunk)
 
 <a name="Spark-kafka"></a>
-# :tada:Spark kafka
+Spark kafka
  ------------
  - Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data
  - Support topic to add new partition
@@ -76,7 +76,7 @@ sc.esRDD("testindex/testtype", query)
 ```
 
 <a name="Spark-Kudu"></a>
-# :confetti_ball:Spark Kudu  <br>
+Spark Kudu  <br>
 ------------
 - Read kudu data into RDD <br>
 - Write RDD data to kudu <br>
@@ -84,44 +84,44 @@ sc.esRDD("testindex/testtype", query)
 - https://github.com/LinMingQiang/spark-util/tree/spark-kudu
 
 <a name="Flink-kafka"></a>
-# :lollipop:Flink kafka
+Flink kafka
 ------------
 * This is a simple example. Read Kafka data, implement WordCount statistics and write to HBase <br>
 - https://github.com/LinMingQiang/flink-demo
 
 <a name="Splunk"></a>
-# :joy:Splunk  <br>
+Splunk  <br>
 ------------
 * Splunk is a log display and monitoring system.
 * Installation and use of Splunk <br>
 - https://github.com/LinMingQiang/spark-util/tree/splunk
 
 <a name="Kafka-Util"></a>
-# :joy:Kafka Util
+Kafka Util
 ------------
 * Operate the tool class of kafka, provide offset to record topic by day, mainly used for day recalculation, hour recalculation and other functions  <br>
 - https://github.com/LinMingQiang/spark-util/tree/kafka-util
 
 <a name="Hbase-Util"></a>
-# :joy:Hbase Util
+Hbase Util
 ------------
 * The tool class that operates Hbase, inquires the region information of HBase table, used for manual split some excessive region  <br>
 - https://github.com/LinMingQiang/spark-util/tree/hbase-util
 
 <a name="Database-util"></a>
-# :joy:database util
+database util
 ------------
 * Provides a connection tool for each database. include: es,hbase,mysql,mongo  <br>
 - https://github.com/LinMingQiang/spark-util/tree/database-util
 
 <a name="Elasticserach-shade"></a>
-# :joy:Elasticserach shade
+Elasticserach shade
 ------------
 * Resolving conflicts between ES and spark and Hadoop related packages <br>
 - https://github.com/LinMingQiang/spark-util/tree/es-shaed
 
 <a name="Rabbitmq-util"></a>
-# :joy:Rabbitmq util
+Rabbitmq util
 ------------
 * A tool class for sending and consuming MQ messages  <br>
 https://github.com/LinMingQiang/spark-util/tree/rabbitmq-util
