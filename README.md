@@ -1,8 +1,9 @@
 # :tada:Spark-Util 
-There are many components in bigdata ecology. As the mainstream technology of bigdata, spark often combines with other components in actual development. But spark official did not respond to the toolkit to support it.
-Here is mainly encapsulated some common components with spark. for example:spark.Sparkstreaming-Kafka，Spark-hbase. For some simple needs, or newcomers may be more suitable. The following code is used in the production line and runs smoothly. Bug has not been discovered for the time being. If you use any bug or new idea in the process, you can leave a message.------LinMingQiang  <br>
 
 大数据生态圈中有许多组件，spark作为大数据的主流技术，在实际开发中经常会与其他组件结合使用的情况，但是官方没有比较完整的工具包。这里主要是封装了一些常用的组件，例如：Sparkstreaming-Kafka，Spark-hbase等，对于一些简单的需求项目比较适合，或者比较适合新人学习阅读。遇到bug的可以在此提交error反馈------LinMingQiang  <br>
+
+There are many components in bigdata ecology. As the mainstream technology of bigdata, spark often combines with other components in actual development. But spark official did not respond to the toolkit to support it.
+Here is mainly encapsulated some common components with spark. for example:spark.Sparkstreaming-Kafka，Spark-hbase. For some simple needs, or newcomers may be more suitable. The following code is used in the production line and runs smoothly. Bug has not been discovered for the time being. If you use any bug or new idea in the process, you can leave a message.------LinMingQiang  <br>
 
 ## Support
 ---
