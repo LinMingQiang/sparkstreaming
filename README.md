@@ -31,10 +31,11 @@ Here is mainly encapsulated some common components with spark. for example:spark
 <a name="Spark-kafka"></a>
 Spark kafka
 ------------
- - Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data
- - Support topic to add new partition
- - Supporting RDD data to write to Kafka
- - Support Kafka SSL (0.10+,spark 1.6+)
+ - 封装了spark/sparkstreaming direct读取kafka数据的方式；提供rdd.updateOffset方法来手动管理偏移量到zk； 提供配置参数。<br>
+ (Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data)
+ - 支持topic新增分区 (Support topic to add new partition)
+ - 支持rdd数据写入kafka 的算子 (Supporting RDD data to write to Kafka)
+ - 支持 Kafka SSL （sparkstreaming 1.6 with kafka 010 ）  (Support Kafka SSL (0.10+,spark 1.6+))
  - Add parameters ： 'kafka.consumer.from' To dynamically decide whether to get Kafka data from last or from consumption point
  - The version support of spark2.x Kafka 0.10+ is provided.（0.8, there is a big change compared to the 0.10 version.）
  - https://github.com/LinMingQiang/spark-kafka
