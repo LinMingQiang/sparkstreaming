@@ -53,15 +53,20 @@ Spark kafka
 <a name="spark-Hbase"></a>
 Spark Hbase
 ------------
- * spark scan hbase data to RDD <br>
+ * 根据scan条件扫描hbase数据成RDD  <br> 
+ (spark scan hbase data to RDD) <br>
   scan -> RDD[T]
- * spark RDD[T] get from hbase to RDD[U] <br>
+ * 根据RDD的数据来批量gethbase <br> 
+ (spark RDD[T] get from hbase to RDD[U]) <br>
   RDD[T] -> Get -> RDD[U]
- * spark RDD[T] write to hbase <br>
+ * 根据RDD的数据来批量 写入  <br> 
+ spark RDD[T] write to hbase <br>
   RDD[T] -> Put -> Hbase
- * spark RDD[T] update with hbase data  <br>
+ * 根据RDD的数据来批量更新rdd数据  <br>
+  spark RDD[T] update with hbase data  <br>
   RDD[T] -> Get -> Combine -> RDD[U] <br>
- * spark RDD[T] update with hbase data then put return to hbase <br>
+ * 根据RDD的数据来批量更新rdd数据并写回hbase  <br> 
+ spark RDD[T] update with hbase data then put return to hbase <br>
   RDD[T] -> Get -> Combine -> Put -> Hbase
  - https://github.com/LinMingQiang/spark-util/tree/spark-hbase
  ```
@@ -75,8 +80,10 @@ Spark Hbase
 <a name="Spark-ES-Util"></a>
 Spark ES Util
 ------------
-- ElasticSearch integration for Apache Spark  <br>
-- Scanning es data into RDD <br>
+- spark集成es <br>
+ElasticSearch integration for Apache Spark  <br>
+- scan es数据为rdd  <br>
+Scanning es data into RDD <br>
 - https://github.com/LinMingQiang/spark-util/tree/spark-es
 ```
 sc.esRDD("testindex/testtype", query)
@@ -86,8 +93,10 @@ sc.esRDD("testindex/testtype", query)
 <a name="Spark-Kudu"></a>
 Spark Kudu
 ------------
-- Read kudu data into RDD <br>
-- Write RDD data to kudu <br>
+- 读取kudu的数据为rdd  <br>
+Read kudu data into RDD <br>
+- 讲rdd数据写入kudu  <br>
+Write RDD data to kudu <br>
 - draw lessons from: https://github.com/tmalaska/SparkOnKudu
 - https://github.com/LinMingQiang/spark-util/tree/spark-kudu
 
@@ -110,13 +119,15 @@ Splunk
 <a name="Kafka-Util"></a>
 Kafka Util
 ------------
-* Operate the tool class of kafka, provide offset to record topic by day, mainly used for day recalculation, hour recalculation and other functions  <br>
+*  操作kafka工具类，提供每天记录主题的偏移量，主要用于日重新计算、小时重新计算等功能。  <br>
+Operate the tool class of kafka, provide offset to record topic by day, mainly used for day recalculation, hour recalculation and other functions  <br>
 - https://github.com/LinMingQiang/spark-util/tree/kafka-util
 
 <a name="Hbase-Util"></a>
 Hbase Util
 ------------
-* The tool class that operates Hbase, inquires the region information of HBase table, used for manual split some excessive region  <br>
+* 操作Hbase的工具类，查询HBase表的region信息，用于手动分割过大的region <br>
+The tool class that operates Hbase, inquires the region information of HBase table, used for manual split some excessive region  <br>
 - https://github.com/LinMingQiang/spark-util/tree/hbase-util
 
 <a name="Database-util"></a>
