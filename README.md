@@ -94,13 +94,16 @@ Spark Kudu
 <a name="Flink-kafka"></a>
 Flink kafka
 ------------
+* 这是一个简单的例子。读取卡夫卡数据，实现WordCount统计并写入HBase<br>
 * This is a simple example. Read Kafka data, implement WordCount statistics and write to HBase <br>
 - https://github.com/LinMingQiang/flink-demo
 
 <a name="Splunk"></a>
 Splunk
 ------------
+* Splunk是一个日志显示和监视系统
 * Splunk is a log display and monitoring system.
+* Splunk的安装和使用
 * Installation and use of Splunk <br>
 - https://github.com/LinMingQiang/spark-util/tree/splunk
 
