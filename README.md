@@ -12,7 +12,7 @@ Here is mainly encapsulated some common components with spark. for example:spark
 | **spark 1.3.x**    | 2.10               | 0.8               | :ok_hand: | :star2: | :eggplant: |NO |
 | **spark 1.6.x**    | 2.10               | 0.8               | :baby_chick: | :santa: | :corn: |NO |
 | **spark 1.6.x**    | 2.10               | 0.10+               | :baby_chick: | :santa: | :corn: |YES |
-| **spark 2.0.x**    | 2.10/2.11          | 0.8+               | :smiley: | :cherries: | :peach: |YES |
+| **spark 2.0.x**    | 2.10/2.11          | 0.10+               | :smiley: | :cherries: | :peach: |YES |
 ---
 
 ## :jack_o_lantern: Table of contents
