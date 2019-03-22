@@ -37,7 +37,7 @@ Spark kafka
  (Support topic to add new partition)
  - 支持rdd数据写入kafka 的算子 <br>
  (Supporting RDD data to write to Kafka)
- - 支持 Kafka SSL （sparkstreaming 1.6 with kafka 010 ）  <br>
+ - 支持 Kafka SSL (提供spark 1.6 + Kafka 010 的整合api)（sparkstreaming 1.6 with kafka 010 ）  <br>
  (Support Kafka SSL (0.10+,spark 1.6+))
  - Add parameters ： 'kafka.consumer.from' To dynamically decide whether to get Kafka data from last or from consumption point
  - The version support of spark2.x Kafka 0.10+ is provided.（0.8, there is a big change compared to the 0.10 version.）
