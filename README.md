@@ -9,9 +9,9 @@ Here is mainly encapsulated some common components with spark. for example:spark
  封装 StreamingDynamicContext ：
     实现以下功能： 不使用streamingContext 来实现流式计算，因为streamingContext是严格的时间间隔执行job任务，当job时间远小于batchtime时，会有大量的时间是在sleep等待下一个批次执行的到来(具体可以看看streamingContext的源码);<br>
     StreamingDynamicContext 的设计借鉴了streamingContext的设计。但是在Job的提交上不使用Queue队列来appending堆积的job。当job执行完后，用户可以自己选择是否立刻执行下一个批次的计算，还是选择继续等待指定时长。<br><br>
+     封装 StreamingKafkaContext ：你依然可以用 streamingContext来实现流式计算，词Api封装了读取kafka数据。<br>
    Encapsulation Streaming DynamicContext: Implement the following functions: Streaming DynamicContext is not used to implement streaming computing, because streaming Context is a strict time interval to perform job tasks, when job time is much less than batchtime, there will be a lot of time in sleep waiting for the next batch of execution (see the source code of streaming Context specifically), Streaming DynamicContext The design draws lessons from the design of streaming Context. But Job submissions do not use Queue queues to append stacked jobs. When the job is finished, the user can choose whether to perform the next batch immediately or to continue waiting for the specified length of time. <br>
- 封装 StreamingKafkaContext ：
-   你依然可以用 streamingContext来实现流式计算，词Api封装了读取kafka数据。
+
 ## Support
 ---
 |                    | scala version      |Kafka version       | hbase 1.0+         | es   2.3.0         |kudu  1.3.0         |SSL         |
