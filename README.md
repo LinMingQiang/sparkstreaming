@@ -8,7 +8,8 @@ Here is mainly encapsulated some common components with spark. for example:spark
 最近更新 ： <br> 
  封装 StreamingDynamicContext ：
    实现以下功能： 不使用streamingContext 来实现流式计算，因为streamingContext是严格的时间间隔执行job任务，当job时间远小于batchtime时，会有大量的时间是在sleep等待下一个批次执行的到来(具体可以看看streamingContext的源码);<br>
-   StreamingDynamicContext 的设计借鉴了streamingContext的设计。但是在Job的提交上不使用Queue队列来appending堆积的job。当job执行完后，用户可以自己选择是否立刻执行下一个批次的计算，还是选择继续等待指定时长。<br>
+   StreamingDynamicContext 的设计借鉴了streamingContext的设计。<br>
+   但是在Job的提交上不使用Queue队列来appending堆积的job。当job执行完后，用户可以自己选择是否立刻执行下一个批次的计算，还是选择继续等待指定时长。<br><br>
    Encapsulation Streaming DynamicContext: Implement the following functions: Streaming DynamicContext is not used to implement streaming computing, because streaming Context is a strict time interval to perform job tasks, when job time is much less than batchtime, there will be a lot of time in sleep waiting for the next batch of execution (see the source code of streaming Context specifically), Streaming DynamicContext The design draws lessons from the design of streaming Context. But Job submissions do not use Queue queues to append stacked jobs. When the job is finished, the user can choose whether to perform the next batch immediately or to continue waiting for the specified length of time. <br>
  封装 StreamingKafkaContext ：
    你依然可以用 streamingContext来实现流式计算，词Api封装了读取kafka数据。
@@ -40,6 +41,7 @@ Spark kafka
 ------------
  - 封装了StreamingDynamicContext 。动态地调整 streaming的批次间隔时间，不像sparkstreaming的批次间隔时间是固定的（Streaming Kafka DynamicContext is encapsulated. Dynamically adjust the batch interval of streaming, unlike sparkstreaming, where the batch interval is fixed）
  - 使用StreamingDynamicContext 可以让你在流式程序的执行过程中动态的调整你的topic和获取kafkardd的方式。而不需要重新启动程序
+ - 添加了 sparkStreaming 1.6 -> kafka 010  的 spark-streaming-kafka-0-10_2.10 。用以支持ssl 。
  - 封装了spark/sparkstreaming direct读取kafka数据的方式；提供rdd.updateOffset方法来手动管理偏移量到zk； 提供配置参数。<br>
  (Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data)
  - 支持topic新增分区 <br>
