@@ -31,6 +31,7 @@ Here is mainly encapsulated some common components with spark. for example:spark
 <a name="Spark-kafka"></a>
 Spark kafka
 ------------
+ - 封装了StreamingKafkaDynamicContext 。动态地调整 streaming的批次间隔时间，不像sparkstreaming的批次间隔时间是固定的
  - 封装了spark/sparkstreaming direct读取kafka数据的方式；提供rdd.updateOffset方法来手动管理偏移量到zk； 提供配置参数。<br>
  (Encapsulated spark/sparkstreaming to read Kafka with Low level integration (offset in zookeeper)。Provides many configuration parameters to control the way to read Kafka data)
  - 支持topic新增分区 <br>
