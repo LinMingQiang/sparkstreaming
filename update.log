@@ -1,12 +1,18 @@
 更新日志：
-2018-08-30 
+
 更新 spark-hbase
   重新封装 SparkHbaseContext
-  完善Sample
-
-2018-11-30
-  添加了spark 1.6 + kafka 0.10的集成jar
+  
+ 1： 添加了sparkstreaming 1.6 + kafka 0.10的集成jar。目前网上没有集成好的 sparkstereaming 1.6 + kafka 010 的jar。
+  kafka 010 之后才支持ssl，所以对于集群spark还是1.6，但是kafka要使用ssl的来说，这个包就正合适
   spark-streaming-kafka-0-10_2.10-1.6.0.jar
-  支持了kafka 0.10的 SSL 验证。
-  kafka 0.10 默认是将offset存储在自身的topic里而不是之前版本的zookeeper里面
+
+
+ 2： kafka 0.10 默认是将offset存储在自身的topic里而不是之前版本的zookeeper里面
   所以，想自己实现存储zookeeper的可以使用kafka-util工具来自行封装
+  
+ 3： sparkstreaming的批次时间一经设定就没办法改变，但是在实际生产中，数据室友低峰期和高峰期的，数据低峰期的时候希望批次间隔小一点，高峰期的时候希望批次大一点。
+   我封装了 StreamingDynamicContext 来实现动态调整批次时间。 由用户返回 ture 或者 false 来决定是否马上执行下一个批次。
+   举个简单的例子: 我们希望在kafka中有数据的时候马上执行计算，而不是等待固定时长之后才执行
+   
+   
