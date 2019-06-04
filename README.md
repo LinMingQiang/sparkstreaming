@@ -115,4 +115,5 @@ val skc = new SparkKafkaContext(
     ssc.start()
     ssc.awaitTermination()
     
+    
 ```
