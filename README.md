@@ -20,7 +20,16 @@ Here is mainly encapsulated some common components with spark. for example:spark
 | **spark 1.6.x**    | 2.10               | 0.8               | :baby_chick: | :santa: | :corn: |NO |
 | **spark 1.6.x**    | 2.10               | 0.10+               | :baby_chick: | :santa: | :corn: |YES |
 | **spark 2.0.x**    | 2.10/2.11          | 0.10+               | :smiley: | :cherries: | :peach: |YES |
+
 ---
+## POINT
+-------------------
+> 支持动态调节 streaming 的 批次间隔时间 （不同于sparkstreaming 的 定长的批次间隔） <br/>
+> 支持在streaming过程中 重设 topics，用于生产中动态地增加删减数据源 <br/>
+> 提供spark-streaming-kafka-0-10_2.10 spark 1.6 来支持 kafka的ssl <br/>
+> 支持rdd.updateOffset 来管理偏移量。 <br/>
+-------------------
+
 
 ## :jack_o_lantern: Table of contents
 - [Spark kafka /sparkstreaming kafka](#Spark-kafka)
