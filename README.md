@@ -26,6 +26,7 @@ Here is mainly encapsulated some common components with spark. for example:spark
 -------------------
 > 支持动态调节 streaming 的 批次间隔时间 （不同于sparkstreaming 的 定长的批次间隔） <br/>
 > 支持在streaming过程中 重设 topics，用于生产中动态地增加删减数据源 <br/>
+> 添加了速率控制，KafkaRateController。用来控制读取速率，由于不是用的sparkstreaming，所有速率控制的一些参数拿不到，得自己去计算。 <br/>
 > 提供spark-streaming-kafka-0-10_2.10 spark 1.6 来支持 kafka的ssl <br/>
 > 支持rdd.updateOffset 来管理偏移量。 <br/>
 -------------------
