@@ -6,7 +6,7 @@ There are many components in bigdata ecology. As the mainstream technology of bi
 Here is mainly encapsulated some common components with spark. for example:spark.Sparkstreaming-Kafka，Spark-hbase. For some simple needs, or newcomers may be more suitable. The following code is used in the production line and runs smoothly. Bug has not been discovered for the time being. If you use any bug or new idea in the process, you can leave a message.------LinMingQiang  <br>
 
 最近更新 ： <br> 
- 封装 StreamingDynamicContext ：<br>
+ 封装 StreamingDynamicContext ( https://github.com/LinMingQiang/spark-kafka)：<br>
     实现以下功能： 不使用streamingContext 来实现流式计算，因为streamingContext是严格的时间间隔执行job任务，当job时间远小于batchtime时，会有大量的时间是在sleep等待下一个批次执行的到来(具体可以看看streamingContext的源码); <br>
     StreamingDynamicContext 的设计借鉴了streamingContext的设计。但是在Job的提交上不使用Queue队列来appending堆积的job。当job执行完后，用户可以自己选择是否立刻执行下一个批次的计算，还是选择继续等待指定时长。<br><br>
      封装 StreamingKafkaContext ：你依然可以用 streamingContext来实现流式计算，词Api封装了读取kafka数据。<br><br>
