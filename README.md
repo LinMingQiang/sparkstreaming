@@ -2,13 +2,13 @@
 
 ## POINT
 -------------------
-> spark与其他组件的封装api <br>
-> 支持动态调节 streaming 的 批次间隔时间 （不同于sparkstreaming 的 定长的批次间隔）;不使用streamingContext 来实现流式计算，因为streamingContext是严格的时间间隔执行job任务，当job时间远小于batchtime时，会有大量的时间是在sleep等待下一个批次执行的到来(具体可以看看streamingContext的源码);StreamingDynamicContext 的设计借鉴了streamingContext的设计。但是在Job的提交上不使用Queue队列来appending堆积的job。当job执行完后，用户可以自己选择是否立刻执行下一个批次的计算，还是选择继续等待指定时长。<br><br>
-> 支持在streaming过程中 重设 topics，用于生产中动态地增加删减数据源 <br/>
-> 添加了速率控制，KafkaRateController。用来控制读取速率，由于不是用的sparkstreaming，所有速率控制的一些参数拿不到，得自己去计算。 <br/>
-> 提供spark-streaming-kafka-0-10_2.10 spark 1.6 来支持 kafka的ssl <br/>
-> 支持rdd.updateOffset 来管理偏移量。 <br/>
- > 封装 StreamingKafkaContext ：你依然可以用 streamingContext来实现流式计算，词Api封装了读取kafka数据。<br><br>
+> -  spark与其他组件的封装api <br>
+> -  支持动态调节 streaming 的 批次间隔时间 （不同于sparkstreaming 的 定长的批次间隔）;不使用streamingContext 来实现流式计算，因为streamingContext是严格的时间间隔执行job任务，当job时间远小于batchtime时，会有大量的时间是在sleep等待下一个批次执行的到来(具体可以看看streamingContext的源码);StreamingDynamicContext 的设计借鉴了streamingContext的设计。但是在Job的提交上不使用Queue队列来appending堆积的job。当job执行完后，用户可以自己选择是否立刻执行下一个批次的计算，还是选择继续等待指定时长。<br>
+> - 支持在streaming过程中 重设 topics，用于生产中动态地增加删减数据源 <br/>
+> - 添加了速率控制，KafkaRateController。用来控制读取速率，由于不是用的sparkstreaming，所有速率控制的一些参数拿不到，得自己去计算。 <br/>
+> - 提供spark-streaming-kafka-0-10_2.10 spark 1.6 来支持 kafka的ssl <br/>
+> - 支持rdd.updateOffset 来管理偏移量。 <br/>
+> - 封装 StreamingKafkaContext ：你依然可以用 streamingContext来实现流式计算，词Api封装了读取kafka数据。<br><br>
 -------------------
 
 ## Support
