@@ -1,0 +1,8 @@
+# spark-es
+spark读取es
+scala version 2.10
+spark version 1.6.0
+es version 2.3.0
+
+* 
+# Example 
