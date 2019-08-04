@@ -2,6 +2,7 @@ package com.spark.es.util
 
 import org.elasticsearch.client.transport.TransportClient
 import java.net.InetAddress
+
 import org.elasticsearch.common.settings.Settings
 import org.elasticsearch.common.transport.TransportAddress
 import org.elasticsearch.transport.client.PreBuiltTransportClient
@@ -13,7 +14,7 @@ object ElasticsearchManagerTool {
     * @param clusterName
     */
   def initClient(address: String, clusterName: String): Unit = {
-    if (client == null) {
+    if (null == client) {
       client = new PreBuiltTransportClient(Settings.EMPTY)
       address.split(",").map(_.split(":", -1)).foreach {
         case Array(host, port) =>
@@ -60,5 +61,12 @@ object ElasticsearchManagerTool {
       }
     }
     client
+  }
+
+  def main(args: Array[String]): Unit = {
+    val address = "192.168.30.61,192.168.30.62,192.168.30.63"
+    val clusterName = "zhiziyun"
+    val c = getESClient(address,clusterName)
+    println(c)
   }
 }

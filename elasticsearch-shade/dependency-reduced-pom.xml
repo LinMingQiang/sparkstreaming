@@ -58,5 +58,15 @@
       </plugin>
     </plugins>
   </build>
+  <properties>
+    <scala.compat.version>2.10</scala.compat.version>
+    <elasticsearch.version>6.2.0</elasticsearch.version>
+    <scala.version>2.10</scala.version>
+    <hbase.version>1.2.0</hbase.version>
+    <encoding>UTF-8</encoding>
+    <maven.compiler.source>1.6</maven.compiler.source>
+    <spark.version>1.6.0</spark.version>
+    <maven.compiler.target>1.6</maven.compiler.target>
+  </properties>
 </project>
 

@@ -62,5 +62,7 @@
         <module>kafka-util</module>
         <module>hbase-util</module>
         <module>database-util</module>
+        <module>rabbitmq-util</module>
+        <module>kafka-util-010</module>
     </modules>
 </project>

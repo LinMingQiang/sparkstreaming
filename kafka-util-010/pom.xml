@@ -6,8 +6,7 @@
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>database-util</artifactId>
-    <version>1.0.0</version>
+    <artifactId>kafka-util-010</artifactId>
     <name>${project.artifactId}</name>
     <description>My wonderfull scala app</description>
     <inceptionYear>2015</inceptionYear>
@@ -25,57 +24,22 @@
         <encoding>UTF-8</encoding>
         <scala.version>2.10.5</scala.version>
         <scala.compat.version>2.10</scala.compat.version>
-        <elasticsearch.version>6.2.0</elasticsearch.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpasyncclient</artifactId>
-            <version>4.0-beta3</version>
-            <scope>provided</scope>
-        </dependency>
-        <!-- hbase -->
-        <dependency>
-            <groupId>org.apache.hbase</groupId>
-            <artifactId>hbase-client</artifactId>
-            <version>1.2.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>slf4j-log4j12</artifactId>
-                    <groupId>org.slf4j</groupId>
-                </exclusion>
-                <exclusion>
-                    <artifactId>jdk.tools</artifactId>
-                    <groupId>jdk.tools</groupId>
-                </exclusion>
-            </exclusions>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>2.10.1</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.30</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.spark.util</groupId>
-            <artifactId>elasticsearch-shade</artifactId>
-            <version>${elasticsearch.version}</version>
-            <scope>provided</scope>
+            <groupId>org.apache.kafka</groupId>
+            <artifactId>kafka_2.10</artifactId>
+            <version>0.10.0.0</version>
         </dependency>
     </dependencies>
 
     <build>
         <sourceDirectory>src/main/scala</sourceDirectory>
+        <testSourceDirectory>src/test/scala</testSourceDirectory>
         <plugins>
             <plugin>
+                <!-- see http://davidb.github.com/scala-maven-plugin -->
                 <groupId>net.alchim31.maven</groupId>
                 <artifactId>scala-maven-plugin</artifactId>
                 <version>3.2.0</version>
