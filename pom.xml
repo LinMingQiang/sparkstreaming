@@ -61,5 +61,6 @@
         <module>elasticsearch-shade</module>
         <module>kafka-util</module>
         <module>hbase-util</module>
+        <module>database-util</module>
     </modules>
 </project>
