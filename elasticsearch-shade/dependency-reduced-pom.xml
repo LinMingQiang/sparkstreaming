@@ -58,8 +58,5 @@
       </plugin>
     </plugins>
   </build>
-  <properties>
-    <elasticsearch.version>6.2.0</elasticsearch.version>
-  </properties>
 </project>
 
