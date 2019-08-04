@@ -17,8 +17,8 @@
         <encoding>UTF-8</encoding>
         <scala.version>2.10</scala.version>
         <scala.compat.version>2.10</scala.compat.version>
-        <spark.version>1.6.0-cdh5.7.5</spark.version>
-        <hbase.version>1.2.0-cdh5.7.5</hbase.version>
+        <spark.version>1.6.0</spark.version>
+        <hbase.version>1.2.0</hbase.version>
         <elasticsearch.version>6.2.0</elasticsearch.version>
     </properties>
 
