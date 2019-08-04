@@ -60,5 +60,6 @@
         <module>spark-elasticsearch</module>
         <module>elasticsearch-shade</module>
         <module>kafka-util</module>
+        <module>hbase-util</module>
     </modules>
 </project>
