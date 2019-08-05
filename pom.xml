@@ -65,5 +65,6 @@
         <module>rabbitmq-util</module>
         <module>kafka-util-010</module>
         <module>spark-kudu</module>
+        <module>kafka-shade_010</module>
     </modules>
 </project>
