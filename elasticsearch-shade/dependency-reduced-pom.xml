@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-  <parent>
-    <artifactId>spark-util</artifactId>
-    <groupId>com.spark.util</groupId>
-    <version>1.0.0</version>
-  </parent>
   <modelVersion>4.0.0</modelVersion>
+  <groupId>com.spark.util</groupId>
   <artifactId>elasticsearch-shade</artifactId>
   <version>${elasticsearch.version}</version>
   <build>
@@ -30,6 +26,10 @@
                   <shadedPattern>my.elasticsearch.jackson.core</shadedPattern>
                 </relocation>
               </relocations>
+              <transformers>
+                <transformer />
+                <transformer />
+              </transformers>
               <filters>
                 <filter>
                   <artifact>*:*</artifact>
@@ -60,7 +60,7 @@
   </build>
   <properties>
     <scala.compat.version>2.10</scala.compat.version>
-    <elasticsearch.version>6.2.0</elasticsearch.version>
+    <elasticsearch.version>6.2.1</elasticsearch.version>
     <scala.version>2.10</scala.version>
     <hbase.version>1.2.0</hbase.version>
     <encoding>UTF-8</encoding>

@@ -58,11 +58,12 @@
     <modules>
         <module>spark-hbase</module>
         <module>spark-elasticsearch</module>
-        <module>elasticsearch-shade</module>
+<!--        <module>elasticsearch-shade</module>-->
         <module>kafka-util</module>
         <module>hbase-util</module>
         <module>database-util</module>
         <module>rabbitmq-util</module>
         <module>kafka-util-010</module>
+        <module>spark-kudu</module>
     </modules>
 </project>
