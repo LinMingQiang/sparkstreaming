@@ -125,7 +125,7 @@ Splunk
 (Splunk is a log display and monitoring system.)
 * Splunk的安装和使用   <br>
 (Installation and use of Splunk)
-- https://github.com/LinMingQiang/spark-util/tree/splunk
+- http://blog.csdn.net/a1043498776/article/details/68500059
 
 <a name="Kafka-Util"></a>
 Kafka Util
