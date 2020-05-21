@@ -286,7 +286,6 @@ class KafkaCluster(val kafkaParams: Map[String, String]) extends Serializable {
     val req =
       OffsetFetchRequest(groupId, topicAndPartitions.toSeq, consumerApiVersion)
     val errs = new Err
-    println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>")
     withBrokers(Random.shuffle(config.seedBrokers), errs) { consumer =>
       val resp = consumer.fetchOffsets(req)
       val respMap = resp.requestInfo
