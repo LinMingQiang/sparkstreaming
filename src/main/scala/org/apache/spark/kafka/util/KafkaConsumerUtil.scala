@@ -1,133 +1,127 @@
-//package org.apache.spark.kafka.util
-//
-//import java.util.Date
-//import java.{util => ju}
-//import org.apache.kafka.clients.consumer.{KafkaConsumer, OffsetAndTimestamp}
-//import org.apache.kafka.common.TopicPartition
-//import org.slf4j.LoggerFactory
-//
-//import scala.collection.JavaConverters._
-//
-//object KafkaConsumerUtil {
-//  lazy val _log = LoggerFactory.getLogger(KafkaUtil.getClass)
-//  var kafkaUtil: KafkaConsumerUtil = null
-//  def apply(kafkaParams: ju.Map[String, Object]): KafkaConsumerUtil = {
-//    if (kafkaUtil == null) {
-//      kafkaUtil = new KafkaConsumerUtil(kafkaParams)
-//    }
-//    kafkaUtil
-//  }
-//  class KafkaUtil(kafkaParams: java.util.Map[String, Object]) {
-//    lazy val comsumer = createConsumer
-//    private def createConsumer: KafkaConsumer[String, String] = {
-//      val c = new KafkaConsumer[String, String](kafkaParams)
-//      c
-//    }
-//
-//    /**
-//      * 按照时间获取offset
-//      */
-//    def offsetsForTimes(
-//        topics: Set[String],
-//        timeStamp: java.lang.Long): java.util.Map[TopicPartition, OffsetAndTimestamp] = {
-//      import scala.collection.JavaConverters._
-//      val parts = topics.flatMap(tp => { comsumer.partitionsFor(tp).asScala })
-//      val m = parts
-//        .map(x => {
-//          (new TopicPartition(x.topic(), x.partition()), timeStamp)
-//        })
-//        .toMap
-//      comsumer.offsetsForTimes(m.asJava)
-//    }
-//
-//    /**
-//      *获取最新得offset
-//      * @param topics
-//      */
-//    def getLastestOffset(topics: Set[String]): Map[TopicPartition, Long] = {
-//      comsumer.subscribe(topics.asJava)
-//      comsumer.poll(0)
-//      val parts = comsumer.assignment()
-//      comsumer
-//        .endOffsets(parts)
-//        .asScala
-//        .map { case (tp, l) => (tp -> l.toLong) }
-//        .toMap
-////      val currentOffset = parts.asScala.map { tp =>
-////        tp -> comsumer.position(tp)
-////      }.toMap
-////      comsumer.pause(parts)
-////      comsumer.seekToEnd(parts)
-////      val re = parts.asScala.map { ps =>
-////        ps -> comsumer.position(ps)
-////      }
-////      currentOffset.foreach { case (tp, l) => comsumer.seek(tp, l) }
-////      re.toMap
-//    }
-//
-//    /**
-//      * @author LMQ
-//      * @time 2018-10-31
-//      * @desc 获取最开始偏移量
-//      */
-//    def getEarleastOffset(topics: Set[String]): Map[TopicPartition, Long] = {
-//      comsumer.subscribe(topics.asJava)
-//      comsumer.poll(0)
-//      val parts = comsumer.assignment()
-//      comsumer
-//        .beginningOffsets(parts)
-//        .asScala
-//        .map { case (tp, l) => (tp -> l.toLong) }
-//        .toMap
-////      val currentOffset = parts.asScala.map { tp =>
-////        tp -> comsumer.position(tp)
-////      }.toMap
-////      comsumer.pause(parts)
-////      comsumer.seekToBeginning(parts)
-////      val re = parts.asScala.map { ps =>
-////        ps -> comsumer.position(ps)
-////      }
-////      currentOffset.foreach { case (tp, l) => comsumer.seek(tp, l) }
-////      re.toMap
-//    }
-//
-//    /**
-//      *
-//      * @return
-//      */
-//    def getBrokers(topics: Set[String]): ju.HashMap[TopicPartition, String] = {
-//      val result = new ju.HashMap[TopicPartition, String]()
-//      val hosts = new ju.HashMap[TopicPartition, String]()
-//      comsumer.subscribe(topics.asJava)
-//      comsumer.poll(0)
-//      val assignments = comsumer.assignment().iterator()
-//      while (assignments.hasNext()) {
-//        val tp: TopicPartition = assignments.next()
-//        if (null == hosts.get(tp)) {
-//          val infos = comsumer.partitionsFor(tp.topic).iterator()
-//          while (infos.hasNext()) {
-//            val i = infos.next()
-//            hosts.put(new TopicPartition(i.topic(), i.partition()),
-//                      i.leader.host())
-//          }
-//        }
-//        result.put(tp, hosts.get(tp))
+package org.apache.spark.kafka.util
+
+import java.{util => ju}
+
+import org.apache.kafka.clients.consumer.{KafkaConsumer, OffsetAndTimestamp}
+import org.apache.kafka.common.TopicPartition
+import org.slf4j.LoggerFactory
+
+import scala.collection.JavaConverters._
+
+/**
+  * kafka 0.10.2.1 +
+  */
+object KafkaConsumerUtil {
+  lazy val _log = LoggerFactory.getLogger(this.getClass)
+  var kafkaUtil: KafkaConsumerUtil = null
+  def apply(kafkaParams: ju.Map[String, Object]): KafkaConsumerUtil = {
+    if (kafkaUtil == null) {
+      kafkaUtil = new KafkaConsumerUtil(kafkaParams)
+    }
+    kafkaUtil
+  }
+  class KafkaConsumerUtil(kafkaParams: java.util.Map[String, Object]) {
+    lazy val comsumer = createConsumer
+    private def createConsumer: KafkaConsumer[String, String] = {
+      val c = new KafkaConsumer[String, String](kafkaParams)
+      c
+    }
+
+    /**
+      *
+      * 按照时间获取offset
+      */
+    def offsetsForTimes(topics: Set[String], timeStamp: java.lang.Long)
+      : java.util.Map[TopicPartition, OffsetAndTimestamp] = {
+      import scala.collection.JavaConverters._
+      val parts = topics.flatMap(tp => { comsumer.partitionsFor(tp).asScala })
+      val m = parts
+        .map(x => {
+          (new TopicPartition(x.topic(), x.partition()), timeStamp)
+        })
+        .toMap
+      comsumer.offsetsForTimes(m.asJava)
+    }
+
+    /**
+      *获取最新得offset
+      * @param topics
+      */
+    def getLastestOffset(topics: Set[String]): Map[TopicPartition, Long] = {
+      comsumer.subscribe(topics.asJava)
+      comsumer.poll(0)
+      val parts = comsumer.assignment()
+      comsumer
+        .endOffsets(parts)
+        .asScala
+        .map { case (tp, l) => (tp -> l.toLong) }
+        .toMap
+//      val currentOffset = parts.asScala.map { tp =>
+//        tp -> comsumer.position(tp)
+//      }.toMap
+//      comsumer.pause(parts)
+//      comsumer.seekToEnd(parts)
+//      val re = parts.asScala.map { ps =>
+//        ps -> comsumer.position(ps)
 //      }
-//      result
-//    }
-//  }
-//
-//  /**
-//    *
-//    * @param consumOff
-//    * @param ku
-//    * @param topics
-//    * @param limit
-//    * @return
-//    */
+//      currentOffset.foreach { case (tp, l) => comsumer.seek(tp, l) }
+//      re.toMap
+    }
+
+    /**
+      * @author LMQ
+      * @time 2018-10-31
+      * @desc 获取最开始偏移量
+      */
+    def getEarleastOffset(topics: Set[String]): Map[TopicPartition, Long] = {
+      comsumer.subscribe(topics.asJava)
+      comsumer.poll(0)
+      val parts = comsumer.assignment()
+      comsumer
+        .beginningOffsets(parts)
+        .asScala
+        .map { case (tp, l) => (tp -> l.toLong) }
+        .toMap
+//      val currentOffset = parts.asScala.map { tp =>
+//        tp -> comsumer.position(tp)
+//      }.toMap
+//      comsumer.pause(parts)
+//      comsumer.seekToBeginning(parts)
+//      val re = parts.asScala.map { ps =>
+//        ps -> comsumer.position(ps)
+//      }
+//      currentOffset.foreach { case (tp, l) => comsumer.seek(tp, l) }
+//      re.toMap
+    }
+
+    /**
+      *
+      * @return
+      */
+    def getBrokers(topics: Set[String]): ju.HashMap[TopicPartition, String] = {
+      val result = new ju.HashMap[TopicPartition, String]()
+      val hosts = new ju.HashMap[TopicPartition, String]()
+      comsumer.subscribe(topics.asJava)
+      comsumer.poll(0)
+      val assignments = comsumer.assignment().iterator()
+      while (assignments.hasNext()) {
+        val tp: TopicPartition = assignments.next()
+        if (null == hosts.get(tp)) {
+          val infos = comsumer.partitionsFor(tp.topic).iterator()
+          while (infos.hasNext()) {
+            val i = infos.next()
+            hosts.put(new TopicPartition(i.topic(), i.partition()),
+                      i.leader.host())
+          }
+        }
+        result.put(tp, hosts.get(tp))
+      }
+      result
+    }
+  }
 //  def getOffsetRange(
 //      consumOff: String,
-//      ku: KafkaUtil,
+//      ku: KafkaConsumerUtil,
 //      topics: Set[String],
 //      limit: Long,
 //      latestOrEarliest: String = "latest"): Array[(String, Int, Long, Long)] = {
@@ -188,18 +182,18 @@
 //    }.toArray
 //    offsetRange
 //  }
-//
-//  def main(args: Array[String]): Unit = {
-//    val kafkabroker = "brokerlist"
-//    val map = new java.util.HashMap[String, Object]
-//    map.put("bootstrap.servers", kafkabroker)
-//    map.put("key.deserializer",
-//            "org.apache.kafka.common.serialization.StringDeserializer")
-//    map.put("value.deserializer",
-//            "org.apache.kafka.common.serialization.StringDeserializer")
-//    map.put("group.id", "test");
-//    map.put("enable.auto.commit", "false")
-//    val ku = KafkaConsumerUtil(map)
-//    println(ku.offsetsForTimes(Set("topic"), 1576660139989L))
-//  }
-//}
+
+  def main(args: Array[String]): Unit = {
+    val kafkabroker = "brokerlist"
+    val map = new java.util.HashMap[String, Object]
+    map.put("bootstrap.servers", kafkabroker)
+    map.put("key.deserializer",
+            "org.apache.kafka.common.serialization.StringDeserializer")
+    map.put("value.deserializer",
+            "org.apache.kafka.common.serialization.StringDeserializer")
+    map.put("group.id", "test");
+    map.put("enable.auto.commit", "false")
+    val ku = KafkaConsumerUtil(map)
+    println(ku.offsetsForTimes(Set("topic"), 1576660139989L))
+  }
+}

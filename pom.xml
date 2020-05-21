@@ -21,7 +21,7 @@
         <encoding>UTF-8</encoding>
         <scala.version>2.11.5</scala.version>
         <spark.vertion>2.0.1</spark.vertion>
-        <kafka.version>0.10.0.0</kafka.version>
+        <kafka.version>0.10.2.1</kafka.version>
         <scala.compat.version>2.11</scala.compat.version>
     </properties>
     <dependencies>
