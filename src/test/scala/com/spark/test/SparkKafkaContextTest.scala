@@ -13,9 +13,9 @@ object SparkKafkaContextTest {
     * 测试 SparkKafkaContext类
     */
   def main(args: Array[String]): Unit = {
-    val brokers = "kafka-1:9092,kafka-2:9092,kafka-3:9092"
+    val brokers = "localhost:9092"
     val groupId = "test"
-    val topics = Set("smartadsdeliverylog")
+    val topics = Set("test")
     val kp = SparkKafkaContext.getKafkaParam(
       brokers,
       groupId,
@@ -23,22 +23,22 @@ object SparkKafkaContextTest {
       "earliest" //wrong_from
     )
     //如果需要使用ssl验证，需要设置一下四个参数
-    kp.put(
-      SparkKafkaContext.DRIVER_SSL_TRUSTSTORE_LOCATION,
-      "/mnt/kafka-key/client.truststore.jks"
-    )
-    kp.put(
-      SparkKafkaContext.DRIVER_SSL_KEYSTORE_LOCATION,
-      "/mnt/kafka-key/client.keystore.jks"
-    )
-    kp.put(
-      SparkKafkaContext.EXECUTOR_SSL_TRUSTSTORE_LOCATION,
-      "client.truststore.jks"
-    )
-    kp.put(
-      SparkKafkaContext.EXECUTOR_SSL_KEYSTORE_LOCATION,
-      "client.keystore.jks"
-    )
+//    kp.put(
+//      SparkKafkaContext.DRIVER_SSL_TRUSTSTORE_LOCATION,
+//      "/mnt/kafka-key/client.truststore.jks"
+//    )
+//    kp.put(
+//      SparkKafkaContext.DRIVER_SSL_KEYSTORE_LOCATION,
+//      "/mnt/kafka-key/client.keystore.jks"
+//    )
+//    kp.put(
+//      SparkKafkaContext.EXECUTOR_SSL_TRUSTSTORE_LOCATION,
+//      "client.truststore.jks"
+//    )
+//    kp.put(
+//      SparkKafkaContext.EXECUTOR_SSL_KEYSTORE_LOCATION,
+//      "client.keystore.jks"
+//    )
 
     val skc = new SparkKafkaContext(
       kp.toMap,

@@ -82,16 +82,6 @@ object KafkaConsumerUtil {
         .asScala
         .map { case (tp, l) => (tp -> l.toLong) }
         .toMap
-//      val currentOffset = parts.asScala.map { tp =>
-//        tp -> comsumer.position(tp)
-//      }.toMap
-//      comsumer.pause(parts)
-//      comsumer.seekToBeginning(parts)
-//      val re = parts.asScala.map { ps =>
-//        ps -> comsumer.position(ps)
-//      }
-//      currentOffset.foreach { case (tp, l) => comsumer.seek(tp, l) }
-//      re.toMap
     }
 
     /**

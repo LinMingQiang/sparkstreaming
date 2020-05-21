@@ -32,7 +32,6 @@ import kafka.common.{
 import kafka.consumer.{ConsumerConfig, SimpleConsumer}
 import org.apache.spark.SparkException
 
-import scala.collection.generic.CanBuildFrom
 
 /**
   * Convenience methods for interacting with a Kafka cluster.
