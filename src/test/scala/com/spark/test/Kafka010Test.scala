@@ -11,11 +11,11 @@ import java.util.Arrays
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 object Kafka010Test {
-  val broker = "192.168.0.234:9092,192.168.0.235:9092,192.168.0.236:9092"
-  val topics = Set("test010")
+  val broker = "localhost:9092"
+  val topics = Set("test")
   def main(args: Array[String]): Unit = {
     //spark-streaming-kafka-0-10_2.11 版本
-    /*val props = new Properties();
+    val props = new Properties();
     props.put("bootstrap.servers", broker);
     props.put("group.id", "test");
     props.put("enable.auto.commit", "false"); //自动commit
@@ -26,13 +26,7 @@ object Kafka010Test {
     val kp = props.toMap[String,Object]
     val lastoffset = getLastOffset
     val sc = new SparkContext(new SparkConf().setAppName("ss").setMaster("local"))
-    val offsetRanges = lastoffset.map { case (tp, of) => OffsetRange(tp, 0, of) }.toArray
-    val rdd = KafkaUtils.createRDD[String, String](
-      sc,
-      kp.asJava,
-      offsetRanges,
-      LocationStrategies.PreferConsistent)
-    rdd.foreach { cr => println(cr.value()) }*/
+
   }
   //kafka 010 获取最新偏移量
   //kafka 010 不提供kafkaCluster类，这个类只有在spark-streaming-kafka-0-8 才有

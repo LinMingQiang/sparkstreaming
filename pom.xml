@@ -21,15 +21,15 @@
         <encoding>UTF-8</encoding>
         <scala.version>2.11.5</scala.version>
         <spark.vertion>2.0.1</spark.vertion>
-        <kafka.version>0.10.2.1</kafka.version>
+        <kafka.version>0.10.0.1</kafka.version>
         <scala.compat.version>2.11</scala.compat.version>
     </properties>
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
         <dependency>
             <groupId>org.apache.kafka</groupId>
-            <artifactId>kafka_2.11</artifactId>
-            <version>0.10.0.0</version>
+            <artifactId>kafka_${scala.compat.version}</artifactId>
+            <version>${kafka.version}</version>
             <exclusions>
                 <exclusion>
                     <artifactId>kafka-clients</artifactId>
@@ -52,25 +52,25 @@
 
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming-kafka-0-10_2.11</artifactId>
+            <artifactId>spark-streaming-kafka-0-10_${scala.compat.version}</artifactId>
             <version>${spark.vertion}</version>
             <exclusions>
                 <exclusion>
-                    <artifactId>kafka_2.11</artifactId>
+                    <artifactId>kafka_${scala.compat.version}</artifactId>
                     <groupId>org.apache.kafka</groupId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-core_2.11</artifactId>
+            <artifactId>spark-core_${scala.compat.version}</artifactId>
             <version>${spark.vertion}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.spark/spark-streaming -->
         <dependency>
             <groupId>org.apache.spark</groupId>
-            <artifactId>spark-streaming_2.11</artifactId>
+            <artifactId>spark-streaming_${scala.compat.version}</artifactId>
             <version>${spark.vertion}</version>
         </dependency>
     </dependencies>
