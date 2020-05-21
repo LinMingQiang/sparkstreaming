@@ -6,8 +6,8 @@
 > - 提供spark-streaming-kafka-0-10_2.10 spark 1.6 来支持 kafka的ssl <br/>
 > - 支持rdd.updateOffset 来管理偏移量。 <br/>
 ---------------------
----------------------
 # :tada: branch-sparkstreaming-1.6.0-0.10
+---------------------
 > - 只是结合了 sparkstreaming 1.6 和 kafka 010 。 使低版本的spark能够使用kafka的ssl验证 <br>
 > - 支持 SSL
 > - 支持spark 1.6 和 kafka 0.10 的结合
