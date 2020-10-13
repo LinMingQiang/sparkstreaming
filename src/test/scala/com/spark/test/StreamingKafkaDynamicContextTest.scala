@@ -12,7 +12,7 @@ import org.apache.log4j.BasicConfigurator
 import org.apache.log4j.PropertyConfigurator
 import java.util.Date
 
-object StreamingDynamicContextTest {
+object StreamingKafkaDynamicContextTest {
   PropertyConfigurator.configure("conf/log4j.properties");
   def msgHandle =
     (mmd: MessageAndMetadata[String, String]) => (mmd.topic, mmd.message)
