@@ -44,7 +44,6 @@ import org.apache.spark.streaming.scheduler.rate.RateEstimator
  * per second that each '''partition''' will accept.
  * @param locationStrategy In most cases, pass in [[PreferConsistent]],
  *   see [[LocationStrategy]] for more details.
- * @param executorKafkaParams Kafka
  * <a href="http://kafka.apache.org/documentation.html#newconsumerconfigs">
  * configuration parameters</a>.
  *   Requires  "bootstrap.servers" to be set with Kafka broker(s),
