@@ -43,6 +43,7 @@ object StreamingKafkaDynamicContextTest {
     kafkastream.foreachRDD {
       case (rdd) =>
         println("################ start ##################")
+      // kafkastream.setTopic(..) // 可以重置当前topic
         val st = new Date().getTime
         val count = rdd.count
         println("count : ", count)
