@@ -1,5 +1,6 @@
 # :tada:branch-1.6.0-0.10
 ---------------------
+> - 解决了批次计算延迟后出现的任务append导致整体恢复后 计算消费还是跟不上的问题
 > - 支持动态调节 streaming 的 批次间隔时间 （不同于sparkstreaming 的 定长的批次间隔，StructuredStreaming中使用trigger实现了。） <br/>
 > - 支持在streaming过程中 重设 topics，用于生产中动态地增加删减数据源 <br/>
 > - 添加了速率控制，KafkaRateController。用来控制读取速率，由于不是用的sparkstreaming，所有速率控制的一些参数拿不到，得自己去计算。
