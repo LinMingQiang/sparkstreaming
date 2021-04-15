@@ -1,4 +1,4 @@
-# :tada:branch-1.6.0-0.10
+# :tada:v1.6.0-0.10
 ---------------------
 > - 解决了批次计算延迟后出现的任务append导致整体恢复后 计算消费还是跟不上的问题
 > - 支持动态调节 streaming 的 批次间隔时间 （不同于sparkstreaming 的 定长的批次间隔，StructuredStreaming中使用trigger实现了。） <br/>
@@ -7,14 +7,14 @@
 > - 提供spark-streaming-kafka-0-10_2.10 spark 1.6 来支持 kafka的ssl <br/>
 > - 支持rdd.updateOffset 来管理偏移量。 <br/>
 ---------------------
-# :tada: branch-sparkstreaming-1.6.0-0.10
+# :tada: v1.6.0-0.10_ssl
 ---------------------
 > - 只是结合了 sparkstreaming 1.6 和 kafka 010 。 使低版本的spark能够使用kafka的ssl验证 <br>
 > - 支持 SSL
 > - 支持spark 1.6 和 kafka 0.10 的结合
 > - 支持管理offset
 --------------------
-# :tada:branch-2.0.1-0.10
+# :tada:v2.0.1-0.10
 -------------------
 > - 解决了批次计算延迟后出现的任务append导致整体恢复后 计算消费还是跟不上的问题
 > - 支持动态调节 streaming 的 批次间隔时间 （不同于sparkstreaming 的 定长的批次间隔，StructuredStreaming中使用trigger实现了。） <br/>
@@ -27,7 +27,7 @@
 > - 添加了速率控制，KafkaRateController。用来控制读取速率，由于不是用的sparkstreaming，所有速率控制的一些参数拿不到，得自己去计算。<br>
 -------------------
 
-# :tada:Spark-Util
+# :tada:Spark-Util_1.6
 
 ## POINT
 
